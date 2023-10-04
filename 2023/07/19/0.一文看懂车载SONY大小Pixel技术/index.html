@@ -1,0 +1,768 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/adas_eyes_log.jpg">
+  <link rel="icon" href="/img/adas_eyes_log.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Joker.Mao">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="引言“由于自动驾驶场景需要，一般ADAS系统对于车载CIS(CMOS Image Sensor)传感器的HDR性能以及LFM功能有一定的要求。随着技术的发展，目前市面上的大部分车载相机的动态范围在可以达到≥120dB的同时还支持LFM功能。今天，我们将以Sony大小Pixel的IEEE论文作为切入点，为大家介绍大小像素技术是如何实现的高动态以及LFM功能。感兴趣的同学关注我公众号后台私信我《Son">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ADAS-CIS|一文看懂索尼CIS传感器SubPixel-HDR技术">
+<meta property="og:url" content="https://jokereyeadas.github.io/2023/07/19/0.%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E8%BD%A6%E8%BD%BDSONY%E5%A4%A7%E5%B0%8FPixel%E6%8A%80%E6%9C%AF/index.html">
+<meta property="og:site_name" content="ADAS之眼">
+<meta property="og:description" content="引言“由于自动驾驶场景需要，一般ADAS系统对于车载CIS(CMOS Image Sensor)传感器的HDR性能以及LFM功能有一定的要求。随着技术的发展，目前市面上的大部分车载相机的动态范围在可以达到≥120dB的同时还支持LFM功能。今天，我们将以Sony大小Pixel的IEEE论文作为切入点，为大家介绍大小像素技术是如何实现的高动态以及LFM功能。感兴趣的同学关注我公众号后台私信我《Son">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/0_SonySubpixelHDR/subpixel.png">
+<meta property="article:published_time" content="2023-07-19T01:06:42.000Z">
+<meta property="article:modified_time" content="2023-10-04T02:02:28.449Z">
+<meta property="article:author" content="Joker.Mao">
+<meta property="article:tag" content="CMOS SENSOR">
+<meta property="article:tag" content="SONY">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/0_SonySubpixelHDR/subpixel.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>ADAS-CIS|一文看懂索尼CIS传感器SubPixel-HDR技术 - ADAS之眼</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jokereyeadas.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":80,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ADAS之眼</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ADAS-CIS|一文看懂索尼CIS传感器SubPixel-HDR技术"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-19 09:06" pubdate>
+          2023年7月19日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ADAS-CIS|一文看懂索尼CIS传感器SubPixel-HDR技术</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>“由于自动驾驶场景需要，一般ADAS系统对于车载CIS(CMOS Image Sensor)传感器的HDR性能以及LFM功能有一定的要求。随着技术的发展，目前市面上的大部分车载相机的动态范围在可以达到≥120dB的同时还支持LFM功能。今天，我们将以Sony大小Pixel的IEEE论文作为切入点，为大家介绍大小像素技术是如何实现的高动态以及LFM功能。感兴趣的同学关注我公众号后台私信我《Sony大小pixel》进行论文pdf版本获取。”</p>
+<p><img src="/img/0_SonySubpixelHDR/subpixel.png" srcset="/img/loading.gif" lazyload alt="Sony Sensor"></p>
+<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h1><p>实时传感器的发展创造了新的商业和社会变革，特别是互联网物联网和汽车领域。在汽车ADAS应用的众多传感器中，图像传感器是这些领域实现关键功能最重要的传感器，对移动物体、路况检测以及所有光照条件下的物体检测、识别等有着重要的作用。</p>
+<p>图像传感器中HDR是一项重要的性能指标，它代表了同一张图像中可以看到场景中最亮以及最暗场景亮度的比值。例如，即使在黑暗里，必须要通过高灵敏度和低噪声采样识别图像。而在亮处，必须要通过低灵敏度和低噪声进行采样。在之前公众号文章中我们介绍了HDR实现的方式：HDR目前实现方式主要有多曝光合成、DCG以及SubPixel技术等。</p>
+<p>其中，使用多重曝光方法传统的高动态范围技术，由于不同帧是在不同的采样时间进行采集，因此很容易造成运动伪影，这会导致后端算法识别错误。</p>
+<p><img src="/img/0_SonySubpixelHDR/dol.png" srcset="/img/loading.gif" lazyload alt="DOL HDR"></p>
+<p>另外，在ADAS应用中，交通指示灯识别也是一项重要的任务。发光LED二极管的信号灯由于是PWM驱动，因此实际上它们在工作状态中是不停的眨眼睛。</p>
+<p><img src="/img/0_SonySubpixelHDR/tra_red_light.png" srcset="/img/loading.gif" lazyload alt="交通灯"></p>
+<p>然而，它们必须看起来像是图像中始终亮起。当使用扩展的方法时仅仅为了捕捉这种闪烁的曝光时间信号，信号在短时间内饱和从而丢失它们的亮度和颜色信息。作为LED闪烁抑制（LFM）方法，采样倍数在曝光期间时间方向上的次数已提出，但此方法有一个非补充期并且不能完全减轻光闪烁效应。</p>
+<p>今天我们将介绍Sony开发的一种新的图像传感器来解决上述这些问题，此传感器的特点是采用亚像素架构设计光电二极管、单个小型光电二极管和像素内浮动电容器，即SubPixel+DCG技术。</p>
+<h1 id="2-SubPixel架构介绍"><a href="#2-SubPixel架构介绍" class="headerlink" title="2 SubPixel架构介绍"></a>2 SubPixel架构介绍</h1><p>图像传感器主要由像素的像素阵列、读出电路(负载MOS晶体管、列ADC、DAC)、驱动器电路(行驱动器、行解码器)、图像信号处理器和其他电路(PLL、稳压器、MIPI I&#x2F;F、CPU等)组成，其整体框图如下图所示：</p>
+<p><img src="/img/0_SonySubpixelHDR/sensor_arch.png" srcset="/img/loading.gif" lazyload alt="Sensor Arch"></p>
+<p>其中，相对于其他Sensor，最大的不同即为像素架构，其微观显微镜的像素俯视图如下图(a)所示。一个像素具有大片上微透镜（OCL）和小的OCL，分别给SP1和SP2使用。SP2的OCL位于SP1的OCL的间隙部分中，这使得SP1与SP2的灵敏度比等于10:1。</p>
+<p><img src="/img/0_SonySubpixelHDR/imx390_pixel.png" srcset="/img/loading.gif" lazyload alt="Pixel Arch"></p>
+<p>上图右侧显示了子像素的电路架构示意图，该电路架构由单个大的光电二极管(SP1)，单个小光电二极管(SP2)，像素内浮动电容器(FC)和七个晶体管组成。</p>
+<p>其中:</p>
+<ul>
+<li><p>SP1具有高灵敏度(绿色)36000e-&#x2F;lx࣭s，而SP2的灵敏度为SP1的1&#x2F;10。由于FC的存在，SP1的线性全井容量(FWC)为10000e-，SP2的FWC为78500e-。</p>
+</li>
+<li><p>电路的中七个晶体管为：SP1的传输栅极(TGL)，SP2的传输栅极(TGS)，浮动扩散栅极(FDG)、浮动电容器栅极(FCG)、复位晶体管(RST)、选择晶体管(SEL)和源极跟随器放大器(AMP)。</p>
+</li>
+<li><p>浮动扩散（FD），FD在此架构中被分离为FD1、FD2和FD3，其中FD3是由FDG和FCG组成。FDG以及DCG被用作切换，以分别用于连接FD1与FD2、FD2与FD3。FC的两个电极连接到FD3以及其供电电压FCVDD。</p>
+</li>
+</ul>
+<p>下图显示了相应的像素截面上图(a)中的虚线，深沟在硅底处采用隔离的方式来防止从SP1到SP2的电荷泄漏。</p>
+<p><img src="/img/0_SonySubpixelHDR/pixel_arch.png" srcset="/img/loading.gif" lazyload alt="Pixel Arch"></p>
+<h1 id="3-SubPixel-HDR合成-LFM实现"><a href="#3-SubPixel-HDR合成-LFM实现" class="headerlink" title="3 SubPixel HDR合成&amp;LFM实现"></a>3 SubPixel HDR合成&amp;LFM实现</h1><p>相对于多帧曝光HDR传感器，SubPixel架构的传感器中SP1和SP2的信号被同一时刻采样并且被串行输出。同时，SP1以及SP2中累积的电荷都会被转换为两种模式下的电压，即高转换增益（HCG）以及通过切换FDG来实现的低转换增益（LCG）。因此，SubPixel传感器可以输出同一时刻采集的4张不同灵敏度的图像，完美地解决运动模糊的问题，如下图所示：</p>
+<p><img src="/img/0_SonySubpixelHDR/hdr_merge.png" srcset="/img/loading.gif" lazyload alt="四帧HDR"></p>
+<p>通过四帧图像合成，可以轻松地输出24bit的HDR图像，如下图所示：</p>
+<p><img src="/img/0_SonySubpixelHDR/hdr_linear.png" srcset="/img/loading.gif" lazyload alt="Alt text"></p>
+<p>同时，由于在HDR合成后，在曝光在10ms的情况下，单帧动态范围便可以实现大于120dB的效果。因此，在国内交通LED灯为100Hz频率的情况下，我们将曝光控制在10ms便可以采集到整个LED的能量周期，如下图所示：</p>
+<p><img src="/img/0_SonySubpixelHDR/lfm.png" srcset="/img/loading.gif" lazyload alt="LFM"></p>
+<p>论文中给出了Sensor在曝光为11ms的情况下，SP1H+SP1L+SPL三帧合成的仿真效果如下：</p>
+<p><img src="/img/0_SonySubpixelHDR/paper.png" srcset="/img/loading.gif" lazyload alt="仿真效果"></p>
+<p>可以看出，在隧道场景下，隧道口明亮处、隧道内暗部以及LED灯信息都得以保留，相对于传统多帧合成Sensor有了很大的提升。最后，论文也给出了Sensor内部的工作时序图，如下所示：</p>
+<p><img src="/img/0_SonySubpixelHDR/timeing.png" srcset="/img/loading.gif" lazyload alt="时序图"></p>
+<p>可以看出，相对于普通Sensor，SubPixel架构的整体工作流程也分为主要的三步：复位、曝光、读出，只是在细节处有差异，同时多了一个SP2小像素的处理。</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>传感器技术的发展日新月异，为自动驾驶提供了良好的数据采集源，也带来了一系列的产业变革。然而，在每个新技术应用的背后都有着无数工程师的奇思妙想以及夜以继日的努力与实验。我们在欣赏与运用技术的同时，更要尊重知识产权，饮水思源，尊重前人做的努力与付出。最后，我们也更希望诸位可以站在巨人的肩膀上，看的更高、走的更远。</p>
+<p>今天我们为大家介绍了Sony在IEEE中发表的大小像素的技术论文，为大家介绍了大小像素的实现原理与技术架构，希望可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及文章在看。</p>
+<p>如果您对自动驾驶感兴趣，可以关注本公众号，当然有想了解的话题，也可以私信我，我们将对各位看官感兴趣的话题进行技术分享。</p>
+<p>好了今天就到这里，想看原论文的同学可以关注我公众号并私信回复《Sony大小pixel》获取论文。&#96;</p>
+<hr>
+<p><strong>如果您对ADAS感兴趣，欢迎关注我的公众号、知乎、CSDN等，同时发表文章中使用源码会在我的GitHub进行开源<code>（网页About Me中有公众号、Github等信息）</code></strong></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CMOS-SENSOR/" class="category-chain-item">CMOS SENSOR</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CMOS-SENSOR/" class="print-no-link">#CMOS SENSOR</a>
+      
+        <a href="/tags/SONY/" class="print-no-link">#SONY</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ADAS-CIS|一文看懂索尼CIS传感器SubPixel-HDR技术</div>
+      <div>https://jokereyeadas.github.io/2023/07/19/0.一文看懂车载SONY大小Pixel技术/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Joker.Mao</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/20/1.%E5%AE%89%E6%A3%AE%E7%BE%8E%E4%B8%80%E5%B8%A7150dB%E6%98%AF%E5%A6%82%E4%BD%95%E7%BB%83%E6%88%90%E7%9A%84/" title="ADAS-CIS|安森美AR0821两帧150dB是如何练成的？">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ADAS-CIS|安森美AR0821两帧150dB是如何练成的？</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

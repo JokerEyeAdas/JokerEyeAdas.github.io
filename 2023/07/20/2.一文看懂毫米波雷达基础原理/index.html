@@ -1,0 +1,860 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/adas_eyes_log.jpg">
+  <link rel="icon" href="/img/adas_eyes_log.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Joker.Mao">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="引言刚接触毫米波雷达的时候并不清楚它是如何用2Tx天线加4Rx天线就能做到多目标检测，随着学习的不断深入，才恍然大悟，科学真的很奇妙！信号与系统老师诚不欺我！ 随着现代社会对于安全驾驶和智能交通的不断追求，汽车技术正朝着前所未有的高度发展。其中，毫米波雷达技术作为一种先进的传感器技术，正在引领着汽车领域的革命性变革。毫米波雷达以其高精度、可靠性和适应性，在自动驾驶、碰撞预警、自适应巡航控制等关键领">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ADAS-Radar|一文入门汽车毫米波雷达基本原理">
+<meta property="og:url" content="https://jokereyeadas.github.io/2023/07/20/2.%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E6%AF%AB%E7%B1%B3%E6%B3%A2%E9%9B%B7%E8%BE%BE%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="ADAS之眼">
+<meta property="og:description" content="引言刚接触毫米波雷达的时候并不清楚它是如何用2Tx天线加4Rx天线就能做到多目标检测，随着学习的不断深入，才恍然大悟，科学真的很奇妙！信号与系统老师诚不欺我！ 随着现代社会对于安全驾驶和智能交通的不断追求，汽车技术正朝着前所未有的高度发展。其中，毫米波雷达技术作为一种先进的传感器技术，正在引领着汽车领域的革命性变革。毫米波雷达以其高精度、可靠性和适应性，在自动驾驶、碰撞预警、自适应巡航控制等关键领">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/2_RadarPrinciple/radar_car.png">
+<meta property="article:published_time" content="2023-07-20T15:09:35.000Z">
+<meta property="article:modified_time" content="2023-10-04T02:02:28.451Z">
+<meta property="article:author" content="Joker.Mao">
+<meta property="article:tag" content="ADAS">
+<meta property="article:tag" content="RADAR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/2_RadarPrinciple/radar_car.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>ADAS-Radar|一文入门汽车毫米波雷达基本原理 - ADAS之眼</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jokereyeadas.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":80,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ADAS之眼</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ADAS-Radar|一文入门汽车毫米波雷达基本原理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-20 23:09" pubdate>
+          2023年7月20日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          41 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ADAS-Radar|一文入门汽车毫米波雷达基本原理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p><strong>刚接触毫米波雷达的时候并不清楚它是如何用2Tx天线加4Rx天线就能做到多目标检测，随着学习的不断深入，才恍然大悟，科学真的很奇妙！信号与系统老师诚不欺我！</strong></p>
+<p>随着现代社会对于安全驾驶和智能交通的不断追求，汽车技术正朝着前所未有的高度发展。其中，毫米波雷达技术作为一种先进的传感器技术，正在引领着汽车领域的革命性变革。毫米波雷达以其高精度、可靠性和适应性，在自动驾驶、碰撞预警、自适应巡航控制等关键领域发挥着不可或缺的作用，将汽车的安全性、便捷性和智能化水平推向新的高度。</p>
+<p><img src="/img/2_RadarPrinciple/radar_car.png" srcset="/img/loading.gif" lazyload alt="Radar in Car"></p>
+<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1.Introduction"></a>1.Introduction</h1><p>毫米波雷达作为一种主要的感知技术，在汽车安全系统中扮演着重要的角色。它利用毫米波频段的电磁波来感知周围环境，并通过测量反射回来的信号来检测和跟踪其他车辆、行人、障碍物以及道路状况。</p>
+<p>与传统的红外传感器和激光雷达相比，毫米波雷达具有独特的优势。它能够利用毫米波频段的电磁波，穿透恶劣天气条件，如雨、雪和雾，从而实现在复杂环境下的可靠探测。</p>
+<p>本文将重点介绍汽车毫米波雷达的原理和工作方式，我们将简要解释毫米波雷达的基本原理，包括其工作频段和探测原理。</p>
+<h1 id="2-FMCW雷达介绍"><a href="#2-FMCW雷达介绍" class="headerlink" title="2.FMCW雷达介绍"></a>2.FMCW雷达介绍</h1><h2 id="2-1-基本概念"><a href="#2-1-基本概念" class="headerlink" title="2.1 基本概念"></a>2.1 基本概念</h2><p>目前市面上毫米波雷达基于连续波调频 (FMCW)技术，因此下面我们将以FMCW雷达指代毫米波雷达。顾名思义，FMCW 雷达连续发射调频信号，以测量距离以及角度和速度。FMCW雷达通过反射信号的相位以及频率来定位、测速、测速等，这与激光雷达周期性发射短脉冲然后通过直接测量返回时间的原理不同。（<strong>关于激光雷达原理可以看我公众号另外一篇文章</strong> <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkzNjQ0NDMyMg==&mid=2247483738&idx=1&sn=18a945bf534dcb61fa7b309b687a7e27&chksm=c29fe997f5e8608117e314616a05daf28751b6a2caa5426802132bdba93f366083f77d83b0db&token=2025311329&lang=zh_CN#rd">激光雷达基本原理详解</a>）</p>
+<p>FMCW雷达系统所用信号的频率随时间变化呈线性升高。这种类型的信号也称为线性调频脉冲。 下图以幅度（振幅）相对时间的（A-t）函数，显示了线性调频脉冲信号表示。<br><img src="/img/2_RadarPrinciple/fmcw_at.png" srcset="/img/loading.gif" lazyload alt="FMCW t-A曲线"><br>以纵轴为频率，横轴为时间，则其（f-t）图像表示如下所示：<br><img src="/img/2_RadarPrinciple/fmcw_tf.png" srcset="/img/loading.gif" lazyload alt="FMCW雷达f-t图像"></p>
+<h2 id="2-2-基本框架"><a href="#2-2-基本框架" class="headerlink" title="2.2 基本框架"></a>2.2 基本框架</h2><p>FMCW雷达基本框架如下所示：</p>
+<p><img src="/img/2_RadarPrinciple/base_arch.png" srcset="/img/loading.gif" lazyload alt="FMCW雷达基本架构"></p>
+<p>可以看出，FMCW雷达由下述基础组件构成：</p>
+<ul>
+<li>发送天线(Tx Antenna)&amp;接收天线(Rx Antenna)</li>
+<li>混频器(Mixer)</li>
+<li>时钟源(晶振)</li>
+<li>ADC &amp; DSP</li>
+</ul>
+<h2 id="2-3-工作流程"><a href="#2-3-工作流程" class="headerlink" title="2.3 工作流程"></a>2.3 工作流程</h2><p>雷达工作流程如下：</p>
+<ul>
+<li>合成器生成一个线性调频脉冲；</li>
+<li>该线性调频脉冲由发射天线（TX 天线）发射；</li>
+<li>物体对该线性调频脉冲的反射生成一个由接收天线（RX 天线）捕捉的反射线性调频脉冲；</li>
+<li>“混频器”将 RX 和 TX 信号合并到一起，生成一个中频 (IF) 信号。</li>
+</ul>
+<p>其中：</p>
+<p><strong>混频器是一个电子组件，将两个信号合并到一起生成一个具有新频率的新信号。</strong></p>
+<p>其解释如下：</p>
+<p>对于两个正弦函数信号$x_1$和$x_2$如下：</p>
+<p>$$<br>x1&#x3D;sin(w_1t + φ_1) \<br>x2&#x3D;sin(w_2t + φ_2)<br>$$</p>
+<p>对于输出$x_{out}$有一个瞬时频率，等于两个输入正弦函数的瞬时频率之差。输出$x_{out}$的相位等于两个输入信号的相位之差，如下：<br>$$<br>x_{out}&#x3D;sin((w_1 - w_2)t + (φ_1 - φ_2))<br>$$</p>
+<h1 id="3-测距原理"><a href="#3-测距原理" class="headerlink" title="3.测距原理"></a>3.测距原理</h1><h2 id="3-1-雷达信号"><a href="#3-1-雷达信号" class="headerlink" title="3.1 雷达信号"></a>3.1 雷达信号</h2><p>以单个物体检测为例，使用时间对频率（f-t）图像对于 Tx、Rx 以及混频的 IF 信号的表示如下所示：</p>
+<p><a id="FMCW测距原理图像">FMCW测距原理信号图像</a><br><img src="/img/2_RadarPrinciple/radar_inout.png" srcset="/img/loading.gif" lazyload alt="输出输入频率图像"></p>
+<p>可以看出混频信号IF是一个频率固定的正弦信号$Asin(2πf_ot+φ_0)$。</p>
+<h2 id="3-2-距离计算"><a href="#3-2-距离计算" class="headerlink" title="3.2 距离计算"></a>3.2 距离计算</h2><p>假设物体的距离为$d$，那么 Rx 与 Tx 之间的延时 $τ$ 计算如下：</p>
+<p>$$<br>τ &#x3D; 2d &#x2F; c<br>$$</p>
+<p>其中：$d$ 是距离，$c$ 是光速</p>
+<p><strong>注意：</strong> $d$ 是待测目标距离，而$τ$是电磁波的飞行时间，由于飞行时间极短，因此如果直接对$τ$使用硬件测量成本极高（参考激光雷达）。</p>
+<p><strong>所以：</strong> 这里换一个方式，我们通过FFT反推信号的频率和相位，转换得到速度、距离等信息，推导过程如下：</p>
+<p>高中三角函数学过，旋转角频率$w$和频率$f$之间关系如下：</p>
+<p>$$<br>w &#x3D; 2πf<br>$$</p>
+<p>那么对于 Rx 以及 Tx 混合得到 IF 信号的初始相位有：</p>
+<p>$$<br>φ_0 &#x3D; w_c * τ &#x3D; 2πf_c τ<br>$$</p>
+<p>其中：$f_c$是雷达的Tx信号的初始频率</p>
+<p>由于：</p>
+<p>$$<br>τ &#x3D; 2d &#x2F; c<br>$$</p>
+<p>因此:</p>
+<p>$$<br>φ_0 &#x3D; 2πf_c2d &#x2F; c &#x3D; 4πf_cd &#x2F; c \<br>&#x3D; 4πd&#x2F;λ<br>$$</p>
+<p>其中，$λ$为初始信号波长($c&#x3D;f_cλ$)</p>
+<p>其次，根据<a href="#FMCW%E6%B5%8B%E8%B7%9D%E5%8E%9F%E7%90%86%E5%9B%BE%E5%83%8F">FMCW测距原理图像</a>，可知混频 IF 信号其频率$f_o$为</p>
+<p>$$<br>f_o &#x3D; 2Sd&#x2F;c<br>$$</p>
+<p>其中：$S$为FMCW频率变化率，单位为Mhz&#x2F;s</p>
+<p>那么，IF 信号可以表示如下：</p>
+<p>$$<br>IF &#x3D; Asin(2πf_ot+φ_0)<br>$$</p>
+<p>其中：$f_o &#x3D; 2Sd&#x2F;c$，$φ_0 &#x3D; 4πd &#x2F; λ$</p>
+<p>到这里，我们便可以知道，对于一个反射物体，我们对 IF 信号做FFT，可以知道其频率$f$以及相位$φ$，那么其距离为：</p>
+<p>$$<br>d &#x3D; f_oc &#x2F; 2S &#x3D; φ_0c&#x2F;4πf_c<br>$$</p>
+<p>一般计算时我们选择频率计算即可。</p>
+<h2 id="3-3-多目标距离计算"><a href="#3-3-多目标距离计算" class="headerlink" title="3.3 多目标距离计算"></a>3.3 多目标距离计算</h2><p>对于多目标物体，IF混频信号则由多反射目标距离不同，那么反射回来图像则如下所示：</p>
+<p><img src="/img/2_RadarPrinciple/mult-fft.png" srcset="/img/loading.gif" lazyload alt="多目标反射信号"><br>可以看出，多目标反射则对应多个Rx信号，其频率与相位均不相同。对IF信号做完FFT之后可以得到多个主干频率如下：</p>
+<p><img src="/img/2_RadarPrinciple/mult_obj.png" srcset="/img/loading.gif" lazyload alt="多目标FFT"></p>
+<p>通过$d &#x3D; f_oc &#x2F; 2S$ 则可以分别计算出这三个物体的距离了。</p>
+<h2 id="3-4-距离分辨率计算"><a href="#3-4-距离分辨率计算" class="headerlink" title="3.4 距离分辨率计算"></a>3.4 距离分辨率计算</h2><p>距离分辨率是辨别两个或更多物体的能力。当两个物体靠近到某个位置时，雷达系统将不再能够将二者区分开物体。傅里叶变换理论指出，通过延长 IF信号，可以提高分辨率。</p>
+<p>但要延长 IF 信号，还必须按比例增加带宽。延长的IF 信号会产生一个有两个分离峰值的 IF 谱。</p>
+<p>傅里叶变换理论还指出，观测窗口 (T) 可以分辨间隔超过 1&#x2F;THz 的频率分量。这意味着只要频率差满足下面公式中给出的关系，就可以分辨两个 IF 单音信号。</p>
+<p>$$<br>Δf&gt;1&#x2F;T_c<br>$$</p>
+<p>其中$T_c$是观测时间长度，即做FFT信号时间长度。</p>
+<p>而由于：</p>
+<p>$$<br>Δf&#x3D;2SΔd&#x2F;c<br>$$</p>
+<p>则有</p>
+<p>$$<br>Δd&gt;c&#x2F;2ST_c&#x3D;c&#x2F;2B (B&#x3D;ST_c)<br>$$</p>
+<p>因此距离分辨率有：</p>
+<p>$$<br>Δd_{res}&#x3D;c&#x2F;2B<br>$$</p>
+<p>因此，对于带宽为 Ghz 的FMCW雷达，大概为cm级别的分辨率，例如带宽$B&#x3D;4Ghz$线性调频脉冲带宽的的雷达距离分辨率为3.75cm：</p>
+<p>$$<br>Δd_{res}&#x3D;c&#x2F;2B&#x3D;0.0375m<br>$$</p>
+<p>好了到这里距离已经计算出来了，那么速度、角度是怎么计算出来的呢？<strong>请继续往下看！！！</strong></p>
+<h1 id="4-测速原理"><a href="#4-测速原理" class="headerlink" title="4.测速原理"></a>4.测速原理</h1><h2 id="4-1-Radar测速信号"><a href="#4-1-Radar测速信号" class="headerlink" title="4.1 Radar测速信号"></a>4.1 Radar测速信号</h2><p>为了测量速度， FMCW 雷达会发射两个间隔 $T_c$ 的线性调频脉冲。每个反射的线性调频脉冲通过 FFT加以处理，以便检测物体的距离，这个FFT称之为距离FFT。对应于每个线性调频脉冲的距离 FFT 将在同一位置出现峰值，但相位不同。该测得的相位差对应于速度为 $vT_c$ 的物体的移动</p>
+<p><img src="/img/2_RadarPrinciple/radar_meature_spd.png" srcset="/img/loading.gif" lazyload alt="双线性脉冲速度测量"></p>
+<p>通过相位差公式$φ_0 &#x3D; 4πd &#x2F; λ$我们可以知：</p>
+<p>$$<br>Δφ&#x3D;4πΔd&#x2F;λ&#x3D;4πvT_c&#x2F;λ<br>$$</p>
+<p>则有：</p>
+<p>$$<br>v&#x3D;Δφλ&#x2F;4πT_c<br>$$</p>
+<p>由于速度测量基于相位差，因为相位存在周期性为$(-π，π)$，因此会存在模糊性或者周期性。这种测量仅在 $|Δφ| &lt; π$ 时具有非模糊性。</p>
+<p>故可知 <strong>当$|Δφ|&#x3D; π$，雷达最大可测量的速度为：</strong></p>
+<p>$$<br>v_{max}&#x3D;λ&#x2F;4T_c<br>$$</p>
+<h2 id="4-2-同一位置不同物体速度测算"><a href="#4-2-同一位置不同物体速度测算" class="headerlink" title="4.2 同一位置不同物体速度测算"></a>4.2 同一位置不同物体速度测算</h2><p>如果速度不同的多个移动物体在测量时与雷达的距离相同，则双线性调频脉冲速度测量方法不起作用。这些物体由于与雷达的距离相同，因而会生成IF 频率完全相同的反射线性调频脉冲。因此，距离FFT 会产生单个峰值，该峰值表示来自所有这些距离相同的物体的合并信号。简单的相位比较技术将不起作用。</p>
+<p>在这种情况下，为了测量速度，雷达系统必须发射两个以上的线性调频脉冲。它发射一组 N 个等间隔线性调频脉冲。这组线性调频脉冲称为线性调频脉冲帧。</p>
+<p>下图显示了一个线性调频脉冲帧随时间变化的频率：</p>
+<p><img src="/img/2_RadarPrinciple/linear_freq.png" srcset="/img/loading.gif" lazyload alt="线性调频脉冲"></p>
+<p>距离 FFT 处理反射的一组线性调频脉冲，从而产生一组 N 个位置完全相同的峰值，但每个峰值都有一个不同的相位，包含来自这两个物体的相位成分（来自各个物体的单独相位成分由下图中的红色和蓝色相量表示）。</p>
+<p><img src="/img/2_RadarPrinciple/range_fft.png" srcset="/img/loading.gif" lazyload alt="距离FFT产生的N个向量"></p>
+<p>这个里  $v_1$ 和 $v_2$  通过多普勒FFT则可以获取，即对n组信号的每个信号单独做FFT，具体可以参考下图：</p>
+<p><img src="/img/2_RadarPrinciple/drppler_fft.png" srcset="/img/loading.gif" lazyload alt="多普勒FFT"></p>
+<p>通过多普勒FFT，便可以区分出两个不同速度物体：</p>
+<p><img src="/img/2_RadarPrinciple/droppler_fft_spd.png" srcset="/img/loading.gif" lazyload alt="多普勒FFT区分两个物体"></p>
+<p>其中  $w_1$ 和 $w_2$  对应于各个物体连续线性调频脉冲之间的相位差，则两个物体的速度可以得到如下：</p>
+<p>$$<br>v_1&#x3D;w_1λ&#x2F;4πT_c \<br>v_2&#x3D;w_2λ&#x2F;4πT_c<br>$$</p>
+<h2 id="4-3-速度分辨率"><a href="#4-3-速度分辨率" class="headerlink" title="4.3 速度分辨率"></a>4.3 速度分辨率</h2><p>离散傅里叶变换的理论指出，两个离散频率 $w_1$ 和 $w_2$ 在 $Δw &#x3D; w_2 – w1 &gt; 2π &#x2F; N$ 个弧度&#x2F;样本时，是可以分辨的。</p>
+<p>由于 $Δw$ 是由 $Δφ&#x3D;4πvT_c&#x2F;λ$定义的，因而当帧周期为 $Tf &#x3D; NT_c$ 时，可通过数学方法推导出速度分辨率：</p>
+<p>$$<br>v&gt;v_{res}&#x3D;λ&#x2F;2T_f<br>$$</p>
+<p>可知，雷达的速度分辨率与帧时间 $T_f$ 成反比</p>
+<h1 id="5-角度测量"><a href="#5-角度测量" class="headerlink" title="5 角度测量"></a>5 角度测量</h1><h2 id="5-1-角度测量条件"><a href="#5-1-角度测量条件" class="headerlink" title="5.1 角度测量条件"></a>5.1 角度测量条件</h2><p>FMCW 雷达系统可以使用水平面估算反射信号的角度，该角度也称为到达角 (AoA)，如下图所示：</p>
+<p><img src="/img/2_RadarPrinciple/radar_aoa.png" srcset="/img/loading.gif" lazyload alt="Radar到达角"></p>
+<p>需要注意的是雷达估算角度至少需要两个 Rx 天线，如下图所示：</p>
+<p><img src="/img/2_RadarPrinciple/aor_tx_rx.png" srcset="/img/loading.gif" lazyload alt="使用2Rx天线估计角度"></p>
+<h2 id="5-2-角度测量推导"><a href="#5-2-角度测量推导" class="headerlink" title="5.2 角度测量推导"></a>5.2 角度测量推导</h2><p>我们知道，对于同一个物体，两个接受天线接受的相位差为：</p>
+<p>$$<br>Δφ&#x3D;wΔt<br>$$</p>
+<p>其中，$w&#x3D;2πf_c$, $Δt&#x3D;dsin(θ)&#x2F;c$</p>
+<p>因此：</p>
+<p>$$<br>Δφ&#x3D;2πf_cdsin(θ)&#x2F;c \<br> &#x3D; 2πdsin(θ)&#x2F;λ<br>$$</p>
+<p>因此，角度可以通反三角函数得到：</p>
+<p>$$<br> θ &#x3D; sin^{-1}(Δφλ&#x2F;2πd)<br>$$</p>
+<p>注意，$Δφ$ 取决于 $sin(θ)$，这被称为非线性依赖关系。</p>
+<p>$sin(θ)$仅在$θ$的值很小时，才是线性函数的近似值： $sin(θ)&#x3D;θ$。因此，估算准确度取决于 AoA，且在 $θ$ 的值很小时更准确，如下图所示：<br><img src="/img/2_RadarPrinciple/aoa_acc.png" srcset="/img/loading.gif" lazyload alt="AoA精度"></p>
+<p>与速度获取计算方式相似，想计算物体的角度偏差，需要计算不同接受天线之间的相位差，好了第三个角度 FFT 来了，还是参考图像如下：</p>
+<p><img src="/img/2_RadarPrinciple/drppler_fft.png" srcset="/img/loading.gif" lazyload alt="多普勒FFT"></p>
+<h2 id="5-3-最大视场角"><a href="#5-3-最大视场角" class="headerlink" title="5.3 最大视场角"></a>5.3 最大视场角</h2><p>雷达的最大角视场由雷达可以估算的最大 AoA 来界定，如下：<br><img src="/img/2_RadarPrinciple/aoa_max.png" srcset="/img/loading.gif" lazyload alt="最大AoA"></p>
+<p>由于角度的精准测量受制于 $|Δw| &lt; 180°$，对应关系有</p>
+<p>$$<br> 2πdsin(θ)&#x2F;λ &lt; π<br>$$</p>
+<p>因此，角度最大为：</p>
+<p>$$<br> θ_{max} &#x3D; sin^{-1}(λ&#x2F;2d)<br>$$</p>
+<p>可知：两个天线之间的间隔 $d &#x3D; λ&#x2F;2$ 会导致 ±90°的最大角视场</p>
+<h1 id="6-总结与效果"><a href="#6-总结与效果" class="headerlink" title="6. 总结与效果"></a>6. 总结与效果</h1><p>不同频率的雷达测量距离不同、最大探测角度也不同。目前Radar最基础的算法就是FFT，基于距离FFT、速度FFT以及角度FFT获取物体的运动信息，最终得到雷达图像。</p>
+<p>Radar的典型效果如下所示：</p>
+<p><img src="/img/2_RadarPrinciple/radar_result.png" srcset="/img/loading.gif" lazyload alt="测量效果"></p>
+<p>可以看出，目前3D Radar探测效果为一个平面数据，只有速度v、距离d以及角度θ信息，缺少了高度h信息，而这个在后续的4D Radar中进行了优化，这个我们后面再讲。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>[1] 毫米波雷达传感器基础知识</p>
+<p>[2] MIMO Radar</p>
+<hr>
+<p><strong>如果您对ADAS感兴趣，欢迎关注我的公众号、知乎、CSDN等，同时发表文章中使用源码会在我的GitHub进行开源<code>（网页About Me中有公众号、Github等信息）</code></strong></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/RADAR/" class="category-chain-item">RADAR</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ADAS/" class="print-no-link">#ADAS</a>
+      
+        <a href="/tags/RADAR/" class="print-no-link">#RADAR</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ADAS-Radar|一文入门汽车毫米波雷达基本原理</div>
+      <div>https://jokereyeadas.github.io/2023/07/20/2.一文看懂毫米波雷达基础原理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Joker.Mao</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/26/3.%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E6%B1%BD%E8%BD%A6%E7%94%B5%E6%B0%94%E4%B8%8E%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0/" title="ADAS-EE|自动驾驶汽车E/E拓扑架构与软件功能框架">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ADAS-EE|自动驾驶汽车E/E拓扑架构与软件功能框架</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/20/1.%E5%AE%89%E6%A3%AE%E7%BE%8E%E4%B8%80%E5%B8%A7150dB%E6%98%AF%E5%A6%82%E4%BD%95%E7%BB%83%E6%88%90%E7%9A%84/" title="ADAS-CIS|安森美AR0821两帧150dB是如何练成的？">
+                        <span class="hidden-mobile">ADAS-CIS|安森美AR0821两帧150dB是如何练成的？</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

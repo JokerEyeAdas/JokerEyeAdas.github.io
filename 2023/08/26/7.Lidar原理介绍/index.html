@@ -1,0 +1,787 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/adas_eyes_log.jpg">
+  <link rel="icon" href="/img/adas_eyes_log.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Joker.Mao">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="引言“ADAS激光雷达领域厮杀激烈，从最开始的纯机械32&#x2F;64&#x2F;128线到现在MEMS振镜半固态激光雷达，再到纯固态Flash补盲雷达，激光雷达在ADAS的需求之下发展的如火如荼。目前国内禾赛、速腾等厂家车规级激光雷达已经批量出货，今天我们揭秘激光雷达神秘的面纱。”  1 基本原理激光雷达本质是一个深度传感器，其测距原理是利用dToF(direct Time of Flight">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ADAS-Lidar|一文看懂车载激光雷达原理">
+<meta property="og:url" content="https://jokereyeadas.github.io/2023/08/26/7.Lidar%E5%8E%9F%E7%90%86%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="ADAS之眼">
+<meta property="og:description" content="引言“ADAS激光雷达领域厮杀激烈，从最开始的纯机械32&#x2F;64&#x2F;128线到现在MEMS振镜半固态激光雷达，再到纯固态Flash补盲雷达，激光雷达在ADAS的需求之下发展的如火如荼。目前国内禾赛、速腾等厂家车规级激光雷达已经批量出货，今天我们揭秘激光雷达神秘的面纱。”  1 基本原理激光雷达本质是一个深度传感器，其测距原理是利用dToF(direct Time of Flight">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/7_Lidar_Principle/Lidar.png">
+<meta property="article:published_time" content="2023-08-26T14:43:16.000Z">
+<meta property="article:modified_time" content="2023-10-04T02:02:28.453Z">
+<meta property="article:author" content="Joker.Mao">
+<meta property="article:tag" content="ADAS">
+<meta property="article:tag" content="Lidar">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/7_Lidar_Principle/Lidar.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>ADAS-Lidar|一文看懂车载激光雷达原理 - ADAS之眼</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jokereyeadas.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":80,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ADAS之眼</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ADAS-Lidar|一文看懂车载激光雷达原理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-26 22:43" pubdate>
+          2023年8月26日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ADAS-Lidar|一文看懂车载激光雷达原理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>“ADAS激光雷达领域厮杀激烈，从最开始的纯机械32&#x2F;64&#x2F;128线到现在MEMS振镜半固态激光雷达，再到纯固态Flash补盲雷达，激光雷达在ADAS的需求之下发展的如火如荼。目前国内禾赛、速腾等厂家车规级激光雷达已经批量出货，今天我们揭秘激光雷达神秘的面纱。”</p>
+<p><img src="/img/7_Lidar_Principle/Lidar.png" srcset="/img/loading.gif" lazyload alt="Lidar"></p>
+<h1 id="1-基本原理"><a href="#1-基本原理" class="headerlink" title="1 基本原理"></a>1 基本原理</h1><p>激光雷达本质是一个深度传感器，其测距原理是利用dToF(direct Time of Flight)飞行时间来计算，典型激光雷达点云图如下所示：<br><img src="/img/7_Lidar_Principle/point_cloud.png" srcset="/img/loading.gif" lazyload alt="3D点云"></p>
+<p>相对于dToF直接飞行时间，还有iToF(indirect Time of Flight)，这个我们后面单独开一期文章进行科普。不同于传统的如双目图像来推算三维信息，而是通过红外光在空气中的飞行时间，计算出目标体的距离。</p>
+<p>典型的ToF相机原理如下图所示：</p>
+<p><img src="/img/7_Lidar_Principle/principle.png" srcset="/img/loading.gif" lazyload alt="ToF原理"></p>
+<p>ToF相机主动发出红外光，光线遇到物体之后反射到ToF相机，ToF相机通过发射光以及反射光之间时间差，也就是红外光的飞行时间，通过公式来计算物体距离：</p>
+<p>$$<br>d &#x3D; 1&#x2F;2∗c∗∆t<br>$$</p>
+<p>其中，∆t为ToF测试时间，c为光速，d为测试物体距离。</p>
+<p>另外，自然界的环境光也会夹杂在反射光中一起反射进入到ToF传感器中，这部分环境光对于真实反射光而言就是噪声，会降低测量的信噪比。</p>
+<p>以目前市面上主流激光雷达如禾赛、速腾、Livox等激光雷达转镜方案为例，架构如下所示：</p>
+<p><img src="/img/7_Lidar_Principle/arch.png" srcset="/img/loading.gif" lazyload alt="Lidar架构"></p>
+<p>可以看出一个激光雷达模组主要以下部件组成：</p>
+<ul>
+<li>转镜 or MEMS振镜：光路折射处理；</li>
+<li>激光发射器：主动发射红外光源；</li>
+<li>镜头：接收转镜反射的激光，过滤杂光；</li>
+<li>FPGA信号处理器：信号处理以及雷达控制；</li>
+<li>dToF Sensor，内部主要器件有：<ul>
+<li>SPAD：单光子雪崩二极管（Single Photon Avalanche Diode）</li>
+<li>TDC：时间数字转换器（Time to Digital Convert）<br>下面就其中的SPAD、TDC以及振镜进行介绍。</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-关键电子器件"><a href="#3-关键电子器件" class="headerlink" title="3 关键电子器件"></a>3 关键电子器件</h1><p>Lidar中关键的电子器件有SPAD、TDC、振镜、DSP等，今天我们就其中的SPAD、TDC、微振镜进行介绍。</p>
+<h2 id="3-1-SPAD"><a href="#3-1-SPAD" class="headerlink" title="3.1 SPAD"></a>3.1 SPAD</h2><p>dToF深度传感器上，SPAD像素能够检测单个光子，SPAD本质上是一个二极管，那么它就会有二极管该有的特性。</p>
+<p>SPAD工作特性曲线如下图所示：</p>
+<p><img src="/img/7_Lidar_Principle/spad.png" srcset="/img/loading.gif" lazyload alt="SPAD"></p>
+<p>上图来自于索尼官网，可以看出：</p>
+<ul>
+<li>击穿电压(VBD)施加到SPAD像素中的电极，通过设置过量偏置电压(VEX)超过VBD到电极，此时SPAD处于工作状态1。</li>
+<li>当像素被光子击中时，此时SPAD光电转换中产生的电子通过雪崩倍增被放大，SPAD进入状态2。</li>
+<li>然后，电极间电压降低至击穿电压并且雪崩倍增停止。此时后端收集雪崩倍增产生的电子。</li>
+<li>电压恢复到击穿电压（淬灭作用）后，再次将电极间电压设为过剩偏置电压，从而能够检测光子（再充电作用）。</li>
+</ul>
+<p>整个过程，由光子到达触发的电子倍增称为盖革模式，整个过程电子变化如下所示：</p>
+<p><img src="/img/7_Lidar_Principle/e_transfer.png" srcset="/img/loading.gif" lazyload alt="电子转移"></p>
+<h2 id="3-2-TDC"><a href="#3-2-TDC" class="headerlink" title="3.2 TDC"></a>3.2 TDC</h2><p>T<br>DC是dToF测量精度的关键器件之一，TDC原理是使用环形振荡器，通过级联反向二极管。当输入端给一个初始激励后，处于环形振荡器的每个二极管都会不断改变状态，而这个过程时间延迟很低在ps级别。开始工作后使用一个计数器进行计数便可以知道从激光发射到接收的时间差。</p>
+<p>TDC的典型硬件原理图如下所示：</p>
+<p><img src="/img/7_Lidar_Principle/TDC.png" srcset="/img/loading.gif" lazyload alt="TDC原理"></p>
+<p>每个SPAD像素都会进行多次测量，然后TDC的测量数据存放入Time Bin当中，Time Bin本质就是直方图统计。直方图统计每次测量反射时间的计数，直方图中的峰值即作为当前测量点的反射时间，而直方图中其他数据则为雷达身处环境中噪声，如下所示：</p>
+<p><img src="/img/7_Lidar_Principle/historm.png" srcset="/img/loading.gif" lazyload alt="TDC直方图"></p>
+<h2 id="3-3-MEMS振镜"><a href="#3-3-MEMS振镜" class="headerlink" title="3.3 MEMS振镜"></a>3.3 MEMS振镜</h2><p>传统激光雷达是使用两个电机带动两个透镜来实现水平方向以及垂直方向的扫描，但由于一般车上的震动大、工况复杂且电机寿命无法达到十几年寿命的需求，传统方案不是激光雷达的最优解，以蔚来ET7上使用的激光雷达拆解图为例，电机带动H&amp;V方向透镜的示意图如下：</p>
+<p><img src="/img/7_Lidar_Principle/motor_mirror.png" srcset="/img/loading.gif" lazyload alt="电机转镜"></p>
+<p>传统方案典型的弊端有两个：</p>
+<ul>
+<li>电机+透镜导致激光雷达整机模组体积大</li>
+<li>电机寿命低</li>
+</ul>
+<p>近些年随着MEMS技术的发展，MEMS Mirror广泛开始应用于投影、激光雷达等领域，其工作原理利用了法拉第电磁感应原理，将通电的线圈中放置于磁场当中，通过改变电流的方向来改变振镜的方向，其原理如下图所示：</p>
+<p><img src="/img/7_Lidar_Principle/mems_mirror.png" srcset="/img/loading.gif" lazyload alt="Mems-Mirror"></p>
+<h1 id="4-结束语"><a href="#4-结束语" class="headerlink" title="4 结束语"></a>4 结束语</h1><p>今天我们给大家介绍了车载激光雷达基本原理，讲解了基本原理、组成机构以及关键器件等，希望今天的介绍以及科普可以帮助您更加深入的了解车载激光雷达，对您的工作有所帮助。</p>
+<p>最后通过速腾发布的一则视频来了解激光雷达MEMS振镜方案整体协作流程，YouTube链接传送门：</p>
+<p><a target="_blank" rel="noopener" href="https://youtu.be/dN_0uJM0Egk">视频传送门</a></p>
+<hr>
+<p><strong>如果您对ADAS感兴趣，欢迎关注我的公众号、知乎、CSDN等，同时发表文章中使用源码会在我的GitHub进行开源（网页About Me中有公众号、Github等信息）</strong></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Lidar/" class="category-chain-item">Lidar</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ADAS/" class="print-no-link">#ADAS</a>
+      
+        <a href="/tags/Lidar/" class="print-no-link">#Lidar</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ADAS-Lidar|一文看懂车载激光雷达原理</div>
+      <div>https://jokereyeadas.github.io/2023/08/26/7.Lidar原理介绍/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Joker.Mao</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/08/26/4-%E7%B4%A2%E5%B0%BCIMX459%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEDemo%E8%AE%BA%E6%96%87%E6%B5%85%E6%9E%90/" title="ADAS-Lidar|索尼车载IMX459激光雷达芯片论文解析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ADAS-Lidar|索尼车载IMX459激光雷达芯片论文解析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/15/6.%E5%BC%80%E6%BA%90HDR-ISP%E4%BB%8B%E7%BB%8D/" title="开源|HDR-ISP开源项目介绍">
+                        <span class="hidden-mobile">开源|HDR-ISP开源项目介绍</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

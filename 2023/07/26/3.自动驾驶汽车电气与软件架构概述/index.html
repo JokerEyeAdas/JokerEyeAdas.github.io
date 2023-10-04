@@ -1,0 +1,778 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/adas_eyes_log.jpg">
+  <link rel="icon" href="/img/adas_eyes_log.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Joker.Mao">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="引言 之前在公众号中我们对自动驾驶常见传感器的原理进行了讲解，如《可见光相机》《IMU惯导传感器》《GPS传感器原理》《毫米波雷达原理》以及《激光雷达原理》。今天我们将结合TI自动驾驶部门专家发表的相关的论文，讲解现代自动驾驶汽车车身电气架构以及ADAS辅助驾驶软件的功能架构。(本文首发于博客&amp;公众号-“ADAS之眼“其他平台同步更新)  目前汽车辅助驾驶还是处于L2+阶段，L3以及L3以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ADAS-EE|自动驾驶汽车E&#x2F;E拓扑架构与软件功能框架">
+<meta property="og:url" content="https://jokereyeadas.github.io/2023/07/26/3.%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E6%B1%BD%E8%BD%A6%E7%94%B5%E6%B0%94%E4%B8%8E%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="ADAS之眼">
+<meta property="og:description" content="引言 之前在公众号中我们对自动驾驶常见传感器的原理进行了讲解，如《可见光相机》《IMU惯导传感器》《GPS传感器原理》《毫米波雷达原理》以及《激光雷达原理》。今天我们将结合TI自动驾驶部门专家发表的相关的论文，讲解现代自动驾驶汽车车身电气架构以及ADAS辅助驾驶软件的功能架构。(本文首发于博客&amp;公众号-“ADAS之眼“其他平台同步更新)  目前汽车辅助驾驶还是处于L2+阶段，L3以及L3以">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/3_AdasCarArch/Adas_Func_Block.png">
+<meta property="article:published_time" content="2023-07-26T13:15:09.000Z">
+<meta property="article:modified_time" content="2023-10-04T02:02:28.451Z">
+<meta property="article:author" content="Joker.Mao">
+<meta property="article:tag" content="E&#x2F;E">
+<meta property="article:tag" content="ADAS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/3_AdasCarArch/Adas_Func_Block.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>ADAS-EE|自动驾驶汽车E/E拓扑架构与软件功能框架 - ADAS之眼</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jokereyeadas.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":80,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ADAS之眼</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ADAS-EE|自动驾驶汽车E/E拓扑架构与软件功能框架"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-26 21:15" pubdate>
+          2023年7月26日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ADAS-EE|自动驾驶汽车E/E拓扑架构与软件功能框架</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><blockquote>
+<p><strong>之前在公众号中我们对自动驾驶常见传感器的原理进行了讲解，如《<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkzNjQ0NDMyMg==&mid=2247483674&idx=1&sn=25f2ec8a22e3d94422f98410ddfe3b34&chksm=c29fe9d7f5e860c1e0439f6039b638314bc88e13be47e08ec3a188b85077f8e3a7402e3e2bed&token=1080996952&lang=zh_CN#rd">可见光相机</a>》《<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkzNjQ0NDMyMg==&mid=2247483842&idx=1&sn=84a9c03ed5d59407185f63cb8b8c0d80&chksm=c29fe90ff5e86019c4b968c2ed4d40b4062fd1310bf89071e3fe0b7f557d83999fa3def9d517&token=1080996952&lang=zh_CN#rd">IMU惯导传感器</a>》《<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkzNjQ0NDMyMg==&mid=2247483820&idx=1&sn=dab55af7a501aa931ee783b4a2f2d1db&chksm=c29fe961f5e860775da0de7b7f91f073e5044d825868f577aa0e2105b9355d4d00820309f364&token=1080996952&lang=zh_CN#rd">GPS传感器原理</a>》《<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkzNjQ0NDMyMg==&mid=2247484260&idx=1&sn=cc3da360b8e8dbc43e35fcb263583f9d&chksm=c29feba9f5e862bffb93666df7b52f1f11f5b36293f834e30f23214cb3894e0a992f036751b9&token=1080996952&lang=zh_CN#rd">毫米波雷达原理</a>》以及《<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkzNjQ0NDMyMg==&mid=2247483738&idx=1&sn=18a945bf534dcb61fa7b309b687a7e27&chksm=c29fe997f5e8608117e314616a05daf28751b6a2caa5426802132bdba93f366083f77d83b0db&token=1080996952&lang=zh_CN#rd">激光雷达原理</a>》。今天我们将结合TI自动驾驶部门专家发表的相关的论文，讲解现代自动驾驶汽车车身电气架构以及ADAS辅助驾驶软件的功能架构。(本文首发于博客&amp;公众号-“<a href="https://jokereyeadas.github.io/">ADAS之眼</a>“其他平台同步更新)</strong></p>
+</blockquote>
+<p>目前汽车辅助驾驶还是处于L2+阶段，L3以及L3以上的高阶辅助驾驶也是各大公司在积极研究的项目，并且高阶辅助驾驶也是下一代系列汽车市场的发展领域。</p>
+<p>本文介绍以ADAS&#x2F;AD域为重点的典型车辆电子拓扑，其具有多个内部&#x2F;内部连接选项。在ADAS&#x2F;AD域，各种E&#x2F;E电气电子系统架构被拓扑多个ECU分区。本文分析了两个ADAS&#x2F;AD域的系统拓扑示例，其中Topology-I使用了基于传统ECU的增量方法，而拓扑II实现了成本优化的解决方案。</p>
+<p>本文还解释了自动驾驶功能的划分，例如高速公路驾驶、自动泊车。这涉及到拆分在给定拓扑中跨多个ECU的自动化感知（相机、雷达和激光雷达）、定位、融合、驾驶策略、运动规划和控制等功能。</p>
+<p>希望今天的科普可以使您对于ADAS汽车有着更深入的了解与认知！</p>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>汽车自动驾驶功能，如高速公路驾驶和停车辅助系统，越来越多地部署在中高端汽车中。随着自动驾驶汽车的发展，汽车车辆具有越来越复杂的电气和电子（E&#x2F;E）拓扑结构以解决汽车复杂的功能，典型的E&#x2F;E拓扑架构如下图所示:</p>
+<p><img src="/img/3_AdasCarArch/EE_Topology.png" srcset="/img/loading.gif" lazyload alt="汽车E/E拓扑"></p>
+<p>该电气电子拓扑的核心是各种ECU，它主要由MCU或者MPU组成，可以选择进行组合以实现给定的功能。为了给车辆提供可扩展、强健以及可维护的解决方案，汽车的E&#x2F;E拓扑结构通常由多个域组成，其中每个域控制一组功能。在每个域中，都有多个ECU，每个ECU控制一个功能或一组功能。</p>
+<p>E&#x2F;E拓扑架构中常用的域如下：</p>
+<ul>
+<li><strong>底盘和安全领域</strong>：控制转向的ECU，汽车油门控制；</li>
+<li><strong>电源控制域</strong>：用于控制发动机和电池等相关功能的ECU；</li>
+<li><strong>身体电子领域</strong>：控制车窗、空调、后视镜以及中央锁定等功能的ECU；</li>
+<li><strong>信息娱乐领域</strong>：控制娱乐显示的ECU，如AR-HUD、电子后视镜、无线电、导航等；</li>
+<li><strong>ADAS&#x2F;AD域</strong>：传感器（摄像头，雷达、激光雷达）数据接入、感知处理、规划决策等；</li>
+<li><strong>连接&#x2F;远程通信领域</strong>：包括调制解调器V2X、移动、蜂窝网络等以提供汽车与外部连接能力。</li>
+</ul>
+<p>每个域内的ECU使用多个连接电缆和协议，例如基于CAN、车载以太网的的通信。中间网关为不同域之间通信的桥梁，所有控制域均连接到中央网关，不同域之间的通信通过中央网关完成。</p>
+<h1 id="ADAS-AD域"><a href="#ADAS-AD域" class="headerlink" title="ADAS&#x2F;AD域"></a>ADAS&#x2F;AD域</h1><h2 id="ADAS-AD-功能框架"><a href="#ADAS-AD-功能框架" class="headerlink" title="ADAS&#x2F;AD 功能框架"></a>ADAS&#x2F;AD 功能框架</h2><p>在汽车众多的控制域中，ADAS&#x2F;AD域实现了高速公路驾驶、城区自动驾驶以及多个自动泊车等功能（L2-L5)。下图显示了实现这些功能的软硬件框图：</p>
+<p><img src="/img/3_AdasCarArch/Adas_Func_Block.png" srcset="/img/loading.gif" lazyload alt="ADAS功能框架"></p>
+<p>自动驾驶的关键块是感知、定位、融合、驾驶策略、路径规划和控制。各个关键模块功能分别如下：</p>
+<ul>
+<li><strong>感知</strong>：利用摄像头、毫米波雷达、激光雷达等传感器用于收集汽车周围的环境信息；</li>
+<li><strong>融合</strong>：结合多传感器特性完成外界信息的融合以及提取；</li>
+<li><strong>定位</strong>：结合相机、IMU惯导、GPS全球定位以及高精地图信息来完成汽车的定位；</li>
+<li><strong>路径规划</strong>：结合V2X以及融合后的感知、定位信息，完成汽车的路径规划；</li>
+<li><strong>运动控制</strong>：结合路径规划信息，完成对汽车的运动控制</li>
+</ul>
+<p>其中，感知以及多传感器融合是后续路径规划以及控制的前提，因此感知融合的结果的准确性对于汽车进行控制尤为重要。</p>
+<h2 id="多传感器融合"><a href="#多传感器融合" class="headerlink" title="多传感器融合"></a>多传感器融合</h2><p>这里结合另一篇论文中camera结合毫米波雷达进行融合为例进行说明，简要说明多传感器在汽车高阶自动驾驶中感知的应用。</p>
+<p>首先，我们要确定一点，那就是<code>&quot;没有完美的传感器&quot;</code>。不同传感器由于机制的不同，因此针对不同感知任务的性能不同。典型Camera以及毫米波雷达针对不同感知任务的特性如下所示：</p>
+<p><img src="/img/3_AdasCarArch/camera_radar.png" srcset="/img/loading.gif" lazyload alt="Camera vs Radar"></p>
+<p>可知的是，Camera受天气影响较大，且对于物体的速度、距离测量效果较差，而毫米波雷达恰恰又可以弥补Camera的缺陷。同样的，Camera也可以弥补雷达无法对物体进行分类的的缺陷。因此，不同的传感器进行融合结果更加准确，同时也符合汽车功能安全的需求。</p>
+<p>典型的Camera与Radar融合框架如下：</p>
+<p><img src="/img/3_AdasCarArch/fustion.png" srcset="/img/loading.gif" lazyload alt="Camera Radar Fusion"></p>
+<p>可以看出，Radar结合Camera融合后，物体的类别、角度、速度、距离等信息均可以得到，给后续的导航、路径规划提供了丰富的信息。</p>
+<h2 id="ADAS-AD-ECU拓扑示例"><a href="#ADAS-AD-ECU拓扑示例" class="headerlink" title="ADAS&#x2F;AD ECU拓扑示例"></a>ADAS&#x2F;AD ECU拓扑示例</h2><h3 id="拓扑1"><a href="#拓扑1" class="headerlink" title="拓扑1"></a>拓扑1</h3><p>Demo拓扑1的结构建立在传统ADAS功能的基础上，例如基于前视相机以及中央雷达的LKA（车道保持辅助）、盲点检测（BSD）、前向碰撞警告（FCW）等。这种拓扑的结构如下所示：<br><img src="/img/3_AdasCarArch/TopologyI.png" srcset="/img/loading.gif" lazyload alt="Topology I"></p>
+<p>在该拓扑中，检测的对象数据（行人、车辆以及车道线等）通常是使用单独的ECU来计算的。数据计算完成后传递到中央ECU进行融合。在该拓扑结构中，带宽要求在ADAS&#x2F;AD域中是较低的，因此可以使用低速接口处理，例如CAN-FD等。中央融合ECU提供功能安全保障，使用提供冗余的两个芯片和ASIL-D MCU或者MPU。融合后的数据可以通过网关和控制域ECU进行通信，完成车辆的偏离车道控制或者防行人碰撞等功能。</p>
+<h3 id="拓扑2"><a href="#拓扑2" class="headerlink" title="拓扑2"></a>拓扑2</h3><p>这种拓扑结构从头开始构建的新架构，旨在优化整体性能的驾驶功能，如下图所示：</p>
+<p><img src="/img/3_AdasCarArch/TopologyII.png" srcset="/img/loading.gif" lazyload alt="Topology II"></p>
+<p>在这种拓扑结构中，预融合ECU（称为卫星ECU）用于在前方进行感知摄像头、雷达和激光雷达以及环视相机。处理后的前方和周围的融合信息被传递到中央融合ECU进行最终融合。在ADAS&#x2F;AD域中的带宽要求主要看融合数据的精细度。中央fusion ECU使用提供冗余的两个芯片和ASIL-D MCU或者MPU。中心的fusion ECU还执行定位、驾驶策略、运动规划等功能。执行器的计算控制命令通过使用域的中央网关发送到汽车控制域控制器。这种拓扑结构的优点是操作灵活，数据融合的性能有所提升。</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>今天我们介绍了现在自动驾驶汽车的电子电气整体框架、ADAS域功能框架以及ADAS域可能使用的两种拓扑框架，当然随着科技的发展，更好更优的架构不断出现，不断进化着我们的自动驾驶汽车。</p>
+<p>希望我们的介绍可以使您对于自动驾驶汽车框架有着更好地理解！如果您对今天的内容感兴趣，请公众号后台私信我《<code>ADAS E/E 拓扑</code>》，获取论文DOI。</p>
+<hr>
+<p><strong>如果您对ADAS感兴趣，欢迎关注我的公众号、知乎、CSDN等，同时发表文章中使用源码会在我的GitHub进行开源<code>（网页About Me中有公众号、Github等信息）</code></strong></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/ADAS/" class="category-chain-item">ADAS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/E-E/" class="print-no-link">#E/E</a>
+      
+        <a href="/tags/ADAS/" class="print-no-link">#ADAS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ADAS-EE|自动驾驶汽车E/E拓扑架构与软件功能框架</div>
+      <div>https://jokereyeadas.github.io/2023/07/26/3.自动驾驶汽车电气与软件架构概述/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Joker.Mao</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/08/02/5-Itof%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" title="iToF|一文了解iToF深度测距原理与芯片架构">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">iToF|一文了解iToF深度测距原理与芯片架构</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/20/2.%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82%E6%AF%AB%E7%B1%B3%E6%B3%A2%E9%9B%B7%E8%BE%BE%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86/" title="ADAS-Radar|一文入门汽车毫米波雷达基本原理">
+                        <span class="hidden-mobile">ADAS-Radar|一文入门汽车毫米波雷达基本原理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

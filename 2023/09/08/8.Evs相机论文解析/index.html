@@ -1,0 +1,780 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/adas_eyes_log.jpg">
+  <link rel="icon" href="/img/adas_eyes_log.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Joker.Mao">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="引言基于事件的（Event-Based，EB）视觉传感器像素单独检测像素时域亮度对比度是否超过预设的相对阈值，以追踪相对光变化（Contrast Detection，CD），并定义采样点无关于帧的测量绝对能量（Exposure Measurement，EM）。由于记录数据的时间精度和固有抑制，固有抑制时间冗余导致后处理成本的降低、宽场景的动态范围等特性，EB传感器在高速、低功耗机器视觉中越来越受欢">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EVS相机|一文了解索尼EVS传感器原理、芯片架构">
+<meta property="og:url" content="https://jokereyeadas.github.io/2023/09/08/8.Evs%E7%9B%B8%E6%9C%BA%E8%AE%BA%E6%96%87%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="ADAS之眼">
+<meta property="og:description" content="引言基于事件的（Event-Based，EB）视觉传感器像素单独检测像素时域亮度对比度是否超过预设的相对阈值，以追踪相对光变化（Contrast Detection，CD），并定义采样点无关于帧的测量绝对能量（Exposure Measurement，EM）。由于记录数据的时间精度和固有抑制，固有抑制时间冗余导致后处理成本的降低、宽场景的动态范围等特性，EB传感器在高速、低功耗机器视觉中越来越受欢">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/8_EVS/p-11_mv_pc.png">
+<meta property="article:published_time" content="2023-09-08T14:43:16.000Z">
+<meta property="article:modified_time" content="2023-10-04T02:02:28.453Z">
+<meta property="article:author" content="Joker.Mao">
+<meta property="article:tag" content="ADAS">
+<meta property="article:tag" content="EVS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/8_EVS/p-11_mv_pc.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>EVS相机|一文了解索尼EVS传感器原理、芯片架构 - ADAS之眼</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jokereyeadas.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":80,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ADAS之眼</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="EVS相机|一文了解索尼EVS传感器原理、芯片架构"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-08 22:43" pubdate>
+          2023年9月8日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">EVS相机|一文了解索尼EVS传感器原理、芯片架构</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>基于事件的（Event-Based，EB）视觉传感器像素单独检测像素时域亮度对比度是否超过预设的相对阈值，以追踪相对光变化（Contrast Detection，CD），并定义采样点无关于帧的测量绝对能量（Exposure Measurement，EM）。由于记录数据的时间精度和固有抑制，固有抑制时间冗余导致后处理成本的降低、宽场景的动态范围等特性，EB传感器在高速、低功耗机器视觉中越来越受欢迎。</p>
+<p>本文基于Sony官网对于EVS相机的表述以及Sony发表的EVS相机论文，对EVS相机的原理、Sensor架构进行展开描述，对论文感兴趣的童鞋可以在我的Github中<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">AdasTechPaper</a>中阅读。</p>
+<p><img src="/img/8_EVS/p-11_mv_pc.png" srcset="/img/loading.gif" lazyload alt="Evs Chip"></p>
+<p><strong>本文首发于公众号与个人博客ADAS之眼，其他平台同步更新。</strong></p>
+<h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1.概述"></a>1.概述</h1><h2 id="1-1-基本概念"><a href="#1-1-基本概念" class="headerlink" title="1.1 基本概念"></a>1.1 基本概念</h2><p>基于事件的视觉传感器（EVS，Event-Based Vision Sensor）是一种生物启发的传感器，通过将输出数据限制为每个像素的亮度变化，并结合坐标和时间信息，实现低延迟的高速数据输出。它们以物体的运动为重点，捕捉物体的详细运动，更适合用于开发作为机器的“眼睛”，尤其在自动驾驶领域。</p>
+<p><img src="/img/8_EVS/p-11_products_evs02_en.jpg" srcset="/img/loading.gif" lazyload alt="Evs"></p>
+<p>与传统基于帧的图像传感器相比，EVS具有极快的运动捕捉，在标准的光学设置下帧率也可以达到10000fps，此外还具有高动态范围、低功耗且对片上存储需求较低。传统相机与EVS传感器图像的典型对比如下：</p>
+<p><img src="/img/8_EVS/caompare.png" srcset="/img/loading.gif" lazyload alt="Compare"></p>
+<h2 id="1-2-论文主要工作"><a href="#1-2-论文主要工作" class="headerlink" title="1.2 论文主要工作"></a>1.2 论文主要工作</h2><p>时间对比度（CD）的信息以“事件”的形式编码：数据包含原始像素的坐标、时间戳和对比度极性。为了最大化单个像素以高精度采集信息，早期时间戳以及高度处吞吐量对于维持事件的时序非常重要。在之前的工作中，不同权衡事件精度以支持更简单的体系结构和降低输出（事件帧）的比特率的方案已经被提出。然而，这些方法与异步EB像素阵列并不能很好的匹配，限制了传感器在高速下的应用性。比如，快速时间编码结构光深度传感，高速具有kHz更新率的跟踪和光流，或可见光通信（visible-light Communication，VLC）。但本文提出的减少位&#x2F;事件数的方法是可以设计成不影响事件数据时间精度的。</p>
+<p>另外基于事件视觉传感器，由于复杂的像素电路，长期以来一直是大像素尺寸和低分辨率。受益于直接晶圆粘合技术以及堆叠技术，实现了在背照式CIS的光子的高效转移，因此，在CMOS上实现高密度的模拟信号处理以实现具有竞争力的分辨率和尺寸具有了可能。本文介绍了一个3D堆叠EB视觉传感器，使用像素级Cu-Cu键合互连，实现4.86μm像素间距，高清分辨率低于½”光学格式。像素内电路通过失速安全低延迟接口与异步行选择树。来自活动行的事件立即被加上时间戳并被安排用于比特有效的矢量读出。数字事件信号处理（ESP）流水线具有可编程事件速率控制器（ERC）以及用于动态比特压缩的事件数据格式化器（EDF）。并行输出具有数据封装的接口（EOI）将事件数据直接提供给处理器，或连接到外部MIPI或USB收发器。</p>
+<h1 id="2-基本原理"><a href="#2-基本原理" class="headerlink" title="2.基本原理"></a>2.基本原理</h1><h2 id="2-1-人眼模型"><a href="#2-1-人眼模型" class="headerlink" title="2.1 人眼模型"></a>2.1 人眼模型</h2><p>EVS 旨在模拟人眼感知光线的方式。人眼的工作方式是，当视网膜上的受体暴露在光线下时，会将其转换为视觉信号发送到大脑。随后的神经元细胞识别明暗，信息通过视网膜神经节细胞传递到大脑的视觉皮层。</p>
+<p>在 EVS 中，入射光在成像器的光接收电路中转换为电信号。信号通过放大器单元并到达比较器，在比较器中差分亮度数据被分离并分为正信号和负信号，然后将其处理并作为事件输出。</p>
+<p><img src="/img/8_EVS/BasePrincilpe.png" srcset="/img/loading.gif" lazyload alt="基本原理"></p>
+<h2 id="2-2-事件捕捉"><a href="#2-2-事件捕捉" class="headerlink" title="2.2 事件捕捉"></a>2.2 事件捕捉</h2><p>在基于事件的视觉传感器中，对每个像素检测到的亮度变化进行过滤，以仅提取超出预设阈值的亮度变化。然后，该事件数据在输出之前的像素坐标、时间和极性信息组合。每个像素异步运行，独立于其他像素。下图说明了传感器如何捕捉球的运动：</p>
+<p><img src="/img/8_EVS/principle.png" srcset="/img/loading.gif" lazyload alt="运动记录"></p>
+<h2 id="2-3-Pixel原理"><a href="#2-3-Pixel原理" class="headerlink" title="2.3 Pixel原理"></a>2.3 Pixel原理</h2><p>每个像素由光接收和亮度检测单元组成。入射光在光接收单元中被转换成电压。亮度检测单元中的差分检测电路检测参考电压和转换后的入射光电压之间的变化。如果正方向或负方向的变化大于设定的阈值，则比较器将其识别为事件并输出该数据。简化的框架如下所示：</p>
+<p><img src="/img/8_EVS/base_info.png" srcset="/img/loading.gif" lazyload alt="基本工作流"></p>
+<p>更具体的Pixel电子框架如下所示：</p>
+<p><img src="/./img/8_EVS/pixel_arch.png" srcset="/img/loading.gif" lazyload alt="Pixel Arch"></p>
+<p>上图显示了一个像素框图，说明了基于对比度检测(Contrast Detection, CD)电路和异步读出接口和状态逻辑（Interface and State-logic,ISL）的CIS前后端块，它带有Cu-Cu内联的CMOS异步增量调制（asynchronous delta-modulation, ADM）。CON&#x2F;COFF的输入锁存器在比较器切换缓慢的情况下降低功率，并防止切换点周围的振铃。门控锁存器（K）可以鲁棒的进行事件注册来防止延迟regx生成和由此产生的事件丢失；行读出开始后的事件驱动在当前周期一结束（去除acky）就被锁存用于后续读出。只有输入锁存器中存储有事件的像素，本地生成GTRLAOU以在接收acky时重新初始化其CD电路，从而消除了对逐列ackx信号的必要性，并简化了读出控制逻辑、列读出电路和像素阵列信号输出。</p>
+<p>其中，LogI&#x2F;V电路以及ISL状态逻辑逻辑电路如下所示：</p>
+<p><img src="/./img/8_EVS/pixel_arch_detail.png" srcset="/img/loading.gif" lazyload alt="Pixel Arch Detail"></p>
+<h1 id="3-芯片架构"><a href="#3-芯片架构" class="headerlink" title="3.芯片架构"></a>3.芯片架构</h1><h2 id="3-1-Sensor-Block"><a href="#3-1-Sensor-Block" class="headerlink" title="3.1 Sensor Block"></a>3.1 Sensor Block</h2><p>下图显示了芯片的框图，说明了像素阵列读出以及事件数据经由ESP Pipeline到输出数据接口的框架：</p>
+<p><img src="/img/8_EVS/Sensor%20Block.png" srcset="/img/loading.gif" lazyload alt="Sensor Block"></p>
+<p>活动行选择的操作是流水的，新行选择与前一行数据的处理是并行的。异步到同步接口是由像素远端行的超时列监督，确保以正确的时序将VecX数据同步到与ESP Pipeline，并且防止由于异步数据路径导致的运行时间的事件丢失。时间戳会附加在事件上一起发送到输出数据接口。这种读出结构保证了像素阵列的事件时间精度。典型的像素激活到时间戳输出的延迟在60-70ns，另外行到行的选择时序约120ns的延迟。</p>
+<h2 id="3-2-事件信号处理"><a href="#3-2-事件信号处理" class="headerlink" title="3.2 事件信号处理"></a>3.2 事件信号处理</h2><p>下图显示了ESP管道和输出接口的框图：</p>
+<p><img src="/img/8_EVS/pipeline.png" srcset="/img/loading.gif" lazyload alt="Pipeline"></p>
+<p>ESP功能包括地址过滤、吞吐量调节和数据格式化。数字读出（RO）块逐行同步以及像素事件数据打时间戳，并且将它们分为32个事件向量。基于LUT的地址过滤器去除所选事件，例如，来自缺陷像素的事件。</p>
+<p>ERC块允许通过在超过该值的峰值上动态应用数据下降来将输出事件速率限制为预定义的极限速率。极限速率可在每秒5k事件（EPS）和1GEPS之间的大范围内编程。ERC持续监控FIFO缓冲器的输入和输出速率，并在闭环配置中，通过移除事件来调节瞬时FIFO输出速率，遵循结合空间和时间标准的各种丢弃策略。</p>
+<p>基于ROI的投放方案将像素阵列细分为40×23的32×32像素块，这些像素块可以编程为每个块执行64个可选称重投放速率中的不同一个，从而实现ERC操作的特定应用优化（例如，最好是在汽车场景中从天空中投放事件）。EDF块将事件流转换为矢量化数据格式（EVT）。高级EVT格式结合了差分编码和矢量化编码，通过利用事件之间的空间和时间关系来动态优化每个事件的比特数。</p>
+<p>在吞吐量最高的情况下，平均1.6b对事件的全部时间和空间信息进行编码。EOI管理芯片外数据传输，提供了对本机管理多个事件粒度的持久性支持。除了16b并行100MHz同步模式外，该接口还可以配置为分组模式，以更好地适应USB&#x2F;MIPI收发器。时钟门控降低EOI功耗。ESP集成了管道沿线不同位置的自动测试模式生成器（ATPG）以简化芯片验证。</p>
+<h1 id="4-工作总结"><a href="#4-工作总结" class="headerlink" title="4.工作总结"></a>4.工作总结</h1><h2 id="4-1-传统传感器对比"><a href="#4-1-传统传感器对比" class="headerlink" title="4.1 传统传感器对比"></a>4.1 传统传感器对比</h2><p>下图展示了传感器的典型应用：</p>
+<ul>
+<li>传统相机应用，约~1lux的亮度场景选，演示了在实验室中测试的与传统相机低光对比度灵敏度结果。</li>
+</ul>
+<p><img src="/img/8_EVS/automovtive.png" srcset="/img/loading.gif" lazyload alt="Automotive"></p>
+<ul>
+<li>3D视觉应用对比，由于时间的高精度、低延迟以及高速读出时间的操作允许传感器在时域编码结构光Pattern以实现3D视觉应用。</li>
+</ul>
+<p><img src="/img/8_EVS/ToF.png" srcset="/img/loading.gif" lazyload alt="3D ToF"></p>
+<h2 id="4-2-其他工作对比"><a href="#4-2-其他工作对比" class="headerlink" title="4.2 其他工作对比"></a>4.2 其他工作对比</h2><p>文末作者给出了与其他厂家sensor的对比，如下：</p>
+<p><img src="/img/8_EVS/WorkCompare.png" srcset="/img/loading.gif" lazyload alt="其它工作对比"></p>
+<p>当然，论文和实际一般存在gap，但从数据上来看，sony的evs sensor从工艺、数据速率、动态范围上都有较大的提升。</p>
+<h2 id="4-3-工作总结"><a href="#4-3-工作总结" class="headerlink" title="4.3 工作总结"></a>4.3 工作总结</h2><p>本文设计并制造了一个分辨率为1280x720、1&#x2F;2英寸的EB视觉传感器，该传感器在40nm CMOS结合90nm BI CIS，完成Cu-Cu键合晶片堆叠上，具有4.86um的像素大小，实现了77%以上的填充因子。</p>
+<p><img src="/img/8_EVS/chip_array.png" srcset="/img/loading.gif" lazyload alt="Chip"></p>
+<p>该芯片功耗为32mw（静态）至84mw的高活性（300EPS）。具有1μs时间戳的读出处理像素阵列中高达2.5GEPS的内部峰值，并在芯片输出时保持1.066GEPS。每个事件的比特被动态压缩到1.6b，同时保持完整的空间和时间信息。由于良好的低光CIS性能（40mlx LLCO）和在高光下不存在寄生光电流的泄漏活动，实现了宽DR（&gt;124dB）。在照度水平&gt;10lux时，典型的阶跃响应潜伏期约为200μs。</p>
+<h1 id="5-结束语"><a href="#5-结束语" class="headerlink" title="5.结束语"></a>5.结束语</h1><p>今天我们给大家介绍了Sony的基于EVS芯片论文，讲解了EVS传感器的基本测量原理、芯片pixel原理、架构等。希望今天的介绍以及科普对您有所帮助。</p>
+<hr>
+<p><strong>如果您对ADAS感兴趣，欢迎关注我的公众号、知乎、CSDN等，同时发表文章中使用源码、文章会在我的GitHub进行开源（网页About Me中有公众号、Github等信息）</strong></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/EVS/" class="category-chain-item">EVS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ADAS/" class="print-no-link">#ADAS</a>
+      
+        <a href="/tags/EVS/" class="print-no-link">#EVS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>EVS相机|一文了解索尼EVS传感器原理、芯片架构</div>
+      <div>https://jokereyeadas.github.io/2023/09/08/8.Evs相机论文解析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Joker.Mao</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年9月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/10/04/9.%E6%96%B0%E8%BD%A6%E8%BD%BDCIS%E8%B5%84%E8%AE%AF/" title="SONY/OV车载新品|本月车载CIS新品资讯与厂家技术趋势解读">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SONY/OV车载新品|本月车载CIS新品资讯与厂家技术趋势解读</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/26/4-%E7%B4%A2%E5%B0%BCIMX459%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BEDemo%E8%AE%BA%E6%96%87%E6%B5%85%E6%9E%90/" title="ADAS-Lidar|索尼车载IMX459激光雷达芯片论文解析">
+                        <span class="hidden-mobile">ADAS-Lidar|索尼车载IMX459激光雷达芯片论文解析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
