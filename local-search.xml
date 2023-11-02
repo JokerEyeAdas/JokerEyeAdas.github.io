@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>CIS|三星200MP图像传感器技术论文解析</title>
+    <link href="/2023/11/02/13.Samung%E7%A7%BB%E5%8A%A8%E8%AE%BE%E5%A4%87200Mp%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8/"/>
+    <url>/2023/11/02/13.Samung%E7%A7%BB%E5%8A%A8%E8%AE%BE%E5%A4%87200Mp%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8/</url>
+    
+    <content type="html"><![CDATA[<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>在之前的文章中，我们介绍了索尼、安森美以及三星等Sensor厂家在车载领域中的技术论文，分析了各个厂家不同的技术路线、Sensor架构以及差异点。同时，我们后面也介绍了豪威移动设备200MP图像传感器的技术路线。今天，三星电子在移动端同样是200Mega Pixels、单个pixel size为0.64um且可以切换分辨率的移动端CIS产品的技术论文来了~</p><p>本文介绍了一种采用65&#x2F;28nm工艺的0.64µm 200MP堆叠CMOS图像传感器（CIS）。所实现的传感器通过优化的读出方案和基于4x4像素中相同滤色器的重马赛克算法，可以提供200MP、50MP和12.5MP的可以切换像素分辨率。在黑暗条件下，2.56µm 12.5 MP的分辨率可以最大限度地提高像素灵敏度，而0.64µm 200MP的分辨率情况下，在明亮条件下可以提供最详细的图像。此外，滤色器材料的网格图案和平坦度有助于将0.64um像素的像素灵敏度提高8%。特别是，当16384个ADC同时工作将像素输出转换到图像信号处理（ISP）链，然后传感器通过3通道CPHY 4Gsps&#x2F;通道提供4K 120帧&#x2F;秒（fps）和8K 30帧&#x2F;秒的快速视频。在16倍的模拟增益下，芯片的随机噪声测量值为2.4e-。同时提出的200 MP堆叠CIS支持无损变焦、自适应感兴趣区域以及可切换分辨率支持，以获得更好的用户体验（UX）。</p><h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>在过去的二十年里，移动应用中的CMOS图像传感器（CIS）已经从VGA分辨率发展到高达200MP。此外，像素大小从5.6微米也减少到0.56微米，减少了1&#x2F;1000倍。下图显示了三星CIS产品在过去十年中用于智能手机的像素分辨率趋势。</p><p><img src="/./img/13_Samung200MPSensor/pitch_trend.png" alt="CIS像素分辨率和像素类型的间距趋势"></p><p>自2015年以来，四像素（2x2图案）已适应16 MP、24 MP和48 MP。之后，九像素（3x3图案）与108 MP匹配，四方形像素（4x4图案）是200 MP的适当像素排列。每个图案具有相同的颜色，如蓝色、红色和绿色。三星实现了全球首个0.64µm 200 MP传感器的量产。像素间距被成功降低到0.6µm和0.56µm，具有200 MP像素数量。</p><p>本文提出的200MP Sensor有以下三个优势：</p><ul><li><p>可切换的像素分辨率可以提供各种相机模式，如12.55MP、50MP和200MP的静态图像或4K和8K视频。特别是，该传感器可以提供200MP的详细图像和12.5MP的明亮图像。</p></li><li><p>通过重马赛克算法，从十六个0.64µm像素变为一个2.56µm像素，很容易提高灵敏度。此外，在改变格栅结构和优化滤色器材料后，灵敏度提高了8%。</p></li><li><p>当放大x2和x4或裁剪任何感兴趣的区域时，图像质量没有损失，因为没有应用数字变焦。</p></li></ul><p>本文描述了65&#x2F;28nm堆叠CIS的实现，该CIS由顶部芯片上的0.64µm正方形200MP和底部芯片上的逻辑组成。在16倍模拟增益下进行多次采样，测量的随机噪声（RN）为2.4e-。</p><h1 id="2-Pixel架构与技术"><a href="#2-Pixel架构与技术" class="headerlink" title="2. Pixel架构与技术"></a>2. Pixel架构与技术</h1><h2 id="2-1-Sensor架构"><a href="#2-1-Sensor架构" class="headerlink" title="2.1 Sensor架构"></a>2.1 Sensor架构</h2><p>下图展示了CIS的框图，该CIS由用于像素阵列的顶部芯片和用于贯穿硅通孔（TSV）的逻辑电路的底部芯片组成。</p><p><img src="/img/13_Samung200MPSensor/sensor_arch.png" alt="Sensor Arch"></p><p>顶部芯片由具有-0.6V负电压基板（Nsub）的16384x12288个像素组成以降低功耗。来自顶部芯片上的像素的输出信号被传输到底部芯片上的16384个比较器输入端口。每个比较器都作为单斜率模数转换器（ADC）进行操作。为了增强噪声和阴影，对两行驱动器和电源管理电路（PMC）进行了调整。针对各种功能和相机模式，实现了图像信号处理器（ISP）和4Gsps&#x2F;lane的三通道CPHY串行接口电路。</p><h2 id="2-2-Pixel-Readout架构"><a href="#2-2-Pixel-Readout架构" class="headerlink" title="2.2 Pixel Readout架构"></a>2.2 Pixel Readout架构</h2><p>下图说明了在一个微透镜下读出光电二极管（PD）的信号链。在PD曝光时段之后，SEL晶体管导通以进行PD读出。在ADC的初始重置期间，自动归零方案适用于减少像素复位噪声和列固定模式噪声（FPN）。然后，复位码通过逐位反转（BWI）进行反转，用于计数器中的数字相关双采样（CDS）操作。在TG导通之后，在ADC复位周期期间，信号和先前偏移之间的差值用于转换来自PD的信号并将其传输到计数器输出存储器。</p><p><img src="/img/13_Samung200MPSensor/pixel_arch.png" alt="Pixel Arch"></p><p>下图说明了200MP、50MP和12.5MP模式的读出方案。在滚动扫描序列期间，来自4共享像素的所有像素由SEL晶体管分别传输200MP，浮动扩散（FD）上的四个合并光电二极管相加50MP，并且具有四个FD相加的附加模拟平均方案应用于12.5MP。</p><p><img src="/img/13_Samung200MPSensor/readout_detail.png" alt="Readout Detail"></p><p>下图说明了该CIS是如何在可切换像素分辨率的每个分辨率下获得拜耳颜色模式：</p><p><img src="/img/13_Samung200MPSensor/bayer_mode.png" alt="Bayer Mode"></p><h1 id="3-评估结果"><a href="#3-评估结果" class="headerlink" title="3. 评估结果"></a>3. 评估结果</h1><h2 id="3-1-传感器规格"><a href="#3-1-传感器规格" class="headerlink" title="3.1 传感器规格"></a>3.1 传感器规格</h2><p>下表总结了所设计传感器的规格：</p><p><img src="/img/13_Samung200MPSensor/sepc.png" alt="CIS Specification"></p><p>传感器使用堆栈式工艺，Pixel部分采用65nm NMOS工艺制造，采用5金属层，而底部逻辑部分芯片采用28nm CMOS工艺制造，8金属层。像素阵列由200Mega（16388×12288）像素组成，像素间距为0.64µm。200MP的输出情况下全阱容量为6000e-，提供每秒8帧（fps）。在四读出的情况下，50MP达到30fps，全阱容量为24000e-。12.5MP模式下可以达到60fps，满阱容量为96000e-。2.2V、1.8V和1.0V的电源分别用于像素&#x2F;模拟电路、PLL&#x2F;DPHY&#x2F;IO和数字电路。在x16的模拟增益下进行多次采样，读出噪声为2.2e-，而在没有多次采样的情况下为3.4e-。在本文中，没有提供交错高动态范围（HDR）和iDCG（场景内双转换增益）HDR的信息。</p><h2 id="3-2-设计挑战"><a href="#3-2-设计挑战" class="headerlink" title="3.2 设计挑战"></a>3.2 设计挑战</h2><p>在0.64µm 200 MP传感器的实施过程中，我们面临着一些设计挑战。</p><ul><li><p>首先，功耗是至关重要的。为了降低功耗，在应用处理器（AP）中采用软件的方式实现了200MP的四方重构，而不是在传感器中嵌入硬件。因此，图像处理速度受到通道滞后的限制。注意，由于图像质量增强技术，重马赛克算法的复杂性已经增加。</p></li><li><p>其次，像素和模拟电路的联合仿真很难进行。例如，即使不包括全分辨率，暗着色模拟也需要更长的时间。因此，由于当前仿真环境的节点复杂性，无法获得200MP的正确结果。在接下来的几天里，将通过尝试不同的方法来改善模型与硬件的相关性。</p></li><li><p>最后，所设计的列比较器布局在0.64µm的列间距内非常窄。因此，比较器不仅通过屏蔽金属来避免串扰，而且通过布线自由度限制来平衡每个比较器中的寄生电容，因此更灵敏。</p></li></ul><h2 id="3-3-测试图像"><a href="#3-3-测试图像" class="headerlink" title="3.3 测试图像"></a>3.3 测试图像</h2><p>在白天，200MP的分辨率提供了更详细的图像。下图显示了在200MP和50MP之间的变焦模式的结果。</p><p><img src="/img/13_Samung200MPSensor/diff_res_image.png" alt="变焦图像"></p><p>在200 MP的变焦模式下，即使感兴趣区域发生变化，像素依然可以保持相同的图像质量。下图显示了带有评估板和单反镜头的200 MP芯片的实验结果。</p><p><img src="/img/13_Samung200MPSensor/Detail_img.png" alt="Detial Image"></p><p>打印的图像尺寸为28mx22m，可保持适当的图像质量。因此，图卡可以提供清晰而恰当的图像。</p><h2 id="3-4-CIS显微镜照片"><a href="#3-4-CIS显微镜照片" class="headerlink" title="3.4 CIS显微镜照片"></a>3.4 CIS显微镜照片</h2><p>下图示了所实现的200 MP堆叠传感器的芯片显微照片。</p><p><img src="/img/13_Samung200MPSensor/pixel_array.png" alt="Pixel Array"></p><p>芯片尺寸为11799µmx10758µm。顶部芯片由像素组成，底部芯片由列ADC（比较器阵列、计数器阵列和DAC）、两个行驱动器、两个PMU、逻辑和一个CPHY组成。</p><h2 id="3-5-工作对比"><a href="#3-5-工作对比" class="headerlink" title="3.5 工作对比"></a>3.5 工作对比</h2><p>下表描述了与其他作品的比较：</p><p><img src="/img/13_Samung200MPSensor/compare.png" alt="工作对比"></p><h1 id="4-工作总结"><a href="#4-工作总结" class="headerlink" title="4 工作总结"></a>4 工作总结</h1><p>本文介绍了具有0.64µm间距像素的200MP堆叠CIS的首次大规模生产实现。超过200 MP的超分辨率传感器适用于从卫星上拍摄地球上物体的照片，或通过各种机器学习算法为下一代传感器调整用户体验。</p><h1 id="5-结束语"><a href="#5-结束语" class="headerlink" title="5 结束语"></a>5 结束语</h1><p>今天我们为大家介绍了三星电子在移动端CIS传感器的技术论文，为大家介绍了其Sensor的实现原理与技术架构，与之前OV 200MP的Sensor对比，可以看出在移动端设备整体架构的相似，内部实现细节与具体工艺有差异。最后，技术的进步带来更好的用户体验，如200MP分辨率可以为移动端设备提高更高的分辨率以及更远的数字变焦距离。</p><p>好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以fllow我的<a href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库AdasTechPapers</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p><hr><p><strong>加入星球:</strong></p><p><img src="/img/6_HDR_ISP/xingqiu.jpg" alt="知识星球"></p><p><strong>如果您对ADAS感兴趣，欢迎关注我的公众号、知乎、Github、CSDN等，同时发表文章中使用源码以及文章会在我的GitHub进行开源，如果您有感兴趣话题也可以后台私信。</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>CMOS SENSOR</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>CMOS SENSOR</tag>
+      
+      <tag>OVT</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>进阶|HDR-ISP支持ROS2以及GPU实时处理啦！</title>
     <link href="/2023/10/29/12.HDR-ISP%E6%94%AF%E6%8C%81ROS2%E4%BB%A5%E5%8F%8AGPU%E5%95%A6/"/>
     <url>/2023/10/29/12.HDR-ISP%E6%94%AF%E6%8C%81ROS2%E4%BB%A5%E5%8F%8AGPU%E5%95%A6/</url>
