@@ -19,13 +19,13 @@
     <meta name="description" content="引言在之前的文章中，我们介绍了Sony、Ov、Samung以及Onsemi等各个半导体设计大厂的CMOS Image Sensor的技术方案，包括车载以及消费领域等。今天，我们介绍Onsmei在2023年发表的微光近红外增强RGB-IR CIS相机技术方案。 本文提出了一种图像传感器系列，像素大小为1.40µm，分辨率为多种（5MP、8MP、20MP）可以选择，采用65nm背照堆叠式工艺制造，硅外">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CIS|安森美微光近红外增强相机论文解析">
-<meta property="og:url" content="https://jokereyeadas.github.io/2023/11/12/14.CIS%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95%E8%B6%8B%E5%8A%BF/index.html">
+<meta property="og:url" content="https://jokereyeadas.github.io/2023/11/18/14.CIS%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95%E8%B6%8B%E5%8A%BF/index.html">
 <meta property="og:site_name" content="ADAS之眼">
 <meta property="og:description" content="引言在之前的文章中，我们介绍了Sony、Ov、Samung以及Onsemi等各个半导体设计大厂的CMOS Image Sensor的技术方案，包括车载以及消费领域等。今天，我们介绍Onsmei在2023年发表的微光近红外增强RGB-IR CIS相机技术方案。 本文提出了一种图像传感器系列，像素大小为1.40µm，分辨率为多种（5MP、8MP、20MP）可以选择，采用65nm背照堆叠式工艺制造，硅外">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://jokereyeadas.github.io/img/14_OnsemiNirCamera/die.png">
-<meta property="article:published_time" content="2023-11-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-11-19T00:31:28.990Z">
+<meta property="article:published_time" content="2023-11-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-19T00:35:38.163Z">
 <meta property="article:author" content="Joker.Mao">
 <meta property="article:tag" content="CMOS SENSOR">
 <meta property="article:tag" content="ONSEMI">
@@ -217,8 +217,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-12 00:00" pubdate>
-          2023年11月12日 凌晨
+        <time datetime="2023-11-18 00:00" pubdate>
+          2023年11月18日 凌晨
         </time>
       </span>
     
@@ -289,68 +289,68 @@
 <p>通过技术计算机辅助设计（TCAD）模拟和硅实验设计（DOE）工作优化了光电二极管（PD）注入、电势分布和布局，以实现10ke-线性全阱（LFW）容量。同时，在浮动扩散（FD）处保持有限的信号摆幅，以降低功耗以及避免电荷滞后，下图显示了TCAD中PD的垂直横截面和俯视图：</p>
 <p><img src="/./img/14_OnsemiNirCamera/tcad.png" srcset="/img/loading.gif" lazyload alt="PD TCAD"></p>
 <p>最佳PD的固定电压允许在不高于2.8V的像素电源电压（Vaapix）下有足够的FD信号摆动，这对于保持低功耗是必不可少的。下图显示了低转换增益（LCG）和高转换增益（HCG）模式下的LFW与Vaapix曲线。</p>
-<p><img src="/img/14_OnsemiNirCamera/lfw_vaapix.png" srcset="/img/loading.gif" lazyload alt="LFW Vaapix曲线"></p>
+<p><img src="/./img/14_OnsemiNirCamera/lfw_vaapix.png" srcset="/img/loading.gif" lazyload alt="LFW Vaapix曲线"></p>
 <p>DOE分析还侧重于确保像素隔离、用BDTI钝化Si&#x2F;SiO2界面，以及防止白像素，以最大限度地减少高温条件下的暗信号不均匀性（DSNU）。</p>
 <h2 id="2-2-Pixel共享电路"><a href="#2-2-Pixel共享电路" class="headerlink" title="2.2 Pixel共享电路"></a>2.2 Pixel共享电路</h2><p>下图显示了像素电路的简化示意图：</p>
-<p><img src="/img/14_OnsemiNirCamera/pixel_sharded_arch.png" srcset="/img/loading.gif" lazyload alt="PD Shared Arch"></p>
+<p><img src="/./img/14_OnsemiNirCamera/pixel_sharded_arch.png" srcset="/img/loading.gif" lazyload alt="PD Shared Arch"></p>
 <p>Pixel架构为1×2共享行，具有双转换增益（DCG）晶体管，TX1和TX2是传输门，SF是源极跟随器晶体管，RS是行选择线，Pixout是输出像素电压，SHR和SHS分别是采样和保持复位线和信号线。线性模式输出为10位数据格式。双增益读出用于增强动态范围（eDR）模式。在eDR模式下，场景内动态范围高达72.5dB，数据格式为12位，定义为16.7ms积分时间的黑暗中有效LFW与总噪声之间的比率。</p>
 <h2 id="2-3-时序图"><a href="#2-3-时序图" class="headerlink" title="2.3 时序图"></a>2.3 时序图</h2><p>下图显示了eDR模式下电路的时序图：</p>
-<p><img src="/Img/14_OnsemiNirCamera/timing.png" srcset="/img/loading.gif" lazyload alt="eHDR时序图"></p>
+<p><img src="/./img/14_OnsemiNirCamera/timing.png" srcset="/img/loading.gif" lazyload alt="eHDR时序图"></p>
 <p>在该模式中，在电荷积分之后，每个像素在分别具有高和低转换增益的两个连续读取中被读取两次。HCG读出是相关的双采样，以消除FD上的kTC噪声。LCG读数为双采样，不会消除kTC噪声分量。由于当光信号高时，kTC噪声低于光子散粒噪声，因此在HCG和LCG读数之间的过渡点，其对信噪比（SNR）下降的不希望的贡献非常小。</p>
 <h1 id="3-Pixel性能"><a href="#3-Pixel性能" class="headerlink" title="3. Pixel性能"></a>3. Pixel性能</h1><h2 id="3-1-传感器性能"><a href="#3-1-传感器性能" class="headerlink" title="3.1 传感器性能"></a>3.1 传感器性能</h2><ul>
 <li>暗噪声直方图</li>
 </ul>
 <p>像素表征是通过用于评估信号和噪声特性的方法进行的。下图显示了结温度Tj为80摄氏度和33毫秒积分时间时的暗信号直方图：</p>
-<p><img src="/Img/14_OnsemiNirCamera/histogram.png" srcset="/img/loading.gif" lazyload alt="Dark直方图"></p>
+<p><img src="/./img/14_OnsemiNirCamera/histogram.png" srcset="/img/loading.gif" lazyload alt="Dark直方图"></p>
 <p>在使用相应的系统增益转换为电荷单位后，测量的标准偏差是暗信号不均匀性（DSNU），等于1.5e-。</p>
 <ul>
 <li>读出噪声直方图</li>
 </ul>
 <p>下图显示了25摄氏度下具有最大增益的读取噪声直方图：</p>
-<p><img src="/Img/14_OnsemiNirCamera/read_noise.png" srcset="/img/loading.gif" lazyload alt="Read Noise"></p>
+<p><img src="/./img/14_OnsemiNirCamera/read_noise.png" srcset="/img/loading.gif" lazyload alt="Read Noise"></p>
 <p>其中分布的均方根（RMS）为1.3e-。</p>
 <ul>
 <li>PTC曲线</li>
 </ul>
 <p>下图显示了增益足够低以提取PD LFW时的光子转移曲线（PTC）测量：</p>
-<p><img src="/Img/14_OnsemiNirCamera/PTC.png" srcset="/img/loading.gif" lazyload alt="PTC"></p>
+<p><img src="/./img/14_OnsemiNirCamera/PTC.png" srcset="/img/loading.gif" lazyload alt="PTC"></p>
 <ul>
 <li>SNR曲线</li>
 </ul>
 <p>为了突出显示eDR模式的动态范围，下图显示了eDR SNR曲线，并将其与具有低转换增益的线性模式下的SNR曲线进行了比较：</p>
-<p><img src="/Img/14_OnsemiNirCamera/snr_curve.png" srcset="/img/loading.gif" lazyload alt="SNR"></p>
+<p><img src="/./img/14_OnsemiNirCamera/snr_curve.png" srcset="/img/loading.gif" lazyload alt="SNR"></p>
 <h2 id="3-2-Sensor-QE"><a href="#3-2-Sensor-QE" class="headerlink" title="3.2 Sensor QE"></a>3.2 Sensor QE</h2><p>Sensor实现了三种滤色器阵列（CFA）变体，以满足目标市场的特定图像质量要求：拜耳（“RGGB”）、具有4x4单元的RGB-IR和单色（“Mono”）。这三种变体的量子效率（QE）曲线如下图所示：</p>
-<p><img src="/Img/14_OnsemiNirCamera/qe.png" srcset="/img/loading.gif" lazyload alt="QE"></p>
+<p><img src="/./img/14_OnsemiNirCamera/qe.png" srcset="/img/loading.gif" lazyload alt="QE"></p>
 <p>RGB-IR变体是通过跳过倒金字塔的背面工艺开发的，以确保R、G、B通道的最大动态范围。不需要NIR QE增强，因为硅外延中的NIR吸收足够高，以满足特定RGB-IR应用的要求。</p>
 <h2 id="3-3-暗光效果"><a href="#3-3-暗光效果" class="headerlink" title="3.3 暗光效果"></a>3.3 暗光效果</h2><p>下表显示了在（a）可见光和（b）近红外照明下在弱光条件下拍摄的图像：</p>
 <table>
 <thead>
 <tr>
-<th><a href="mailto:&#x35;&#x35;&#x30;&#48;&#x4b;&#x40;&#48;&#46;&#x36;&#x36;&#x6c;&#117;&#120;">&#x35;&#x35;&#x30;&#48;&#x4b;&#x40;&#48;&#46;&#x36;&#x36;&#x6c;&#117;&#120;</a></th>
-<th><a href="mailto:&#x39;&#52;&#48;&#x6e;&#109;&#x40;&#50;&#54;&#x2e;&#51;&#x6e;&#87;">&#x39;&#52;&#48;&#x6e;&#109;&#x40;&#50;&#54;&#x2e;&#51;&#x6e;&#87;</a>&#x2F;cm^2</th>
+<th><a href="mailto:&#53;&#53;&#48;&#x30;&#75;&#x40;&#48;&#x2e;&#54;&#x36;&#x6c;&#117;&#x78;">&#53;&#53;&#48;&#x30;&#75;&#x40;&#48;&#x2e;&#54;&#x36;&#x6c;&#117;&#x78;</a></th>
+<th><a href="mailto:&#57;&#x34;&#48;&#x6e;&#109;&#64;&#x32;&#x36;&#x2e;&#x33;&#110;&#x57;">&#57;&#x34;&#48;&#x6e;&#109;&#64;&#x32;&#x36;&#x2e;&#x33;&#110;&#x57;</a>&#x2F;cm^2</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><img src="/Img/14_OnsemiNirCamera/rgb_lowI.png" srcset="/img/loading.gif" lazyload alt="RGB"></td>
-<td><img src="/Img/14_OnsemiNirCamera/ir_lowI.png" srcset="/img/loading.gif" lazyload alt="IR"></td>
+<td><img src="/./img/14_OnsemiNirCamera/rgb_lowI.png" srcset="/img/loading.gif" lazyload alt="RGB"></td>
+<td><img src="/./img/14_OnsemiNirCamera/ir_lowI.png" srcset="/img/loading.gif" lazyload alt="IR"></td>
 </tr>
 </tbody></table>
 <p>当传感器以16.7ms的最大增益和积分时间激活时，两个图像都被捕获，其中现场的照明条件为（左）5500K，0.66勒克斯，和（右）940nm，26.3nW&#x2F;cm2。图像显示在0-330 DN的信号范围内。在图像捕获期间使用的F#2透镜具有VIS&#x2F;940nm双频带滤波器，其在可见波段和940nm处的透射率大于95%。</p>
 <h2 id="3-4-芯片封装"><a href="#3-4-芯片封装" class="headerlink" title="3.4 芯片封装"></a>3.4 芯片封装</h2><p>下图显示了封装的图像传感器产品的照片：</p>
-<p><img src="/Img/14_OnsemiNirCamera/die.png" srcset="/img/loading.gif" lazyload alt="芯片封装"></p>
+<p><img src="/./img/14_OnsemiNirCamera/die.png" srcset="/img/loading.gif" lazyload alt="芯片封装"></p>
 <p>其中5MP和8MP产品位于芯片级封装（CSP）中，20MP产品位于混合间距球栅阵列（MPBGA）封装中。</p>
 <h2 id="3-5-SNR1"><a href="#3-5-SNR1" class="headerlink" title="3.5 SNR1"></a>3.5 SNR1</h2><p>SNR1s指标由索尼半导体解决方案公司引入，用于定量评估低照度下安全摄像头的SNR。SNR1s被定义为当相机在室温下以1&#x2F;60秒的曝光时间和具有95%透射率的F#1.4镜头以及CM500红外截止滤光片激活时，在3200K照明下，绿色通道的SNR等于1或0dB，具有18%反射率的灰色目标上的照度。</p>
 <p>下图显示了各种索尼STARVIS传感器的SNR1值与像素大小的关系——最小像素大小为1.45µm，以及本工作中开发的传感器系列。</p>
-<p><img src="/Img/14_OnsemiNirCamera/snr1.png" srcset="/img/loading.gif" lazyload alt="SNR1"></p>
+<p><img src="/./img/14_OnsemiNirCamera/snr1.png" srcset="/img/loading.gif" lazyload alt="SNR1"></p>
 <p>SNR1s值沿着随着像素大小而减小的曲线分布——正如响应度的贡献所预期的那样，即像素越小，低光性能就越具有挑战性，因此SNR1s的值就越高。与像素面积拟合线所描述的模型相比，本工作中开发的1.40µm像素的SNR1性能有所提高。</p>
 <h2 id="3-6-芯片Spec"><a href="#3-6-芯片Spec" class="headerlink" title="3.6 芯片Spec"></a>3.6 芯片Spec</h2><p>下表总结了适用于三种阵列分辨率的像素阵列的主要性能参数。该表显示了在不同条件下计算的SNR1值，例如在80C和940nm照明下。</p>
-<p><img src="/img/14_OnsemiNirCamera/spec.png" srcset="/img/loading.gif" lazyload alt="Spec"></p>
+<p><img src="/./img/14_OnsemiNirCamera/spec.png" srcset="/img/loading.gif" lazyload alt="Spec"></p>
 <h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h1><p>我们报告了一种滚动快门、低功耗图像传感器系列的开发，该系列具有1.40µm像素大小、多种分辨率变体（5Mp、8Mp、20Mp）、BSI堆叠、65nm技术、6µm外延硅、部分BDTI和用于增强近红外QE的背面工艺选项。传感器性能已证明能够满足监控、消费和工业应用中在弱光条件下成像的最苛刻要求。</p>
 <h1 id="5-结束语"><a href="#5-结束语" class="headerlink" title="5 结束语"></a>5 结束语</h1><p>今天我们为大家介绍了Onsemi RGB-IR微光传感器的技术论文，为大家介绍了其Sensor的实现原理与技术架构，相对于普通RGGB相机，RGB-IR在安防领域应用广泛，如白天使用RGB成像，而晚上则进行红外补光，使用IR图像。同时，在车载领域RGB-IR也在逐步推广，如OMS、DMS等也在逐步推广，相信随着技术的发展会给用户带来更好的用户体验。</p>
 <p>好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以fllow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库AdasTechPapers</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
 <hr>
 <p><strong>加入星球:</strong></p>
-<p><img src="/img/6_HDR_ISP/xingqiu.jpg" srcset="/img/loading.gif" lazyload alt="知识星球"></p>
+<p><img src="/./img/6_HDR_ISP/xingqiu.jpg" srcset="/img/loading.gif" lazyload alt="知识星球"></p>
 <p><strong>如果您对ADAS感兴趣，欢迎关注我的公众号、知乎、Github、CSDN等，同时发表文章中使用源码以及文章会在我的GitHub进行开源，如果您有感兴趣话题也可以后台私信。</strong></p>
 
                 
@@ -400,7 +400,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>CIS|安森美微光近红外增强相机论文解析</div>
-      <div>https://jokereyeadas.github.io/2023/11/12/14.CIS技术发展趋势/</div>
+      <div>https://jokereyeadas.github.io/2023/11/18/14.CIS技术发展趋势/</div>
     </div>
     <div class="license-meta">
       
@@ -412,7 +412,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月12日</div>
+          <div>2023年11月18日</div>
         </div>
       
       
