@@ -16,27 +16,27 @@
   <meta name="author" content="Joker.Mao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="引言在之前的文章中，我们介绍了索尼、安森美以及三星等Sensor厂家在车载领域中的技术论文，分析了各个厂家不同的技术路线、Sensor架构以及差异点。同时，我们后面也介绍了豪威移动设备200MP图像传感器的技术路线。今天，三星电子在移动端同样是200Mega Pixels、单个pixel size为0.64um且可以切换分辨率的移动端CIS产品的技术论文来了~ 本文介绍了一种采用65&#x2F;2">
+    <meta name="description" content="引言在之前的文章中，我们介绍了Sony、Ov、Samung以及Onsemi等各个半导体设计大厂的CMOS Image Sensor的技术方案，包括车载以及消费领域等。今天，我们介绍Onsmei在2023年发表的微光近红外增强RGB-IR CIS相机技术方案。 本文提出了一种图像传感器系列，像素大小为1.40µm，分辨率为多种（5MP、8MP、20MP）可以选择，采用65nm背照堆叠式工艺制造，硅外">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CIS|三星200MP图像传感器技术论文解析">
-<meta property="og:url" content="https://jokereyeadas.github.io/2023/11/02/13.Samung%E7%A7%BB%E5%8A%A8%E8%AE%BE%E5%A4%87200Mp%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8/index.html">
+<meta property="og:title" content="CIS|安森美微光近红外增强相机论文解析">
+<meta property="og:url" content="https://jokereyeadas.github.io/2023/11/12/14.CIS%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95%E8%B6%8B%E5%8A%BF/index.html">
 <meta property="og:site_name" content="ADAS之眼">
-<meta property="og:description" content="引言在之前的文章中，我们介绍了索尼、安森美以及三星等Sensor厂家在车载领域中的技术论文，分析了各个厂家不同的技术路线、Sensor架构以及差异点。同时，我们后面也介绍了豪威移动设备200MP图像传感器的技术路线。今天，三星电子在移动端同样是200Mega Pixels、单个pixel size为0.64um且可以切换分辨率的移动端CIS产品的技术论文来了~ 本文介绍了一种采用65&#x2F;2">
+<meta property="og:description" content="引言在之前的文章中，我们介绍了Sony、Ov、Samung以及Onsemi等各个半导体设计大厂的CMOS Image Sensor的技术方案，包括车载以及消费领域等。今天，我们介绍Onsmei在2023年发表的微光近红外增强RGB-IR CIS相机技术方案。 本文提出了一种图像传感器系列，像素大小为1.40µm，分辨率为多种（5MP、8MP、20MP）可以选择，采用65nm背照堆叠式工艺制造，硅外">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://jokereyeadas.github.io/img/13_Samung200MPSensor/sensor_arch.png">
-<meta property="article:published_time" content="2023-11-01T16:21:17.000Z">
-<meta property="article:modified_time" content="2023-11-02T00:44:58.012Z">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/14_OnsemiNirCamera/die.png">
+<meta property="article:published_time" content="2023-11-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-19T00:22:30.306Z">
 <meta property="article:author" content="Joker.Mao">
 <meta property="article:tag" content="CMOS SENSOR">
-<meta property="article:tag" content="OVT">
+<meta property="article:tag" content="ONSEMI">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://jokereyeadas.github.io/img/13_Samung200MPSensor/sensor_arch.png">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/14_OnsemiNirCamera/die.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>CIS|三星200MP图像传感器技术论文解析 - ADAS之眼</title>
+  <title>CIS|安森美微光近红外增强相机论文解析 - ADAS之眼</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -206,7 +206,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="CIS|三星200MP图像传感器技术论文解析"></span>
+            <span id="subtitle" data-typed-text="CIS|安森美微光近红外增强相机论文解析"></span>
           
         </div>
 
@@ -217,8 +217,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-02 00:21" pubdate>
-          2023年11月2日 凌晨
+        <time datetime="2023-11-12 00:00" pubdate>
+          2023年11月12日 凌晨
         </time>
       </span>
     
@@ -229,7 +229,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.4k 字
+          3.2k 字
         
       </span>
     
@@ -240,7 +240,7 @@
         
         
         
-          29 分钟
+          28 分钟
         
       </span>
     
@@ -277,59 +277,76 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">CIS|三星200MP图像传感器技术论文解析</h1>
+            <h1 id="seo-header">CIS|安森美微光近红外增强相机论文解析</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>在之前的文章中，我们介绍了索尼、安森美以及三星等Sensor厂家在车载领域中的技术论文，分析了各个厂家不同的技术路线、Sensor架构以及差异点。同时，我们后面也介绍了豪威移动设备200MP图像传感器的技术路线。今天，三星电子在移动端同样是200Mega Pixels、单个pixel size为0.64um且可以切换分辨率的移动端CIS产品的技术论文来了~</p>
-<p>本文介绍了一种采用65&#x2F;28nm工艺的0.64µm 200MP堆叠CMOS图像传感器（CIS）。所实现的传感器通过优化的读出方案和基于4x4像素中相同滤色器的重马赛克算法，可以提供200MP、50MP和12.5MP的可以切换像素分辨率。在黑暗条件下，2.56µm 12.5 MP的分辨率可以最大限度地提高像素灵敏度，而0.64µm 200MP的分辨率情况下，在明亮条件下可以提供最详细的图像。此外，滤色器材料的网格图案和平坦度有助于将0.64um像素的像素灵敏度提高8%。特别是，当16384个ADC同时工作将像素输出转换到图像信号处理（ISP）链，然后传感器通过3通道CPHY 4Gsps&#x2F;通道提供4K 120帧&#x2F;秒（fps）和8K 30帧&#x2F;秒的快速视频。在16倍的模拟增益下，芯片的随机噪声测量值为2.4e-。同时提出的200 MP堆叠CIS支持无损变焦、自适应感兴趣区域以及可切换分辨率支持，以获得更好的用户体验（UX）。</p>
-<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>在过去的二十年里，移动应用中的CMOS图像传感器（CIS）已经从VGA分辨率发展到高达200MP。此外，像素大小从5.6微米也减少到0.56微米，减少了1&#x2F;1000倍。下图显示了三星CIS产品在过去十年中用于智能手机的像素分辨率趋势。</p>
-<p><img src="/./img/13_Samung200MPSensor/pitch_trend.png" srcset="/img/loading.gif" lazyload alt="CIS像素分辨率和像素类型的间距趋势"></p>
-<p>自2015年以来，四像素（2x2图案）已适应16 MP、24 MP和48 MP。之后，九像素（3x3图案）与108 MP匹配，四方形像素（4x4图案）是200 MP的适当像素排列。每个图案具有相同的颜色，如蓝色、红色和绿色。三星实现了全球首个0.64µm 200 MP传感器的量产。像素间距被成功降低到0.6µm和0.56µm，具有200 MP像素数量。</p>
-<p>本文提出的200MP Sensor有以下三个优势：</p>
-<ul>
-<li><p>可切换的像素分辨率可以提供各种相机模式，如12.55MP、50MP和200MP的静态图像或4K和8K视频。特别是，该传感器可以提供200MP的详细图像和12.5MP的明亮图像。</p>
-</li>
-<li><p>通过重马赛克算法，从十六个0.64µm像素变为一个2.56µm像素，很容易提高灵敏度。此外，在改变格栅结构和优化滤色器材料后，灵敏度提高了8%。</p>
-</li>
-<li><p>当放大x2和x4或裁剪任何感兴趣的区域时，图像质量没有损失，因为没有应用数字变焦。</p>
-</li>
+                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>在之前的文章中，我们介绍了Sony、Ov、Samung以及Onsemi等各个半导体设计大厂的CMOS Image Sensor的技术方案，包括车载以及消费领域等。今天，我们介绍Onsmei在2023年发表的微光近红外增强RGB-IR CIS相机技术方案。</p>
+<p>本文提出了一种图像传感器系列，像素大小为1.40µm，分辨率为多种（5MP、8MP、20MP）可以选择，采用65nm背照堆叠式工艺制造，硅外延厚度为6µm。1.40µm像素是微光监视成像性能的最小像素，它结合了低噪声、提高的近红外量子效率、增强的动态范围和低功耗，可集成在节能电池摄像系统中。</p>
+<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>我们开发了一种Rolling Shutter、低功耗的图像传感器，像素大小为1.40µm，阵列分辨率为5MP、8MP和20MP可选择。传感器设计结合了先进的技术功能，以满足监控、消费者和工业成像应用的苛刻要求。它表现出良好的微光性能、近红外（NIR）的高响应度和增强的动态范围。据我们所知，这是迄今为止满足微光监控应用性能要求的最小像素尺寸。</p>
+<h1 id="2-Pixel架构与技术"><a href="#2-Pixel架构与技术" class="headerlink" title="2. Pixel架构与技术"></a>2. Pixel架构与技术</h1><h2 id="2-1-Sensor-仿真"><a href="#2-1-Sensor-仿真" class="headerlink" title="2.1 Sensor 仿真"></a>2.1 Sensor 仿真</h2><p>该像素采用堆叠背面照明（BSI）CMOS 65 nm技术设计，具有6µm硅外延和部分背面深沟槽隔离（BDTI）。为了进一步提高用于监控成像的近红外光谱中的像素量子效率（QE），背面工艺包括一种具有倒金字塔的变体，以扩展近红外光子的光路。1.40µm的像素大小是为了在空间分辨率、低光条件下的信噪比（SNR）和动态范围之间进行优化权衡而选择的。</p>
+<p>通过技术计算机辅助设计（TCAD）模拟和硅实验设计（DOE）工作优化了光电二极管（PD）注入、电势分布和布局，以实现10ke-线性全阱（LFW）容量。同时，在浮动扩散（FD）处保持有限的信号摆幅，以降低功耗以及避免电荷滞后，下图显示了TCAD中PD的垂直横截面和俯视图：</p>
+<p><img src="/./img/14_OnsemiNirCamera/tcad.png" srcset="/img/loading.gif" lazyload alt="PD TCAD"></p>
+<p>最佳PD的固定电压允许在不高于2.8V的像素电源电压（Vaapix）下有足够的FD信号摆动，这对于保持低功耗是必不可少的。下图显示了低转换增益（LCG）和高转换增益（HCG）模式下的LFW与Vaapix曲线。</p>
+<p><img src="/img/14_OnsemiNirCamera/lfw_vaapix.png" srcset="/img/loading.gif" lazyload alt="LFW Vaapix曲线"></p>
+<p>DOE分析还侧重于确保像素隔离、用BDTI钝化Si&#x2F;SiO2界面，以及防止白像素，以最大限度地减少高温条件下的暗信号不均匀性（DSNU）。</p>
+<h2 id="2-2-Pixel共享电路"><a href="#2-2-Pixel共享电路" class="headerlink" title="2.2 Pixel共享电路"></a>2.2 Pixel共享电路</h2><p>下图显示了像素电路的简化示意图：</p>
+<p><img src="/img/14_OnsemiNirCamera/pixel_sharded_arch.png" srcset="/img/loading.gif" lazyload alt="PD Shared Arch"></p>
+<p>Pixel架构为1×2共享行，具有双转换增益（DCG）晶体管，TX1和TX2是传输门，SF是源极跟随器晶体管，RS是行选择线，Pixout是输出像素电压，SHR和SHS分别是采样和保持复位线和信号线。线性模式输出为10位数据格式。双增益读出用于增强动态范围（eDR）模式。在eDR模式下，场景内动态范围高达72.5dB，数据格式为12位，定义为16.7ms积分时间的黑暗中有效LFW与总噪声之间的比率。</p>
+<h2 id="2-3-时序图"><a href="#2-3-时序图" class="headerlink" title="2.3 时序图"></a>2.3 时序图</h2><p>下图显示了eDR模式下电路的时序图：</p>
+<p><img src="/Img/14_OnsemiNirCamera/timing.png" srcset="/img/loading.gif" lazyload alt="eHDR时序图"></p>
+<p>在该模式中，在电荷积分之后，每个像素在分别具有高和低转换增益的两个连续读取中被读取两次。HCG读出是相关的双采样，以消除FD上的kTC噪声。LCG读数为双采样，不会消除kTC噪声分量。由于当光信号高时，kTC噪声低于光子散粒噪声，因此在HCG和LCG读数之间的过渡点，其对信噪比（SNR）下降的不希望的贡献非常小。</p>
+<h1 id="3-Pixel性能"><a href="#3-Pixel性能" class="headerlink" title="3. Pixel性能"></a>3. Pixel性能</h1><h2 id="3-1-传感器性能"><a href="#3-1-传感器性能" class="headerlink" title="3.1 传感器性能"></a>3.1 传感器性能</h2><ul>
+<li>暗噪声直方图</li>
 </ul>
-<p>本文描述了65&#x2F;28nm堆叠CIS的实现，该CIS由顶部芯片上的0.64µm正方形200MP和底部芯片上的逻辑组成。在16倍模拟增益下进行多次采样，测量的随机噪声（RN）为2.4e-。</p>
-<h1 id="2-Pixel架构与技术"><a href="#2-Pixel架构与技术" class="headerlink" title="2. Pixel架构与技术"></a>2. Pixel架构与技术</h1><h2 id="2-1-Sensor架构"><a href="#2-1-Sensor架构" class="headerlink" title="2.1 Sensor架构"></a>2.1 Sensor架构</h2><p>下图展示了CIS的框图，该CIS由用于像素阵列的顶部芯片和用于贯穿硅通孔（TSV）的逻辑电路的底部芯片组成。</p>
-<p><img src="/img/13_Samung200MPSensor/sensor_arch.png" srcset="/img/loading.gif" lazyload alt="Sensor Arch"></p>
-<p>顶部芯片由具有-0.6V负电压基板（Nsub）的16384x12288个像素组成以降低功耗。来自顶部芯片上的像素的输出信号被传输到底部芯片上的16384个比较器输入端口。每个比较器都作为单斜率模数转换器（ADC）进行操作。为了增强噪声和阴影，对两行驱动器和电源管理电路（PMC）进行了调整。针对各种功能和相机模式，实现了图像信号处理器（ISP）和4Gsps&#x2F;lane的三通道CPHY串行接口电路。</p>
-<h2 id="2-2-Pixel-Readout架构"><a href="#2-2-Pixel-Readout架构" class="headerlink" title="2.2 Pixel Readout架构"></a>2.2 Pixel Readout架构</h2><p>下图说明了在一个微透镜下读出光电二极管（PD）的信号链。在PD曝光时段之后，SEL晶体管导通以进行PD读出。在ADC的初始重置期间，自动归零方案适用于减少像素复位噪声和列固定模式噪声（FPN）。然后，复位码通过逐位反转（BWI）进行反转，用于计数器中的数字相关双采样（CDS）操作。在TG导通之后，在ADC复位周期期间，信号和先前偏移之间的差值用于转换来自PD的信号并将其传输到计数器输出存储器。</p>
-<p><img src="/img/13_Samung200MPSensor/pixel_arch.png" srcset="/img/loading.gif" lazyload alt="Pixel Arch"></p>
-<p>下图说明了200MP、50MP和12.5MP模式的读出方案。在滚动扫描序列期间，来自4共享像素的所有像素由SEL晶体管分别传输200MP，浮动扩散（FD）上的四个合并光电二极管相加50MP，并且具有四个FD相加的附加模拟平均方案应用于12.5MP。</p>
-<p><img src="/img/13_Samung200MPSensor/readout_detail.png" srcset="/img/loading.gif" lazyload alt="Readout Detail"></p>
-<p>下图说明了该CIS是如何在可切换像素分辨率的每个分辨率下获得拜耳颜色模式：</p>
-<p><img src="/img/13_Samung200MPSensor/bayer_mode.png" srcset="/img/loading.gif" lazyload alt="Bayer Mode"></p>
-<h1 id="3-评估结果"><a href="#3-评估结果" class="headerlink" title="3. 评估结果"></a>3. 评估结果</h1><h2 id="3-1-传感器规格"><a href="#3-1-传感器规格" class="headerlink" title="3.1 传感器规格"></a>3.1 传感器规格</h2><p>下表总结了所设计传感器的规格：</p>
-<p><img src="/img/13_Samung200MPSensor/sepc.png" srcset="/img/loading.gif" lazyload alt="CIS Specification"></p>
-<p>传感器使用堆栈式工艺，Pixel部分采用65nm NMOS工艺制造，采用5金属层，而底部逻辑部分芯片采用28nm CMOS工艺制造，8金属层。像素阵列由200Mega（16388×12288）像素组成，像素间距为0.64µm。200MP的输出情况下全阱容量为6000e-，提供每秒8帧（fps）。在四读出的情况下，50MP达到30fps，全阱容量为24000e-。12.5MP模式下可以达到60fps，满阱容量为96000e-。2.2V、1.8V和1.0V的电源分别用于像素&#x2F;模拟电路、PLL&#x2F;DPHY&#x2F;IO和数字电路。在x16的模拟增益下进行多次采样，读出噪声为2.2e-，而在没有多次采样的情况下为3.4e-。在本文中，没有提供交错高动态范围（HDR）和iDCG（场景内双转换增益）HDR的信息。</p>
-<h2 id="3-2-设计挑战"><a href="#3-2-设计挑战" class="headerlink" title="3.2 设计挑战"></a>3.2 设计挑战</h2><p>在0.64µm 200 MP传感器的实施过程中，我们面临着一些设计挑战。</p>
+<p>像素表征是通过用于评估信号和噪声特性的方法进行的。下图显示了结温度Tj为80摄氏度和33毫秒积分时间时的暗信号直方图：</p>
+<p><img src="/Img/14_OnsemiNirCamera/histogram.png" srcset="/img/loading.gif" lazyload alt="Dark直方图"></p>
+<p>在使用相应的系统增益转换为电荷单位后，测量的标准偏差是暗信号不均匀性（DSNU），等于1.5e-。</p>
 <ul>
-<li><p>首先，功耗是至关重要的。为了降低功耗，在应用处理器（AP）中采用软件的方式实现了200MP的四方重构，而不是在传感器中嵌入硬件。因此，图像处理速度受到通道滞后的限制。注意，由于图像质量增强技术，重马赛克算法的复杂性已经增加。</p>
-</li>
-<li><p>其次，像素和模拟电路的联合仿真很难进行。例如，即使不包括全分辨率，暗着色模拟也需要更长的时间。因此，由于当前仿真环境的节点复杂性，无法获得200MP的正确结果。在接下来的几天里，将通过尝试不同的方法来改善模型与硬件的相关性。</p>
-</li>
-<li><p>最后，所设计的列比较器布局在0.64µm的列间距内非常窄。因此，比较器不仅通过屏蔽金属来避免串扰，而且通过布线自由度限制来平衡每个比较器中的寄生电容，因此更灵敏。</p>
-</li>
+<li>读出噪声直方图</li>
 </ul>
-<h2 id="3-3-测试图像"><a href="#3-3-测试图像" class="headerlink" title="3.3 测试图像"></a>3.3 测试图像</h2><p>在白天，200MP的分辨率提供了更详细的图像。下图显示了在200MP和50MP之间的变焦模式的结果。</p>
-<p><img src="/img/13_Samung200MPSensor/diff_res_image.png" srcset="/img/loading.gif" lazyload alt="变焦图像"></p>
-<p>在200 MP的变焦模式下，即使感兴趣区域发生变化，像素依然可以保持相同的图像质量。下图显示了带有评估板和单反镜头的200 MP芯片的实验结果。</p>
-<p><img src="/img/13_Samung200MPSensor/Detail_img.png" srcset="/img/loading.gif" lazyload alt="Detial Image"></p>
-<p>打印的图像尺寸为28mx22m，可保持适当的图像质量。因此，图卡可以提供清晰而恰当的图像。</p>
-<h2 id="3-4-CIS显微镜照片"><a href="#3-4-CIS显微镜照片" class="headerlink" title="3.4 CIS显微镜照片"></a>3.4 CIS显微镜照片</h2><p>下图示了所实现的200 MP堆叠传感器的芯片显微照片。</p>
-<p><img src="/img/13_Samung200MPSensor/pixel_array.png" srcset="/img/loading.gif" lazyload alt="Pixel Array"></p>
-<p>芯片尺寸为11799µmx10758µm。顶部芯片由像素组成，底部芯片由列ADC（比较器阵列、计数器阵列和DAC）、两个行驱动器、两个PMU、逻辑和一个CPHY组成。</p>
-<h2 id="3-5-工作对比"><a href="#3-5-工作对比" class="headerlink" title="3.5 工作对比"></a>3.5 工作对比</h2><p>下表描述了与其他作品的比较：</p>
-<p><img src="/img/13_Samung200MPSensor/compare.png" srcset="/img/loading.gif" lazyload alt="工作对比"></p>
-<h1 id="4-工作总结"><a href="#4-工作总结" class="headerlink" title="4 工作总结"></a>4 工作总结</h1><p>本文介绍了具有0.64µm间距像素的200MP堆叠CIS的首次大规模生产实现。超过200 MP的超分辨率传感器适用于从卫星上拍摄地球上物体的照片，或通过各种机器学习算法为下一代传感器调整用户体验。</p>
-<h1 id="5-结束语"><a href="#5-结束语" class="headerlink" title="5 结束语"></a>5 结束语</h1><p>今天我们为大家介绍了三星电子在移动端CIS传感器的技术论文，为大家介绍了其Sensor的实现原理与技术架构，与之前OV 200MP的Sensor对比，可以看出在移动端设备整体架构的相似，内部实现细节与具体工艺有差异。最后，技术的进步带来更好的用户体验，如200MP分辨率可以为移动端设备提高更高的分辨率以及更远的数字变焦距离。</p>
+<p>下图显示了25摄氏度下具有最大增益的读取噪声直方图：</p>
+<p><img src="/Img/14_OnsemiNirCamera/read_noise.png" srcset="/img/loading.gif" lazyload alt="Read Noise"></p>
+<p>其中分布的均方根（RMS）为1.3e-。</p>
+<ul>
+<li>PTC曲线</li>
+</ul>
+<p>下图显示了增益足够低以提取PD LFW时的光子转移曲线（PTC）测量：</p>
+<p><img src="/Img/14_OnsemiNirCamera/PTC.png" srcset="/img/loading.gif" lazyload alt="PTC"></p>
+<ul>
+<li>SNR曲线</li>
+</ul>
+<p>为了突出显示eDR模式的动态范围，下图显示了eDR SNR曲线，并将其与具有低转换增益的线性模式下的SNR曲线进行了比较：</p>
+<p><img src="/Img/14_OnsemiNirCamera/snr_curve.png" srcset="/img/loading.gif" lazyload alt="SNR"></p>
+<h2 id="3-2-Sensor-QE"><a href="#3-2-Sensor-QE" class="headerlink" title="3.2 Sensor QE"></a>3.2 Sensor QE</h2><p>Sensor实现了三种滤色器阵列（CFA）变体，以满足目标市场的特定图像质量要求：拜耳（“RGGB”）、具有4x4单元的RGB-IR和单色（“Mono”）。这三种变体的量子效率（QE）曲线如下图所示：</p>
+<p><img src="/Img/14_OnsemiNirCamera/qe.png" srcset="/img/loading.gif" lazyload alt="QE"></p>
+<p>RGB-IR变体是通过跳过倒金字塔的背面工艺开发的，以确保R、G、B通道的最大动态范围。不需要NIR QE增强，因为硅外延中的NIR吸收足够高，以满足特定RGB-IR应用的要求。</p>
+<h2 id="3-3-暗光效果"><a href="#3-3-暗光效果" class="headerlink" title="3.3 暗光效果"></a>3.3 暗光效果</h2><p>下表显示了在（a）可见光和（b）近红外照明下在弱光条件下拍摄的图像：</p>
+<table>
+<thead>
+<tr>
+<th><a href="mailto:&#x35;&#x35;&#48;&#48;&#x4b;&#64;&#x30;&#46;&#x36;&#x36;&#x6c;&#117;&#x78;">&#x35;&#x35;&#48;&#48;&#x4b;&#64;&#x30;&#46;&#x36;&#x36;&#x6c;&#117;&#x78;</a></th>
+<th><a href="mailto:&#57;&#52;&#48;&#x6e;&#x6d;&#64;&#x32;&#54;&#46;&#51;&#110;&#x57;">&#57;&#52;&#48;&#x6e;&#x6d;&#64;&#x32;&#54;&#46;&#51;&#110;&#x57;</a>&#x2F;cm^2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="/Img/14_OnsemiNirCamera/rgb_lowI.png" srcset="/img/loading.gif" lazyload alt="RGB"></td>
+<td><img src="/Img/14_OnsemiNirCamera/ir_lowI.png" srcset="/img/loading.gif" lazyload alt="IR"></td>
+</tr>
+</tbody></table>
+<p>当传感器以16.7ms的最大增益和积分时间激活时，两个图像都被捕获，其中现场的照明条件为（左）5500K，0.66勒克斯，和（右）940nm，26.3nW&#x2F;cm2。图像显示在0-330 DN的信号范围内。在图像捕获期间使用的F#2透镜具有VIS&#x2F;940nm双频带滤波器，其在可见波段和940nm处的透射率大于95%。</p>
+<h2 id="3-4-芯片封装"><a href="#3-4-芯片封装" class="headerlink" title="3.4 芯片封装"></a>3.4 芯片封装</h2><p>下图显示了封装的图像传感器产品的照片：</p>
+<p><img src="/Img/14_OnsemiNirCamera/die.png" srcset="/img/loading.gif" lazyload alt="芯片封装"></p>
+<p>其中5MP和8MP产品位于芯片级封装（CSP）中，20MP产品位于混合间距球栅阵列（MPBGA）封装中。</p>
+<h2 id="3-5-SNR1"><a href="#3-5-SNR1" class="headerlink" title="3.5 SNR1"></a>3.5 SNR1</h2><p>SNR1s指标由索尼半导体解决方案公司引入，用于定量评估低照度下安全摄像头的SNR。SNR1s被定义为当相机在室温下以1&#x2F;60秒的曝光时间和具有95%透射率的F#1.4镜头以及CM500红外截止滤光片激活时，在3200K照明下，绿色通道的SNR等于1或0dB，具有18%反射率的灰色目标上的照度。</p>
+<p>下图显示了各种索尼STARVIS传感器的SNR1值与像素大小的关系——最小像素大小为1.45µm，以及本工作中开发的传感器系列。</p>
+<p><img src="/Img/14_OnsemiNirCamera/snr1.png" srcset="/img/loading.gif" lazyload alt="SNR1"></p>
+<p>SNR1s值沿着随着像素大小而减小的曲线分布——正如响应度的贡献所预期的那样，即像素越小，低光性能就越具有挑战性，因此SNR1s的值就越高。与像素面积拟合线所描述的模型相比，本工作中开发的1.40µm像素的SNR1性能有所提高。</p>
+<h2 id="3-6-芯片Spec"><a href="#3-6-芯片Spec" class="headerlink" title="3.6 芯片Spec"></a>3.6 芯片Spec</h2><p>下表总结了适用于三种阵列分辨率的像素阵列的主要性能参数。该表显示了在不同条件下计算的SNR1值，例如在80C和940nm照明下。</p>
+<p><img src="/img/14_OnsemiNirCamera/spec.png" srcset="/img/loading.gif" lazyload alt="Spec"></p>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h1><p>我们报告了一种滚动快门、低功耗图像传感器系列的开发，该系列具有1.40µm像素大小、多种分辨率变体（5Mp、8Mp、20Mp）、BSI堆叠、65nm技术、6µm外延硅、部分BDTI和用于增强近红外QE的背面工艺选项。传感器性能已证明能够满足监控、消费和工业应用中在弱光条件下成像的最苛刻要求。</p>
+<h1 id="5-结束语"><a href="#5-结束语" class="headerlink" title="5 结束语"></a>5 结束语</h1><p>今天我们为大家介绍了Onsemi RGB-IR微光传感器的技术论文，为大家介绍了其Sensor的实现原理与技术架构，相对于普通RGGB相机，RGB-IR在安防领域应用广泛，如白天使用RGB成像，而晚上则进行红外补光，使用IR图像。同时，在车载领域RGB-IR也在逐步推广，如OMS、DMS等也在逐步推广，相信随着技术的发展会给用户带来更好的用户体验。</p>
 <p>好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以fllow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库AdasTechPapers</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
 <hr>
 <p><strong>加入星球:</strong></p>
@@ -370,7 +387,7 @@
       
         <a href="/tags/CMOS-SENSOR/" class="print-no-link">#CMOS SENSOR</a>
       
-        <a href="/tags/OVT/" class="print-no-link">#OVT</a>
+        <a href="/tags/ONSEMI/" class="print-no-link">#ONSEMI</a>
       
     </div>
   
@@ -382,8 +399,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>CIS|三星200MP图像传感器技术论文解析</div>
-      <div>https://jokereyeadas.github.io/2023/11/02/13.Samung移动设备200Mp图像传感器/</div>
+      <div>CIS|安森美微光近红外增强相机论文解析</div>
+      <div>https://jokereyeadas.github.io/2023/11/12/14.CIS技术发展趋势/</div>
     </div>
     <div class="license-meta">
       
@@ -395,7 +412,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月2日</div>
+          <div>2023年11月12日</div>
         </div>
       
       
@@ -427,18 +444,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/12/14.CIS%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95%E8%B6%8B%E5%8A%BF/" title="CIS|安森美微光近红外增强相机论文解析">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CIS|安森美微光近红外增强相机论文解析</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/10/29/12.HDR-ISP%E6%94%AF%E6%8C%81ROS2%E4%BB%A5%E5%8F%8AGPU%E5%95%A6/" title="进阶|HDR-ISP支持ROS2以及GPU实时处理啦！">
-                        <span class="hidden-mobile">进阶|HDR-ISP支持ROS2以及GPU实时处理啦！</span>
+                      <a href="/2023/11/02/13.Samung%E7%A7%BB%E5%8A%A8%E8%AE%BE%E5%A4%87200Mp%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8/" title="CIS|三星200MP图像传感器技术论文解析">
+                        <span class="hidden-mobile">CIS|三星200MP图像传感器技术论文解析</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
