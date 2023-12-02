@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>SONY-CIS工艺|通过局部连接实现高全阱容量和低噪声特性</title>
+    <link href="/2023/12/01/16.Sony_%E9%80%9A%E8%BF%87%E6%8E%A9%E5%9F%8B%E4%BA%9A%E5%B1%80%E9%83%A8%E8%BF%9E%E6%8E%A5%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%85%A8%E9%98%B1%E5%AE%B9%E9%87%8F%E5%92%8C%E4%BD%8E%E5%99%AA%E5%A3%B0%E7%89%B9%E6%80%A7/"/>
+    <url>/2023/12/01/16.Sony_%E9%80%9A%E8%BF%87%E6%8E%A9%E5%9F%8B%E4%BA%9A%E5%B1%80%E9%83%A8%E8%BF%9E%E6%8E%A5%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%85%A8%E9%98%B1%E5%AE%B9%E9%87%8F%E5%92%8C%E4%BD%8E%E5%99%AA%E5%A3%B0%E7%89%B9%E6%80%A7/</url>
+    
+    <content type="html"><![CDATA[<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>我们在之前论文中介绍了SONY、OVT、ONSEMI、SAMUNG等各大Sensor厂商的CIS产品以及Sensor架构等，今天我们将借Sony发布的工艺改进的技术论文，介绍工艺的提升对于Pixel性能的影响。</p><p>该论文向我们展示了具有高全阱容量（FWC）和低随机噪声（RN）的2层晶体管像素堆叠CMOS图像传感器（CIS）的开发。通过在3D顺序集成工艺中在不同的硅（Si）层上制造PD和像素晶体管并引入单个垂直栅极（SVG）来增加光电二极管（PD）体积，从而实现了高FWC。引入了连接多个浮动扩散区（FD）和像素FinFET的掩埋亚局部连接（BSC），以提高转换增益和随机噪声（RN）。我们展示了一个0.6µm像素的2层像素，RN为0.99，FWC为8000e-，动态范围为78.1dB。</p><h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>确保像素收缩的高动态范围（Dynamic Range）对于图像捕获非常重要。像素收缩使得难以确保高FWC，这是由于像素晶体管的尺寸减小而不能确保PD区域和低噪声。双层晶体管像素堆叠CMOS图像传感器（“双层像素”）已被提出作为一种很有前途的技术，用于捕获低噪声和高D范围的图像，并在CMOS图像传感器中实现像素收缩。</p><p>两层像素的示意图如下图所示：</p><p><img src="/img/16_Sony_ArtPaper/cis_2layer.png" alt="2 Layer"></p><p>横截面示意图如下所示：</p><p><img src="/img/16_Sony_ArtPaper/cross.png" alt="横截面示意图"></p><p>2层像素包括Si层，在该Si层上布置有PD和传输栅极。第二层包含t个像素晶体管，例如放大器晶体管、选择栅极、复位栅极和深接触，以连接PD和像素晶体管。此外，形成全沟槽隔离（FTI）以分离像素。在之前的研究中，我们开发了一种三维（3D）顺序集成过程来实现2层像素。</p><p>本文通过引入单个垂直传输门（SVG）、埋入式亚本地连接（BSC）和像素FinFET，提出了一种具有0.6µm像素的2层像素。</p><h1 id="2-FWC提升"><a href="#2-FWC提升" class="headerlink" title="2 FWC提升"></a>2 FWC提升</h1><p>PD和传输门（TRG）的主要性能要求是高FWC，没有滞后和开花。在该器件中，通过在形成PD的第一Si层中引入全沟槽隔离（FTI）来完全分离PD，从而产生没有开花的结构。仅针对无滞后和FWC执行TRG优化，并且与不应用FTI的情况相比，提高了TRG设计的自由度。2层像素结构放大了TRG布局区域，如下图a-b所示：</p><p><img src="/img/16_Sony_ArtPaper/pd.png" alt="PD布局"></p><p>SVG的引入扩大了可用于TRG放置的区域，因为它会导致PD配置的变化，从而消除了对浅PD的需要，从而实现高FWC和无滞后，如上图（b-c）所示。通过优化SVG的几何形状和位置，可以实现8000e-的FWC。</p><h1 id="3-随机噪声提升"><a href="#3-随机噪声提升" class="headerlink" title="3 随机噪声提升"></a>3 随机噪声提升</h1><p>减小FD电容对于提高RN和转换增益是重要的。引入BSC以减少扩散层电容，引入像素FinFET以缩小FD共享单元。在传统的2层像素中，SC用于连接多个浮动扩散。SC是在第一层和第二层之间形成的结构，其与第一层的Si表面接触并具有欧姆导电性。</p><p>BSC是接触面积从Si表面变化到Si侧壁的结构，如下图b所示：</p><p><img src="/img/16_Sony_ArtPaper/si.png" alt="Si结构"></p><p>与SC相比，BSC可以与TGs分离，并且可以降低TGs的电容。通过优化BSC的布局和深度，FD电容减少了46%，如下图所示：</p><p><img src="/img/16_Sony_ArtPaper/fd.png" alt="FD"></p><p>BSC表现出欧姆导电性，电阻特性如下图：</p><p><img src="/img/16_Sony_ArtPaper/resistence.png" alt="电阻特性"></p><p>为了将FD共享单元从2x4缩小到2x2，我们采用了像素FinFET。引入BSC和改变FD共享单元使转换增益增加了2.26倍，RN减少了67%，如图所示（a）和（b）：</p><table><thead><tr><th>a</th><th>b</th></tr></thead><tbody><tr><td><img src="/img/16_Sony_ArtPaper/compare.png" alt="fd shared"></td><td><img src="/img/16_Sony_ArtPaper/rn_level.png" alt="rn reduce"></td></tr></tbody></table><h1 id="4-结论"><a href="#4-结论" class="headerlink" title="4 结论"></a>4 结论</h1><p>我们制造了一个0.6μm像素的2层像素，如下图所示：</p><p><img src="/img/16_Sony_ArtPaper/pixel.png" alt="pixel"></p><p>下图显示了像素大小和Drange之间的关系：</p><p><img src="/img/16_Sony_ArtPaper/dr.png" alt="DR对比"></p><p>其中将先前研究中报道的PD CIS的FWC和RN与本研究中获得的进行了比较。表一总结了性能参数以及与先前研究的比较。</p><p><img src="/img/16_Sony_ArtPaper/work_compare.png" alt="工作对比"></p><h1 id="5-结束语"><a href="#5-结束语" class="headerlink" title="5 结束语"></a>5 结束语</h1><p>今天为大家介绍了Sony发布的工艺改进的技术论文，介绍工艺的提升对于Pixel性能的影响。希望对大家对于sensor工艺有着更深入了解与提升。</p><p>好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以fllow我的<a href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库AdasTechPapers</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p><hr><p><strong>加入星球:</strong></p><p><img src="/./img/6_HDR_ISP/xingqiu.jpg" alt="知识星球"></p><p><strong>如果您对ADAS感兴趣，欢迎关注我的公众号、知乎、Github、CSDN等，同时发表文章中使用源码以及文章会在我的GitHub进行开源，如果您有感兴趣话题也可以后台私信。</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>CMOS SENSOR</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>CMOS SENSOR</tag>
+      
+      <tag>SONY</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Lidar|三星SPAD dToF Lidar芯片论文解析</title>
     <link href="/2023/11/19/15.Samung_SPAD%E8%AE%BA%E6%96%87%E8%A7%A3%E6%9E%90/"/>
     <url>/2023/11/19/15.Samung_SPAD%E8%AE%BA%E6%96%87%E8%A7%A3%E6%9E%90/</url>

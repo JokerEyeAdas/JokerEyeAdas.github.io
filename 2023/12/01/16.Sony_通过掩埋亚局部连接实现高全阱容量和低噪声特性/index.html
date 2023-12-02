@@ -16,28 +16,27 @@
   <meta name="author" content="Joker.Mao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="引言之前我们在《ADAS-Lidar|索尼车载IMX459激光雷达芯片论文解析》中简要介绍了Sony车载SPAD阵列Lidar芯片。今天，我们将基于三星发布自家消费、工业级的dToF的IEEE论文，为大家介绍三星SPAD阵列芯片技术以及基于该芯片构造的Lidar系统Demo。 该论文提出了一种用于移动应用的激光雷达系统，该系统具有功率效率和耐受高环境的能力。该系统具有940nm扫描激光源和具有片上">
+    <meta name="description" content="引言我们在之前论文中介绍了SONY、OVT、ONSEMI、SAMUNG等各大Sensor厂商的CIS产品以及Sensor架构等，今天我们将借Sony发布的工艺改进的技术论文，介绍工艺的提升对于Pixel性能的影响。 该论文向我们展示了具有高全阱容量（FWC）和低随机噪声（RN）的2层晶体管像素堆叠CMOS图像传感器（CIS）的开发。通过在3D顺序集成工艺中在不同的硅（Si）层上制造PD和像素晶体管">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Lidar|三星SPAD dToF Lidar芯片论文解析">
-<meta property="og:url" content="https://jokereyeadas.github.io/2023/11/19/15.Samung_SPAD%E8%AE%BA%E6%96%87%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:title" content="SONY-CIS工艺|通过局部连接实现高全阱容量和低噪声特性">
+<meta property="og:url" content="https://jokereyeadas.github.io/2023/12/01/16.Sony_%E9%80%9A%E8%BF%87%E6%8E%A9%E5%9F%8B%E4%BA%9A%E5%B1%80%E9%83%A8%E8%BF%9E%E6%8E%A5%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%85%A8%E9%98%B1%E5%AE%B9%E9%87%8F%E5%92%8C%E4%BD%8E%E5%99%AA%E5%A3%B0%E7%89%B9%E6%80%A7/index.html">
 <meta property="og:site_name" content="ADAS之眼">
-<meta property="og:description" content="引言之前我们在《ADAS-Lidar|索尼车载IMX459激光雷达芯片论文解析》中简要介绍了Sony车载SPAD阵列Lidar芯片。今天，我们将基于三星发布自家消费、工业级的dToF的IEEE论文，为大家介绍三星SPAD阵列芯片技术以及基于该芯片构造的Lidar系统Demo。 该论文提出了一种用于移动应用的激光雷达系统，该系统具有功率效率和耐受高环境的能力。该系统具有940nm扫描激光源和具有片上">
+<meta property="og:description" content="引言我们在之前论文中介绍了SONY、OVT、ONSEMI、SAMUNG等各大Sensor厂商的CIS产品以及Sensor架构等，今天我们将借Sony发布的工艺改进的技术论文，介绍工艺的提升对于Pixel性能的影响。 该论文向我们展示了具有高全阱容量（FWC）和低随机噪声（RN）的2层晶体管像素堆叠CMOS图像传感器（CIS）的开发。通过在3D顺序集成工艺中在不同的硅（Si）层上制造PD和像素晶体管">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://jokereyeadas.github.io/img/15_SamungSpad/Pixel_arch.png">
-<meta property="article:published_time" content="2023-11-19T04:21:16.000Z">
-<meta property="article:modified_time" content="2023-11-19T04:21:06.083Z">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/16_Sony_ArtPaper/cis_2layer.png">
+<meta property="article:published_time" content="2023-11-30T16:21:16.000Z">
+<meta property="article:modified_time" content="2023-12-02T03:07:51.434Z">
 <meta property="article:author" content="Joker.Mao">
-<meta property="article:tag" content="Lidar">
-<meta property="article:tag" content="dToF">
-<meta property="article:tag" content="SPAD">
+<meta property="article:tag" content="CMOS SENSOR">
+<meta property="article:tag" content="SONY">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://jokereyeadas.github.io/img/15_SamungSpad/Pixel_arch.png">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/16_Sony_ArtPaper/cis_2layer.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Lidar|三星SPAD dToF Lidar芯片论文解析 - ADAS之眼</title>
+  <title>SONY-CIS工艺|通过局部连接实现高全阱容量和低噪声特性 - ADAS之眼</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -207,7 +206,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Lidar|三星SPAD dToF Lidar芯片论文解析"></span>
+            <span id="subtitle" data-typed-text="SONY-CIS工艺|通过局部连接实现高全阱容量和低噪声特性"></span>
           
         </div>
 
@@ -218,8 +217,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-19 12:21" pubdate>
-          2023年11月19日 中午
+        <time datetime="2023-12-01 00:21" pubdate>
+          2023年12月1日 凌晨
         </time>
       </span>
     
@@ -230,7 +229,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.2k 字
+          1.7k 字
         
       </span>
     
@@ -241,7 +240,7 @@
         
         
         
-          35 分钟
+          15 分钟
         
       </span>
     
@@ -278,61 +277,50 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Lidar|三星SPAD dToF Lidar芯片论文解析</h1>
+            <h1 id="seo-header">SONY-CIS工艺|通过局部连接实现高全阱容量和低噪声特性</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>之前我们在《<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkzNjQ0NDMyMg==&mid=2247484385&idx=1&sn=c024bc234a7d9fb01209030660244691&chksm=c29feb2cf5e8623a44e3d0d27b0f607d7af0e8ace6c2147c9b77200819c06fa5da66e5326bfe&token=8842887&lang=zh_CN#rd">ADAS-Lidar|索尼车载IMX459激光雷达芯片论文解析</a>》中简要介绍了Sony车载SPAD阵列Lidar芯片。今天，我们将基于三星发布自家消费、工业级的dToF的IEEE论文，为大家介绍三星SPAD阵列芯片技术以及基于该芯片构造的Lidar系统Demo。</p>
-<p>该论文提出了一种用于移动应用的激光雷达系统，该系统具有功率效率和耐受高环境的能力。该系统具有940nm扫描激光源和具有片上时间相关直方图的192×144单光子雪崩二极管（SPAD）阵列。当返回的激光脉冲较弱时，自适应单程直方图结构通过保持在粗略分辨率模式来节省功率。新的信号处理方法允许深度分辨率超过粗略的仓大小。该系统能够以每秒30帧的速度测量深度图像，范围可达10米，范围误差为1%，仅消耗12mW的光功率。</p>
-<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>深度传感已成为涉及环境交互的应用中的一个显著特征，如增强现实（AR）、自动驾驶汽车和安全监控。在雷达和超声波等常见测距技术中，激光雷达传感器具有距离远、距离分辨率高和空间分辨率高等优点。激光雷达通过测量传感器和被探测物体之间的光的飞行时间（ToF）来解析深度。根据不同的测量原理，它通常分为直接飞行时间（dToF）或间接飞行时间（iToF）类型。dToF特别受关注，因为它对多径回波具有免疫力，并且易于用现有视觉系统增强它以形成3D图像解决方案。</p>
-<p>dToF激光雷达传感器需要通过重复测量来拒绝透射光中的背景光（也称为环境光）。为了从所有光子中检测返回的激光光子，通常使用直方图来对光子时间戳进行分类，并且直方图的峰值通常指示返回的激光光。设计一个在功率效率、环境容差、射程和射程分辨率之间取得正确平衡的系统可能非常具有挑战性。增加光源强度或减小直方图仓大小通常保证更好的性能；但是功耗和存储器的增加可能会抵消这种益处。提出了一种两次通过的解决方案来缓解这一问题。它首先使用粗直方图以粗分辨率估计深度，然后围绕估计的粗深度构建新的精细直方图，从而获得精细分辨率的深度。第一遍中的信号在第二遍之前被丢弃，对提高距离分辨率没有贡献。信号损失（或浪费）的影响在长距离测量中尤其明显，在长距离测试中，返回的光子通常很少，因此更有价值。</p>
-<p>在本文中，我们提出了一个使用192×144 SPAD阵列的激光雷达系统的设计。该系统具有自适应单程直方图结构，该结构允许直方图根据返回的激光信号强度从粗略模式自适应地切换到精细模式。结合新颖的信号处理，该系统能够在户外阳光充足的情况下，以每秒30帧（fps）的低功耗，在10米处以高分辨率检测低反照率（10%）的物体。</p>
-<h1 id="2-系统架构"><a href="#2-系统架构" class="headerlink" title="2 系统架构"></a>2 系统架构</h1><p>系统架构如下图所示:</p>
-<p><img src="/./img/15_SamungSpad/sys_arch.png" srcset="/img/loading.gif" lazyload alt="Lidar System Arch"></p>
-<p>我们采用扫描激光雷达方案，以利用其比非扫描方案（例如闪光激光雷达）更高的信噪比。已经研究了用于激光雷达应用的不同类型的激光束扫描仪；其中，固态扫描仪通常是首选，因为它没有移动部件，响应时间快，设计紧凑，成本低。特别是将激光二极管阵列与衍射光学元件（DOE）相结合的最新进展使它们在消费级Lidar系统中更具有竞争力。</p>
-<ul>
-<li>Lidar TX</li>
-</ul>
-<p>TX由具有光学元件的激光扫描仪组成，该光学元件用940 nm红外波长的线型图案照射场。由于激光图案和从目标反射回来的光信号之间的光学差异，询问图案的间隔不能在整个过程中是均匀的。我们在接收器（RX）中设计了具有灵活寻址方案的SPAD阵列，以避免反射光信号丢失，这是通过将SPAD阵列划分为不同的区域来实现的，从而可以独立设置每个区域内的扫描和寻址模式。因此，RX扫描图案可以被调谐为与变化的反射光位置完美匹配，以保证捕获返回的信号光子。</p>
-<ul>
-<li>Lidar RX</li>
-</ul>
-<p>如下面将详细描述的，RX芯片还具有放置在阵列两侧的计数器（CNT）和时间-数字转换器（TDC）电路，允许SPAD电压脉冲在检测到光子之后立即被处理。此外，由于片上ASIC支持全直方图构建和读出，所提出的激光雷达系统的实时帧率可以达到30fps。</p>
-<h1 id="3-SPAD传感器芯片及其操作"><a href="#3-SPAD传感器芯片及其操作" class="headerlink" title="3 SPAD传感器芯片及其操作"></a>3 SPAD传感器芯片及其操作</h1><h2 id="3-1-Sensor架构"><a href="#3-1-Sensor架构" class="headerlink" title="3.1 Sensor架构"></a>3.1 Sensor架构</h2><p>我们设计了具有所有基本块的RX，以完全在芯片上进行dTOF操作。</p>
-<p><img src="/./img/15_SamungSpad/Pixel_arch.png" srcset="/img/loading.gif" lazyload alt="pixel arch"></p>
-<p>上图说明了SPAD传感器芯片架构、信号路径和2×2 SPAD像素电路。SPAD通常在雪崩击穿区域中操作，反向偏压略微超过其击穿电压（即Vbias＝Vbd+Vex），其中Vex是过电压）。这意味着SPAD具有非常高的信号增益，并且可以检测单光子事件。为了将激发的SPAD重置回其待机状态，在阳极连接一个淬火晶体管（也称为无源淬火）。这使得紧凑的SPAD设计难以实现。</p>
-<h2 id="3-2-SPAD共享"><a href="#3-2-SPAD共享" class="headerlink" title="3.2 SPAD共享"></a>3.2 SPAD共享</h2><p>最近，基于虚拟保护环的SPAD设计已被证明在实现小间距方面很有前景。我们基于类似的概念，通过在20μm像素中与四个（2×2）相邻SPAD共享一个公共阴极和输出电路，进一步提高了填充因子（至19.6%）（见图2）。SPAD的间距为10μm，我们将击穿电压（Vbd）设计为17.4V。四个SPAD输出通道通过或门耦合，作为统一的像素输出，以节省电路面积并提高填充因子。组合脉冲的信号处理将在第四节中详细讨论。SPAD传感器芯片通过三星定制的90nm背面照明（BSI）图像传感器工艺制造。</p>
-<p><img src="/./img/15_SamungSpad/product_art.png" srcset="/img/loading.gif" lazyload alt="制造工艺"></p>
-<p>最终芯片layout如下所示：</p>
-<p><img src="/./img/15_SamungSpad/layout.png" srcset="/img/loading.gif" lazyload alt="Alt text"></p>
-<h2 id="3-3-TCAD仿真"><a href="#3-3-TCAD仿真" class="headerlink" title="3.3 TCAD仿真"></a>3.3 TCAD仿真</h2><p>TCAD模拟证实，目前的设计可以在940nm处实现3%的光检测概率（PDP），过电压（Vex）为2.6V：</p>
-<p><img src="/./img/15_SamungSpad/tcda.png" srcset="/img/loading.gif" lazyload alt="TCDA仿真"></p>
-<p>通过优化器件结构，引入金属透镜以提高有效填充因子，并引入纳米结构薄膜以增强光吸收，我们估计，在外延厚度为3um的情况下，光检测概率提高了3倍以上，或最终设计中超过10%的光检测效率（PDE）。</p>
-<h2 id="3-4-操作流程"><a href="#3-4-操作流程" class="headerlink" title="3.4 操作流程"></a>3.4 操作流程</h2><p>如下图所示，Lidar操作流程可以分为两个part：</p>
-<ul>
-<li>检测反射激光信号</li>
-<li>然后重复dTOF测量循环</li>
-</ul>
-<p><img src="/./img/15_SamungSpad/tx_rx.png" srcset="/img/loading.gif" lazyload alt="操作流程"></p>
-<p>在返回信号搜索开始时，列&#x2F;宏块扫描仪的信号会启用新的像素组，位于阵列底部。如Pixel arch图所示，八个（4×2）相邻像素被寻址为一个宏块，因此无论视差如何，都可以捕获返回的激光光子。</p>
-<p><img src="/./img/15_SamungSpad/Pixel_arch.png" srcset="/img/loading.gif" lazyload alt="pixel arch"></p>
-<p>一旦选择了宏块，13位CNT阵列首先对块内所有像素的环境光子进行计数。然后进行CNT位反转（2的补充），然后在激光照射下进行另一轮光子计数。然后，可以通过检测哪个CNT（因此像素）首先将其符号位翻转为正来确定精确的返回激光信号位置。这样的操作允许我们仅用简单的向上CNT而不是更复杂的双向（向上&#x2F;向下）CNT来设计阵列。在该阶段结束时，CNT阵列发出驱动TDC输入MUX的像素选择信号。因此，只有接收到最高光子量的像素被选择用于dToF测量。</p>
-<p>在dToF测量阶段，来自SPAD阵列的数字脉冲串由高精度TDC处理，TDC能够分辨低至250ps的时间戳。要投射的激光脉冲总数N由要测量的最大范围决定。在测量的中途，ASIC逻辑分析前M个周期的直方图，并确定是否应切换到精细仓模式。重复此dTOF操作，直到它扫描整个SPAD阵列。</p>
-<h1 id="4-信号处理"><a href="#4-信号处理" class="headerlink" title="4 信号处理"></a>4 信号处理</h1><h2 id="4-1-SPAD信号处理"><a href="#4-1-SPAD信号处理" class="headerlink" title="4.1 SPAD信号处理"></a>4.1 SPAD信号处理</h2><p>由于激光脉冲非常宽（例如w＝4ns，距离约0.6米），因此需要边缘触发来实现所需的分辨率（范围的1%）。我们设计了信号处理流水线（即TDC）来精确测量返回脉冲的上升沿和下降沿的时间戳。信号处理流水线包括脉冲采集恢复、直方图和后处理。</p>
-<p>当两个或多个SPAD同时给出脉冲时，它们在读出通道上合并为单个脉冲（我们称此过程为“脉冲碰撞”或“事件碰撞”），导致信号丢失。如果单个SPAD脉冲较长，则脉冲碰撞发生得更频繁。当脉冲碰撞时，只有第一个脉冲前沿和最后一个脉冲后沿幸存，其他边缘丢失。</p>
-<p>这类似于光子堆积，因为后期光子会被早期光子掩盖。脉冲碰撞与堆积复合，使光子计数失真，并引入深度测量误差。为了减轻这种信号损失，我们开发了脉冲碰撞恢复算法（下图A）来恢复大部分丢失的信号。</p>
-<p><img src="/./img/15_SamungSpad/spad_signal.png" srcset="/img/loading.gif" lazyload alt="SPAD"></p>
-<p>为此，TDC记录脉冲的前沿和后沿时间戳（t1和t2）。如果t2−t1大于单个SPAD通道中的单个脉冲宽度（wS）（通过校准获得），则我们可以在t2−wS处恢复一个事件时间戳。我们在图A中显示了一个示例，其中三个SPAD总共检测到6个光子，但合并通道仅显示3个脉冲。碰撞恢复算法恢复3个丢失光子检测事件中的2个。尽管并非所有光子都被恢复，但模拟在图B中显示，这种恢复算法导致结果接近完全没有碰撞的情况。这是因为n个脉冲碰撞的概率随着n的增加而急剧降低，因此对于大多数碰撞情况，即两个脉冲碰撞情况，都会完全恢复。</p>
-<h2 id="4-2-FIR滤波"><a href="#4-2-FIR滤波" class="headerlink" title="4.2 FIR滤波"></a>4.2 FIR滤波</h2><p>为了从精细直方图中获得精确的TOF，有必要应用数字滤波器来增强峰值。为了避免堆积引起的问题，我们开发了一种用于精确峰值增强的条件FIR滤波器。下图通过模拟举例说明。解析的TOF与滤波直方图的峰值位置匹配良好。</p>
-<p><img src="/./img/15_SamungSpad/histogram_fir.png" srcset="/img/loading.gif" lazyload alt="直方图处理"></p>
-<h1 id="5-性能评估以及结论"><a href="#5-性能评估以及结论" class="headerlink" title="5 性能评估以及结论"></a>5 性能评估以及结论</h1><h2 id="5-1-精度"><a href="#5-1-精度" class="headerlink" title="5.1 精度"></a>5.1 精度</h2><p>我们用蒙特卡罗方法对系统进行了数值模拟，以估计系统的测量误差。如下图所示：</p>
-<p><img src="/./img/15_SamungSpad/err_rate.png" srcset="/img/loading.gif" lazyload alt="误差"></p>
-<p>可以看出误差保持在1%的范围内，除非在1.5米以下的极近距离，否则误差不能降低到精细仓分辨率（250 ps，相当于3.75厘米）以上。</p>
-<h2 id="5-2-系统Spec"><a href="#5-2-系统Spec" class="headerlink" title="5.2 系统Spec"></a>5.2 系统Spec</h2><p>洗标给出了系统规格的摘要。</p>
-<p><img src="/img/15_SamungSpad/spec.png" srcset="/img/loading.gif" lazyload alt="System Spec"></p>
-<p>总结：我们报道了一个完整的激光雷达系统设计，包括TX、RX、片上直方图和数据处理。TX基于940nm的激光扫描仪。RX具有SPAD阵列，该阵列具有用于视差不可知返回信号定位的灵活寻址方案。在有限的光功率预算下，与时间门控解决方案相比，片上自适应单程直方图显示出优越的性能。该系统能够以每秒30帧、12毫瓦的光功率捕获深度图像。该系统的射程可达10米，深度误差保持在1%以内。该系统在能效、测距、测距分辨率和环境容限之间取得了良好的平衡，适用于移动测距应用。</p>
-<h1 id="6-结束语"><a href="#6-结束语" class="headerlink" title="6 结束语"></a>6 结束语</h1><p>今天我们给大家介绍了三星的基于SPAD dToF芯片论文，讲解了芯片基本架构、性能指标等，希望今天的介绍以及科普可以帮助您更加深入的了解车载激光雷达，对您的工作有所帮助。</p>
+                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>我们在之前论文中介绍了SONY、OVT、ONSEMI、SAMUNG等各大Sensor厂商的CIS产品以及Sensor架构等，今天我们将借Sony发布的工艺改进的技术论文，介绍工艺的提升对于Pixel性能的影响。</p>
+<p>该论文向我们展示了具有高全阱容量（FWC）和低随机噪声（RN）的2层晶体管像素堆叠CMOS图像传感器（CIS）的开发。通过在3D顺序集成工艺中在不同的硅（Si）层上制造PD和像素晶体管并引入单个垂直栅极（SVG）来增加光电二极管（PD）体积，从而实现了高FWC。引入了连接多个浮动扩散区（FD）和像素FinFET的掩埋亚局部连接（BSC），以提高转换增益和随机噪声（RN）。我们展示了一个0.6µm像素的2层像素，RN为0.99，FWC为8000e-，动态范围为78.1dB。</p>
+<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>确保像素收缩的高动态范围（Dynamic Range）对于图像捕获非常重要。像素收缩使得难以确保高FWC，这是由于像素晶体管的尺寸减小而不能确保PD区域和低噪声。双层晶体管像素堆叠CMOS图像传感器（“双层像素”）已被提出作为一种很有前途的技术，用于捕获低噪声和高D范围的图像，并在CMOS图像传感器中实现像素收缩。</p>
+<p>两层像素的示意图如下图所示：</p>
+<p><img src="/img/16_Sony_ArtPaper/cis_2layer.png" srcset="/img/loading.gif" lazyload alt="2 Layer"></p>
+<p>横截面示意图如下所示：</p>
+<p><img src="/img/16_Sony_ArtPaper/cross.png" srcset="/img/loading.gif" lazyload alt="横截面示意图"></p>
+<p>2层像素包括Si层，在该Si层上布置有PD和传输栅极。第二层包含t个像素晶体管，例如放大器晶体管、选择栅极、复位栅极和深接触，以连接PD和像素晶体管。此外，形成全沟槽隔离（FTI）以分离像素。在之前的研究中，我们开发了一种三维（3D）顺序集成过程来实现2层像素。</p>
+<p>本文通过引入单个垂直传输门（SVG）、埋入式亚本地连接（BSC）和像素FinFET，提出了一种具有0.6µm像素的2层像素。</p>
+<h1 id="2-FWC提升"><a href="#2-FWC提升" class="headerlink" title="2 FWC提升"></a>2 FWC提升</h1><p>PD和传输门（TRG）的主要性能要求是高FWC，没有滞后和开花。在该器件中，通过在形成PD的第一Si层中引入全沟槽隔离（FTI）来完全分离PD，从而产生没有开花的结构。仅针对无滞后和FWC执行TRG优化，并且与不应用FTI的情况相比，提高了TRG设计的自由度。2层像素结构放大了TRG布局区域，如下图a-b所示：</p>
+<p><img src="/img/16_Sony_ArtPaper/pd.png" srcset="/img/loading.gif" lazyload alt="PD布局"></p>
+<p>SVG的引入扩大了可用于TRG放置的区域，因为它会导致PD配置的变化，从而消除了对浅PD的需要，从而实现高FWC和无滞后，如上图（b-c）所示。通过优化SVG的几何形状和位置，可以实现8000e-的FWC。</p>
+<h1 id="3-随机噪声提升"><a href="#3-随机噪声提升" class="headerlink" title="3 随机噪声提升"></a>3 随机噪声提升</h1><p>减小FD电容对于提高RN和转换增益是重要的。引入BSC以减少扩散层电容，引入像素FinFET以缩小FD共享单元。在传统的2层像素中，SC用于连接多个浮动扩散。SC是在第一层和第二层之间形成的结构，其与第一层的Si表面接触并具有欧姆导电性。</p>
+<p>BSC是接触面积从Si表面变化到Si侧壁的结构，如下图b所示：</p>
+<p><img src="/img/16_Sony_ArtPaper/si.png" srcset="/img/loading.gif" lazyload alt="Si结构"></p>
+<p>与SC相比，BSC可以与TGs分离，并且可以降低TGs的电容。通过优化BSC的布局和深度，FD电容减少了46%，如下图所示：</p>
+<p><img src="/img/16_Sony_ArtPaper/fd.png" srcset="/img/loading.gif" lazyload alt="FD"></p>
+<p>BSC表现出欧姆导电性，电阻特性如下图：</p>
+<p><img src="/img/16_Sony_ArtPaper/resistence.png" srcset="/img/loading.gif" lazyload alt="电阻特性"></p>
+<p>为了将FD共享单元从2x4缩小到2x2，我们采用了像素FinFET。引入BSC和改变FD共享单元使转换增益增加了2.26倍，RN减少了67%，如图所示（a）和（b）：</p>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th>b</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="/img/16_Sony_ArtPaper/compare.png" srcset="/img/loading.gif" lazyload alt="fd shared"></td>
+<td><img src="/img/16_Sony_ArtPaper/rn_level.png" srcset="/img/loading.gif" lazyload alt="rn reduce"></td>
+</tr>
+</tbody></table>
+<h1 id="4-结论"><a href="#4-结论" class="headerlink" title="4 结论"></a>4 结论</h1><p>我们制造了一个0.6μm像素的2层像素，如下图所示：</p>
+<p><img src="/img/16_Sony_ArtPaper/pixel.png" srcset="/img/loading.gif" lazyload alt="pixel"></p>
+<p>下图显示了像素大小和Drange之间的关系：</p>
+<p><img src="/img/16_Sony_ArtPaper/dr.png" srcset="/img/loading.gif" lazyload alt="DR对比"></p>
+<p>其中将先前研究中报道的PD CIS的FWC和RN与本研究中获得的进行了比较。表一总结了性能参数以及与先前研究的比较。</p>
+<p><img src="/img/16_Sony_ArtPaper/work_compare.png" srcset="/img/loading.gif" lazyload alt="工作对比"></p>
+<h1 id="5-结束语"><a href="#5-结束语" class="headerlink" title="5 结束语"></a>5 结束语</h1><p>今天为大家介绍了Sony发布的工艺改进的技术论文，介绍工艺的提升对于Pixel性能的影响。希望对大家对于sensor工艺有着更深入了解与提升。</p>
 <p>好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以fllow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库AdasTechPapers</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
 <hr>
 <p><strong>加入星球:</strong></p>
@@ -356,7 +344,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Lidar/" class="category-chain-item">Lidar</a>
+  <a href="/categories/CMOS-SENSOR/" class="category-chain-item">CMOS SENSOR</a>
   
   
 
@@ -371,11 +359,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Lidar/" class="print-no-link">#Lidar</a>
+        <a href="/tags/CMOS-SENSOR/" class="print-no-link">#CMOS SENSOR</a>
       
-        <a href="/tags/dToF/" class="print-no-link">#dToF</a>
-      
-        <a href="/tags/SPAD/" class="print-no-link">#SPAD</a>
+        <a href="/tags/SONY/" class="print-no-link">#SONY</a>
       
     </div>
   
@@ -387,8 +373,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Lidar|三星SPAD dToF Lidar芯片论文解析</div>
-      <div>https://jokereyeadas.github.io/2023/11/19/15.Samung_SPAD论文解析/</div>
+      <div>SONY-CIS工艺|通过局部连接实现高全阱容量和低噪声特性</div>
+      <div>https://jokereyeadas.github.io/2023/12/01/16.Sony_通过掩埋亚局部连接实现高全阱容量和低噪声特性/</div>
     </div>
     <div class="license-meta">
       
@@ -400,7 +386,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月19日</div>
+          <div>2023年12月1日</div>
         </div>
       
       
@@ -432,18 +418,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/12/01/16.Sony_%E9%80%9A%E8%BF%87%E6%8E%A9%E5%9F%8B%E4%BA%9A%E5%B1%80%E9%83%A8%E8%BF%9E%E6%8E%A5%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%85%A8%E9%98%B1%E5%AE%B9%E9%87%8F%E5%92%8C%E4%BD%8E%E5%99%AA%E5%A3%B0%E7%89%B9%E6%80%A7/" title="SONY-CIS工艺|通过局部连接实现高全阱容量和低噪声特性">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">SONY-CIS工艺|通过局部连接实现高全阱容量和低噪声特性</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/11/18/14.%E5%AE%89%E6%A3%AE%E7%BE%8E%E5%BE%AE%E5%85%89%E8%BF%91%E7%BA%A2%E5%A4%96%E5%A2%9E%E5%BC%BA%E7%9B%B8%E6%9C%BA%E8%AE%BA%E6%96%87%E8%A7%A3%E6%9E%90/" title="CIS|安森美微光近红外增强相机论文解析">
-                        <span class="hidden-mobile">CIS|安森美微光近红外增强相机论文解析</span>
+                      <a href="/2023/11/19/15.Samung_SPAD%E8%AE%BA%E6%96%87%E8%A7%A3%E6%9E%90/" title="Lidar|三星SPAD dToF Lidar芯片论文解析">
+                        <span class="hidden-mobile">Lidar|三星SPAD dToF Lidar芯片论文解析</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
