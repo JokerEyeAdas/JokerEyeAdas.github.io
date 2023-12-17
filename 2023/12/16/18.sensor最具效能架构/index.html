@@ -16,27 +16,27 @@
   <meta name="author" content="Joker.Mao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="引言做CIS的同学都知道，Sensor的pixel表面都有一个Micro Lens，用于聚光，而SPAD本质上也是一个光电二极管，为了起到同样的作用，各个厂家也对SPAD上的Micro Lens进行了研究。今天我们将介绍意法半导体ST发布论文为大家介绍SPAD上微透镜的应用。 在本文中，我们提出了两代基于元表面的平面微透镜的设计，它们在正面照明SPAD像素上实现。这种微透镜是传统回流微透镜的替代品">
+    <meta name="description" content="引言本文介绍了适用于不同应用的最节能的图像传感器架构。作为案例研究，研究了汽车图像传感器和间接飞行时间图像传感器的两种应用。从测量和仿真结果来看，当图像信号处理器（ISP）在主机侧实现时，用于自动驾驶应用的汽车图像传感器将更加高效。相反，与芯片外软件深度ISP相比，ToF图像传感器在传感器侧的硬件深度ISP显示出显著更好的能效。 1. Introduction在过去的20年里，具有有源像素传感器（">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SPAD|用于SPAD像素的基于元表面的平面微透镜">
-<meta property="og:url" content="https://jokereyeadas.github.io/2023/12/05/17.ST_SPAD_McoroLens/index.html">
+<meta property="og:title" content="ToF架构|汽车ToF最具效能架构案例研究">
+<meta property="og:url" content="https://jokereyeadas.github.io/2023/12/16/18.sensor%E6%9C%80%E5%85%B7%E6%95%88%E8%83%BD%E6%9E%B6%E6%9E%84/index.html">
 <meta property="og:site_name" content="ADAS之眼">
-<meta property="og:description" content="引言做CIS的同学都知道，Sensor的pixel表面都有一个Micro Lens，用于聚光，而SPAD本质上也是一个光电二极管，为了起到同样的作用，各个厂家也对SPAD上的Micro Lens进行了研究。今天我们将介绍意法半导体ST发布论文为大家介绍SPAD上微透镜的应用。 在本文中，我们提出了两代基于元表面的平面微透镜的设计，它们在正面照明SPAD像素上实现。这种微透镜是传统回流微透镜的替代品">
+<meta property="og:description" content="引言本文介绍了适用于不同应用的最节能的图像传感器架构。作为案例研究，研究了汽车图像传感器和间接飞行时间图像传感器的两种应用。从测量和仿真结果来看，当图像信号处理器（ISP）在主机侧实现时，用于自动驾驶应用的汽车图像传感器将更加高效。相反，与芯片外软件深度ISP相比，ToF图像传感器在传感器侧的硬件深度ISP显示出显著更好的能效。 1. Introduction在过去的20年里，具有有源像素传感器（">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://jokereyeadas.github.io/img/17_ST_SPAD/32x32_SPAD.png">
-<meta property="article:published_time" content="2023-12-04T16:21:16.000Z">
-<meta property="article:modified_time" content="2023-12-05T14:46:14.854Z">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/18_ArchTrend/tof_isp.png">
+<meta property="article:published_time" content="2023-12-15T16:21:16.000Z">
+<meta property="article:modified_time" content="2023-12-17T01:08:43.663Z">
 <meta property="article:author" content="Joker.Mao">
 <meta property="article:tag" content="SPAD">
-<meta property="article:tag" content="ST">
+<meta property="article:tag" content="ToF">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://jokereyeadas.github.io/img/17_ST_SPAD/32x32_SPAD.png">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/18_ArchTrend/tof_isp.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>SPAD|用于SPAD像素的基于元表面的平面微透镜 - ADAS之眼</title>
+  <title>ToF架构|汽车ToF最具效能架构案例研究 - ADAS之眼</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -206,7 +206,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="SPAD|用于SPAD像素的基于元表面的平面微透镜"></span>
+            <span id="subtitle" data-typed-text="ToF架构|汽车ToF最具效能架构案例研究"></span>
           
         </div>
 
@@ -217,8 +217,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-12-05 00:21" pubdate>
-          2023年12月5日 凌晨
+        <time datetime="2023-12-16 00:21" pubdate>
+          2023年12月16日 凌晨
         </time>
       </span>
     
@@ -229,7 +229,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.1k 字
+          4.1k 字
         
       </span>
     
@@ -240,7 +240,7 @@
         
         
         
-          27 分钟
+          35 分钟
         
       </span>
     
@@ -277,50 +277,51 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">SPAD|用于SPAD像素的基于元表面的平面微透镜</h1>
+            <h1 id="seo-header">ToF架构|汽车ToF最具效能架构案例研究</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>做CIS的同学都知道，Sensor的pixel表面都有一个Micro Lens，用于聚光，而SPAD本质上也是一个光电二极管，为了起到同样的作用，各个厂家也对SPAD上的Micro Lens进行了研究。今天我们将介绍意法半导体ST发布论文为大家介绍SPAD上微透镜的应用。</p>
-<p>在本文中，我们提出了两代基于元表面的平面微透镜的设计，它们在正面照明SPAD像素上实现。这种微透镜是传统回流微透镜的替代品。它在设计方面提供了更多的自由度，特别是设计离轴微透镜以收集SPAD光电二极管周围的光的能力。在STMicroelectronics SPAD上制备了两代微透镜，并对其进行了表征。我们验证了基于扩展超表面的微透镜所提供的灵敏度提高。我们还证实了光刻能力对超表面性能的影响，强调了获得先进深紫外光刻的必要性。</p>
-<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>平面微透镜非常适合SPAD像素，SPAD像素通常在单色照明（飞行时间或荧光寿命应用）下工作，并且与最先进的CMOS像素相比，表现出相当大的像素尺寸和更低的填充因子。我们之前演示了菲涅耳波带板透镜和提出的基于元表面的微透镜。在本文中，我们介绍STMicroelectronics SPAD阵列上两代基于超表面的平面微透镜的设计、制造和表征结果。</p>
-<h1 id="2-元原子与平面微透镜设计"><a href="#2-元原子与平面微透镜设计" class="headerlink" title="2. 元原子与平面微透镜设计"></a>2. 元原子与平面微透镜设计</h1><p>我们的单一结构，或元原子，是嵌入低折射率介质（氧化硅）中的高折射率材料（非晶硅）的纳米级柱。由柱引起的相移由其几何形状控制，该几何形状由间距限定，顶盖厚度和支柱的参数：高度和直径如下图所示：</p>
-<p><img src="/img/17_ST_SPAD/meta_atom_pitch.png" srcset="/img/loading.gif" lazyload alt="几何形状"></p>
-<p>我们还考虑了铺路策略。对于第一代基于元表面的微透镜，我们考虑了元原子排列的方形铺设。为了改进空间采样，第二代中还实施了三角形铺设如下图所示：</p>
-<p><img src="/img/17_ST_SPAD/two_gen.png" srcset="/img/loading.gif" lazyload alt="两代微透镜"></p>
-<p>我们将柱库定义为具有铺砌和前三个参数固定的柱集，并且柱的直径在光刻可实现的范围内变化：最小直径由最小临界尺寸（CD）定义，最大直径定义为间原子间距减去最小空间。在所有可能的库中，我们选择涵盖从0到2的相移的库同时提供最佳传输，如下图所示:</p>
-<p><img src="/img/17_ST_SPAD/workflow.png" srcset="/img/loading.gif" lazyload alt="库生成以及工作流"></p>
-<p>第一代库基于500nm和420nm间距，而第二代库更具侵略性，具有370nm的间原子间距。在这两种情况下，考虑的最小CD和空间都是100nm。</p>
-<h1 id="3-平面微透镜设计"><a href="#3-平面微透镜设计" class="headerlink" title="3. 平面微透镜设计"></a>3. 平面微透镜设计</h1><h2 id="3-1-SPAD像素"><a href="#3-1-SPAD像素" class="headerlink" title="3.1 SPAD像素"></a>3.1 SPAD像素</h2><p>针对本次设计，我们考虑32x32的SPAD阵列。在86.4x86.4um2的单元内，SPAD以4x4一组进行共享N-well。SPAD单个空间维度为10.5x11.5um2。因此，与传统的基于折射回流的微透镜相比，我们使用设计具有超表面的离轴微透镜的能力来扩展占地面积<br>从而收集更多的光。</p>
-<p><img src="/img/17_ST_SPAD/4x4_spad.png" srcset="/img/loading.gif" lazyload alt="4x4 SPAD"></p>
-<h2 id="3-2-平面微透镜"><a href="#3-2-平面微透镜" class="headerlink" title="3.2 平面微透镜"></a>3.2 平面微透镜</h2><p>我们将32×32的SPAD阵列划分为8×16SPAD的8个区域。每个区域都由给定的微透镜设计覆盖，如下图所示：</p>
-<p><img src="/img/17_ST_SPAD/32x32_SPAD.png" srcset="/img/loading.gif" lazyload alt="32x32 SPAD"></p>
-<ul>
-<li>一个没有任何微透镜的区域，以获得作为参考的裸露SPAD灵敏度</li>
-<li>具有微透镜的一个区域具有与回流区域相同的占地面积。这将用于与折射微透镜进行直接比较。</li>
-<li>具有中间占地面积的微透镜的三个区域面积S为16.5x16.6um2，是两倍参考面积。</li>
-<li>具有尽可能大的占地面积的微透镜的三个区域，面积为21.6x21.6um2，是参考面积3.86倍。</li>
-</ul>
-<p>需要注意的是，对于占地面积大于参考的微透镜，其设计因其在4x4 SPAD组内的位置而异（见上图中左下角的图片）。考虑到布局对称性，我们区分了四个不同的像素：中心、顶部、角落和侧面，如下图：</p>
-<p><img src="/img/17_ST_SPAD/spad.png" srcset="/img/loading.gif" lazyload alt="spad"></p>
-<p>微透镜光轴以感兴趣的SPAD为中心。当微透镜和SPAD具有相同的印迹时，光轴以其为中心。但当微透镜表面延伸到SPAD印迹之外时，光轴偏移。元表面的目标相位轮廓对应于将平面波弯曲成球面波的完美透镜：</p>
-<p><img src="/img/17_ST_SPAD/formula.png" srcset="/img/loading.gif" lazyload alt="公式"></p>
-<p>空间坐标表示为x和y、微透镜光轴的偏移x0和y0、微透镜的焦距f以及感兴趣的波长λ（在我们的情况下为940nm）。为了对该相位轮廓进行编码，我们考虑经典的查找表方法。</p>
-<h1 id="4-超表面制造"><a href="#4-超表面制造" class="headerlink" title="4. 超表面制造"></a>4. 超表面制造</h1><p>工艺流程始于40nm CMOS正面照明SPAD晶片，具有光学基座（SiO2）沉积和平坦化。然后，沉积并平坦化非晶硅树脂（aSi）的低应力层。元原子是通过干式深紫外光刻和蚀刻来定义的。最后，SiO2沉积和平坦化确保了柱的封装，并调整了覆盖厚度，以最大限度地减少超表面的反射，如下图：</p>
-<p><img src="/img/17_ST_SPAD/art.png" srcset="/img/loading.gif" lazyload alt="制造工艺"></p>
-<h1 id="5-光电特性"><a href="#5-光电特性" class="headerlink" title="5. 光电特性"></a>5. 光电特性</h1><h2 id="A-实验建立"><a href="#A-实验建立" class="headerlink" title="A 实验建立"></a>A 实验建立</h2><p>SPAD阵列的电光特性是在晶圆级使用基于Accretech 300mm探测器的专用探测站进行的。光源为Thorlabs M940L3 LED，通过Thorlabs带通滤波器FBH940-10进行过滤（FWHM&#x3D;10nm）。通过LabSphere积分球确保阵列上的均匀照明。球体输出和晶片之间的固定距离模拟f&#x2F;10角度分布。使用校准的辐射计（UDT221）记录光强度。</p>
-<p>为了评估微透镜的性能，我们计算光子检测效率（PDE），即量子效率：</p>
-<p><img src="/img/17_ST_SPAD/pde.png" srcset="/img/loading.gif" lazyload alt="PDE"></p>
-<p>其中Φ940nm是单位面积下每秒的光子数，a^2是spad面积，LCR是光计数率，DCR是暗计数率，分别是SPAD在照明和黑暗中触发的频率。由于这些计数率通常取决于超过SPAD击穿电压的过量偏置，我们首先评估每个电路的平均击穿电压。对于LCR和DCR测量，过量偏置被设置为高于击穿电压1.5V。</p>
-<h2 id="B-实验结果"><a href="#B-实验结果" class="headerlink" title="B 实验结果"></a>B 实验结果</h2><p>已经表征了基于元表面的微透镜的生成以及具有折射微透镜的SPAD（参考过程）和没有微透镜的裸SPAD。下图显示了所有这些配置的PDE:</p>
-<p><img src="/img/17_ST_SPAD/pde_result.png" srcset="/img/loading.gif" lazyload alt="PDE Result"></p>
-<p>正如预期的那样，对于裸露的SPAD和具有单一表面的微透镜，无论SPAD如何，PDE几乎是相同的。事实上，4种SPAD（中心、顶部、角落、侧面）的布局在该表面S1上几乎相同。在这种配置中，折射微透镜比基于元表面的微透镜具有更高的灵敏度，因为它以连续的方式弯曲相位，与在空间和相位值上对相位轮廓进行采样的元表面相反。</p>
-<p>对于延伸表面，，我们清楚地看到，PDE取决于位置（中心、顶部、角落、侧面）：中心的（图中的点）比角落的数据更敏感。造成这种影响的根本原因有两个。首先，给定微透镜下的布局取决于其位置：角微透镜主要位于围绕4×4光电二极管的金属互连上方，顶部和侧面微透镜下方的布局并不完全相同。其次，对于给出的相位，到光轴的距离越大，相位的斜率就越大。因此，当元原子在空间上对相位进行采样时，这会导致可能的混叠。随着更激进的设计规则（较小的间距和CD以及三角形铺砌的使用），第二代元表面具有更高和更少的分散性能。</p>
-<p>与回流微透镜相比，无论基于元表面的微透镜如何，PDE都得到了改善。对于我们的第一个扩展设计，灵敏度提高了30%，色散很小。对于大型微透镜（S3.86），我们将中心微透镜的PDE提高了×2.3，并且在任何情况下，PDE都高于参考（回流微透镜）。</p>
-<h1 id="6-结论"><a href="#6-结论" class="headerlink" title="6. 结论"></a>6. 结论</h1><p>这项工作验证了基于元表面的微透镜在像素级的兴趣和可行性。我们展示了我们在正面照明CMOS晶片顶部处理封装在二氧化硅中的深亚波长非晶硅柱以产生微透镜的能力。在32x32 SPAD阵列上的测量证实了这种技术的兴趣。通过设计离轴微透镜的能力，与经典回流微透镜相比，我们利用4x4 SPAD组周围的可用空间来提高PDE。</p>
-<h1 id="7-结束语"><a href="#7-结束语" class="headerlink" title="7. 结束语"></a>7. 结束语</h1><p>今天为大家介绍了意法半导体针对SPAD所设计微透镜而发布的技术论文，介绍不同的微透镜结构对于Pixel性能的影响。希望对大家对于SPAD有着更深入了解与提升。</p>
-<p>好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以fllow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
+                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>本文介绍了适用于不同应用的最节能的图像传感器架构。作为案例研究，研究了汽车图像传感器和间接飞行时间图像传感器的两种应用。从测量和仿真结果来看，当图像信号处理器（ISP）在主机侧实现时，用于自动驾驶应用的汽车图像传感器将更加高效。相反，与芯片外软件深度ISP相比，ToF图像传感器在传感器侧的硬件深度ISP显示出显著更好的能效。</p>
+<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>在过去的20年里，具有有源像素传感器（APS）技术的CMOS图像传感器（CIS）已经得到了相当大的发展，特别是在像素间距和像素计数方面。从Pixel Size为5.6μm，像素数量为0.3兆像素开始，最近的CIS具有0.56μm、200兆像素CIS，如下图所示：</p>
+<p><img src="/img/18_ArchTrend/trend.png" srcset="/img/loading.gif" lazyload alt="发展趋势"></p>
+<p>CIS行业的领先市场一直是移动彩色图像传感器，它安装在智能手机上用于拍照和视频录制。然而，借助于丰富的特性和功能，如红外（IR）传感、深度传感和更高动态范围（DR），CIS的应用扩展到其他应用，如汽车、监控和AR&#x2F;VR。系统中的摄像头数量往往会增加。在手机的情况下，采用了更多的背面和正面摄像头，以满足各种拍照体验。例如，Galaxy S22 Ultra总共有五个摄像头：四个用于后置摄像头，一个用于前置摄像头。</p>
+<p>对于支持高级驾驶员辅助系统（ADAS）和自动驾驶（AD）的车辆，根据车辆自主性水平需要更多的摄像头。L3级自动驾驶至少包括八个摄像头，L5级别需要11个或更多摄像头。</p>
+<p>对于基于飞行时间（ToF）传感器的深度相机，由于深度处理和颜色处理之间的差异，需要完全不同类型的后端处理。因此，增加的摄像机数量和新的图像处理将给整个成像系统增加很大的负担。</p>
+<p>在本文中，我们将评估不同图像传感器系统的功率、性能和成本，以找出最优化、最高效的传感器架构。最佳的传感器架构将取决于不同的应用。因此，我们选择了两个例子进行案例研究：汽车和ToF相机系统。</p>
+<h1 id="2-CIS综述"><a href="#2-CIS综述" class="headerlink" title="2. CIS综述"></a>2. CIS综述</h1><p>下图显示了一个典型的成像系统架构：</p>
+<p><img src="/img/18_ArchTrend/sensor_arch.png" srcset="/img/loading.gif" lazyload alt="成像系统"></p>
+<p>该系统由一个镜头和三个电气部分组成：传感器核心、图像信号处理器和中央处理器。传感器核心生成原始图像，其可以是彩色图像传感器的原始拜耳图像、IR传感器的未处理的IR图像或ToF传感器的原始相位数据。原始图像可以通过像素阵列将入射光信号转换为电信号，然后将像素的模拟信号转换为数字信号来获得。可以在原始图像域中执行一些前端信号处理，例如暗电平补偿和缺陷像素识别。</p>
+<p>在ISP中，原始图像数据由一系列功能块处理。必要的处理块将不同于传感器的用途。在图中，ISP中的子块分为三个通用功能：预处理、图像增强和校准&#x2F;校正（块的顺序可以切换）。预处理将是用于颜色处理的缺陷校正、DR合并和颜色插值，而它将包括用于深度处理的抽头混洗和深度计算。图像增强块可以包括降噪、色域中的亮度&#x2F;色度校正、以及深度域中的深度降噪和深度展开等等。校正包括镜头畸变校正、距离校准等。输入的原始图像经过所有ISP块后，处理后的图像将输出到CPU。</p>
+<p>通常，上述三个组件中的两个集成在同一芯片管芯上，以形成一种片上系统（SoC）。组合可能有两种类型的SoC。下图显示了CIS SoC，其中传感器核心和ISP合并在一起：</p>
+<p><img src="/img/18_ArchTrend/cis_soc.png" srcset="/img/loading.gif" lazyload alt="组合1"></p>
+<p>ISP可以与CPU合并为主机芯片，如下图所示：</p>
+<p><img src="/img/18_ArchTrend/Sensor_Soc.png" srcset="/img/loading.gif" lazyload alt="组合2"></p>
+<p>每种类型的体系结构都有优缺点。应针对每个应用程序的特定系统需求选择最优化的体系结构</p>
+<h1 id="3-案例研究"><a href="#3-案例研究" class="headerlink" title="3. 案例研究"></a>3. 案例研究</h1><h2 id="A-ADAS-Sensor"><a href="#A-ADAS-Sensor" class="headerlink" title="A. ADAS Sensor"></a>A. ADAS Sensor</h2><p>汽车摄像头最重要的特性之一是高动态范围（HDR），这需要超过100 dB。为了满足这一要求，图像传感器在具有不同曝光时间的不同时间点（交错HDR）和面积不同的大小像素（分割光电二极管）捕获多个图像。每个像素的多个原始数据应进行处理，合并为一个数据以扩展DR。</p>
+<p>下图显示了汽车图像传感器的典型ISP架构。HDR合并块位于拜耳域中。其他的颜色处理和图像增强块与手机摄像头系统的非常相似：</p>
+<p><img src="/img/18_ArchTrend/adas_isp.png" srcset="/img/loading.gif" lazyload alt="ADAS ISP"></p>
+<p>为了比较不同的Sensor架构，我们使用1.2MP、Pixel Size为3.0um、2堆叠式架构（Pixel使用65nm的顶部硅片以及28nm在底部的模拟数字电路）的传感器。这个CIS芯片可以使用两种配置，分别是使用片上ISP以及离线ISP。为了模拟离线ISP，我们使用软件ISP进行图片性能对比。</p>
+<p>为了公平的进行对比，软件ISP功能设置和片上ISP一致。测试配置是8倍模拟增益、一倍数字增益、3倍ISP增益以及33.3ms的曝光时间。这里有两种测试Case，一种是结温下测试，一种是暗环境测试。如图中所示，1280x960的图像被分为20x20的组别，每个组大小为64x48。下图（a）和（b）分别显示了片外ISP和片上ISP情况下的热图。</p>
+<p><img src="/img/18_ArchTrend/ISP_Result.png" srcset="/img/loading.gif" lazyload alt="ISP测试结果"></p>
+<p>由于底部管芯上的片上ISP消耗更多的功率并增加热量，具有片上ISP的CIS应该具有更大的结温度，如图所示的第（a）和（b）段。离线ISP的片上温度为76.2℃而片上ISP的片上温度为84.6℃。结温差异为8.4℃。8.4°C的结温差相当于像素暗电流温度的两倍，在芯片上ISP的情况下，暗电平将增加2倍以上。</p>
+<p>片上ISP的热不平衡导致较差的温差：片上ISP为3.18°C，片外ISP为0.84°C。此外，这种热不平衡增加了局部的时间噪声和暗粒噪声，这使局部SNR降低了10 dB以上：片上ISP为7.58 dB，片外ISP为18.04 dB。结温增加至暗态（见图（c）和（d））。片外和片上ISP情况的平均暗电平分别为22.30 LSB和35.37 LSB。片上ISP在底部芯片上的局部加热导致暗电平不平衡（即暗阴影）；这可以通过芯片外ISP和芯片上ISP情况下分别为2.06 LSB和11.96 LSB的暗阴影来观察。</p>
+<p>下表表示了两种case的功耗对比：</p>
+<p><img src="/img/18_ArchTrend/caompare_table.png" srcset="/img/loading.gif" lazyload alt="片上ISP处理以及非片上处理对比"></p>
+<p>对于ISP功耗，片上ISP功率来自测量结果，但片外ISP功率是在考虑更好的工艺节点（14nm CMOS）的情况下估计的，这是主机SoC芯片的正常做法。很明显，在传感器功耗、传感器性能和更通用的ISP功能方面，片外ISP比片上ISP更有益。片上ISP的好处是数据接口速度更低。然而，考虑到用于散热器的相机模块的额外成本、用于片内ISP的更多电容器和高电流功率管理集成电路（PMIC），片外ISP的好处更加明显。这一优势对于自动驾驶汽车系统来说将更加明显，因为它需要更多像素分辨率更高的摄像头。</p>
+<h2 id="B-ToF图像传感器"><a href="#B-ToF图像传感器" class="headerlink" title="B. ToF图像传感器"></a>B. ToF图像传感器</h2><p>ToF相机系统架构的两个版本如下图所示：</p>
+<p><img src="/img/18_ArchTrend/tof_arch.png" srcset="/img/loading.gif" lazyload alt="ToF系统架构"></p>
+<p>与汽车CIS不同，传感器核心应控制外部IR照明器，来自传感器核心的原始数据为相位采样数据。深度ISP与颜色ISP完全不同。</p>
+<p>下图显示了间接ToF图像传感器的简化深度ISP架构:</p>
+<p><img src="/img/18_ArchTrend/tof_isp.png" srcset="/img/loading.gif" lazyload alt="ToF ISP"></p>
+<p>一些基本的信号处理，如用于去除抽头失配的抽头混洗，被执行作为预处理，然后是深度计算和降噪滤波器。相位展开和距离校准对于间接ToF传感器至关重要，这将在ISP链的后半部分执行。图7中的深度ISP子块将是其中一个示例，对于来自不同传感器供应商的ToF传感器，它们可能不同。</p>
+<p>这是因为像素结构与传感器供应商截然不同，并且输出格式和所需的后端处理与像素结构密切相关（例如，抽头数量、3T&#x2F;4T APS）。这就是为什么统一的深度ISP架构尚未提出，深度ISP更有可能在软件中实现的原因。</p>
+<p>使用1.2-Mp ToF图像传感器比较了片内和片外深度ISP之间的性能和功率。深度ISP由1280×960 ToF像素阵列和2×2装仓生成VGA（640×480）深度图。上图ISP pipeline中中必要的ISP子块在Snapdragon 865硬件开发套件（HDK）平台[11]上的SW-ISP中实现，以模拟片外深度ISP。片上ISP被建模为用硬连线逻辑和帧缓冲器来实现。为了公平比较，两种情况下的目标深度性能都是深度精度和1%以内的深度噪声。下表将ToF与片外和片上深度ISP进行了比较：</p>
+<p><img src="/img/18_ArchTrend/tof_isp_compare.png" srcset="/img/loading.gif" lazyload alt="ISP效果对比"></p>
+<p>ISP功耗显著不同：芯片外SW-ISP和芯片上HW-ISP分别为2.0W和0.3W。这种巨大的差异来自于SW-ISP需要CPU核心的电源开销这一事实。基于CPU的处理将有利于通用计算，但不利于节能计算。片上ISP在包括帧缓冲存储器的传感器上需要额外的22M门计数，并且由于硅区域负担，特别是对于帧存储器，最大分辨率可能受到限制。然而，片上HW-ISP的帧速率会更快，因为片外SW-ISP需要来自CPU和存储器访问的大延迟，这对于低成本深度处理来说不是最佳的。较低的数据速率是片上ISP情况下的另一个优势。</p>
+<p>总而言之，考虑到功率效率，对于间接ToF传感器，片上HW-ISP优于片外SW-ISP。如果所需的深度分辨率更大，并且深度处理从不同的传感器供应商变得更常见，并且可以在主机侧的统一HW-ISP中实现，那么片外ISP可能是更好的选择。然而，ToF传感器的分辨率竞赛还没有发生，与移动和汽车图像传感器相比，速度相对较慢。因此，片上HW-ISP将比片外SWISP更容易被接受。</p>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h1><p>我们研究了用于汽车和ToF应用的最节能的传感器系统架构。对于拥有完善的通用ISP链的汽车CIS来说，芯片外HW-ISP将比芯片上ISP更有优势。考虑到汽车CIS中图像分辨率的快速增长趋势，芯片外HW-ISP应该是最理想的解决方案。此外，通过在主机侧采用ISP，正在建立汽车成像的生态系统。相反，对于间接ToF图像传感器，片上硬件ISP的好处将比芯片外SW-ISP更明显；这是由于间接ToF传感器中较低的分辨率和不常见的ISP链。因此，选择最优化的图像传感器架构将取决于常见的ISP链准备情况，以及给定传感器分辨率下的额外面积和功率。</p>
+<h1 id="5-结束语"><a href="#5-结束语" class="headerlink" title="5. 结束语"></a>5. 结束语</h1><p>今天为大家介绍汽车应用中CIS以及ToF传感器ISP架构，希望可以对大家有所帮助。好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以fllow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
 <hr>
 <p><strong>加入星球:</strong></p>
 <p><img src="/./img/6_HDR_ISP/xingqiu.jpg" srcset="/img/loading.gif" lazyload alt="知识星球"></p>
@@ -360,7 +361,7 @@
       
         <a href="/tags/SPAD/" class="print-no-link">#SPAD</a>
       
-        <a href="/tags/ST/" class="print-no-link">#ST</a>
+        <a href="/tags/ToF/" class="print-no-link">#ToF</a>
       
     </div>
   
@@ -372,8 +373,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>SPAD|用于SPAD像素的基于元表面的平面微透镜</div>
-      <div>https://jokereyeadas.github.io/2023/12/05/17.ST_SPAD_McoroLens/</div>
+      <div>ToF架构|汽车ToF最具效能架构案例研究</div>
+      <div>https://jokereyeadas.github.io/2023/12/16/18.sensor最具效能架构/</div>
     </div>
     <div class="license-meta">
       
@@ -385,7 +386,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年12月5日</div>
+          <div>2023年12月16日</div>
         </div>
       
       
@@ -417,18 +418,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/12/16/18.sensor%E6%9C%80%E5%85%B7%E6%95%88%E8%83%BD%E6%9E%B6%E6%9E%84/" title="ToF架构|汽车ToF最具效能架构案例研究">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">ToF架构|汽车ToF最具效能架构案例研究</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/12/01/16.Sony_%E9%80%9A%E8%BF%87%E6%8E%A9%E5%9F%8B%E4%BA%9A%E5%B1%80%E9%83%A8%E8%BF%9E%E6%8E%A5%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%85%A8%E9%98%B1%E5%AE%B9%E9%87%8F%E5%92%8C%E4%BD%8E%E5%99%AA%E5%A3%B0%E7%89%B9%E6%80%A7/" title="SONY-CIS工艺|通过局部连接实现高全阱容量和低噪声特性">
-                        <span class="hidden-mobile">SONY-CIS工艺|通过局部连接实现高全阱容量和低噪声特性</span>
+                      <a href="/2023/12/05/17.ST_SPAD_McoroLens/" title="SPAD|用于SPAD像素的基于元表面的平面微透镜">
+                        <span class="hidden-mobile">SPAD|用于SPAD像素的基于元表面的平面微透镜</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
