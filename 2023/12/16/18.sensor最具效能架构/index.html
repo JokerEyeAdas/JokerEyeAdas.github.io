@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://jokereyeadas.github.io/img/18_ArchTrend/tof_isp.png">
 <meta property="article:published_time" content="2023-12-15T16:21:16.000Z">
-<meta property="article:modified_time" content="2023-12-17T01:08:43.663Z">
+<meta property="article:modified_time" content="2023-12-23T12:59:55.210Z">
 <meta property="article:author" content="Joker.Mao">
 <meta property="article:tag" content="SPAD">
 <meta property="article:tag" content="ToF">
@@ -321,7 +321,7 @@
 <p>ISP功耗显著不同：芯片外SW-ISP和芯片上HW-ISP分别为2.0W和0.3W。这种巨大的差异来自于SW-ISP需要CPU核心的电源开销这一事实。基于CPU的处理将有利于通用计算，但不利于节能计算。片上ISP在包括帧缓冲存储器的传感器上需要额外的22M门计数，并且由于硅区域负担，特别是对于帧存储器，最大分辨率可能受到限制。然而，片上HW-ISP的帧速率会更快，因为片外SW-ISP需要来自CPU和存储器访问的大延迟，这对于低成本深度处理来说不是最佳的。较低的数据速率是片上ISP情况下的另一个优势。</p>
 <p>总而言之，考虑到功率效率，对于间接ToF传感器，片上HW-ISP优于片外SW-ISP。如果所需的深度分辨率更大，并且深度处理从不同的传感器供应商变得更常见，并且可以在主机侧的统一HW-ISP中实现，那么片外ISP可能是更好的选择。然而，ToF传感器的分辨率竞赛还没有发生，与移动和汽车图像传感器相比，速度相对较慢。因此，片上HW-ISP将比片外SWISP更容易被接受。</p>
 <h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h1><p>我们研究了用于汽车和ToF应用的最节能的传感器系统架构。对于拥有完善的通用ISP链的汽车CIS来说，芯片外HW-ISP将比芯片上ISP更有优势。考虑到汽车CIS中图像分辨率的快速增长趋势，芯片外HW-ISP应该是最理想的解决方案。此外，通过在主机侧采用ISP，正在建立汽车成像的生态系统。相反，对于间接ToF图像传感器，片上硬件ISP的好处将比芯片外SW-ISP更明显；这是由于间接ToF传感器中较低的分辨率和不常见的ISP链。因此，选择最优化的图像传感器架构将取决于常见的ISP链准备情况，以及给定传感器分辨率下的额外面积和功率。</p>
-<h1 id="5-结束语"><a href="#5-结束语" class="headerlink" title="5. 结束语"></a>5. 结束语</h1><p>今天为大家介绍汽车应用中CIS以及ToF传感器ISP架构，希望可以对大家有所帮助。好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以fllow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
+<h1 id="5-结束语"><a href="#5-结束语" class="headerlink" title="5. 结束语"></a>5. 结束语</h1><p>今天为大家介绍汽车应用中CIS以及ToF传感器ISP架构，希望可以对大家有所帮助。好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以follow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
 <hr>
 <p><strong>加入星球:</strong></p>
 <p><img src="/./img/6_HDR_ISP/xingqiu.jpg" srcset="/img/loading.gif" lazyload alt="知识星球"></p>
@@ -417,6 +417,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/12/23/19.%E6%B1%BD%E8%BD%A6540%E5%85%A8%E6%99%AF%E5%BD%B1%E5%83%8F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="ADAS|汽车540°环视全景影像原理与实现">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ADAS|汽车540°环视全景影像原理与实现</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
