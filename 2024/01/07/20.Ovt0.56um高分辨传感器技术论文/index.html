@@ -23,14 +23,14 @@
 <meta property="og:site_name" content="ADAS之眼">
 <meta property="og:description" content="引言在之前的文章中《CIS|豪威200MP移动设备图像传感器技术论文解析》，我们介绍了豪威科技在移动端200Mega Pixels产品的技术论文，讲解了消费级CIS传感器的基本架构、工艺以及与车载应用不同之处，今天我们将继续借其下一代pixel sizwe为0.56μm的技术论文，讲解其技术演变。 在本文中，我们描述了一种在28nm工艺中实现的具有0.56µm像素的200M像素CMOS图像传感器。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://jokereyeadas.github.io/img/20_Ovt0.56CIS/qpd.png">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/20_OvtCIS/qpd.png">
 <meta property="article:published_time" content="2024-01-06T16:21:16.000Z">
-<meta property="article:modified_time" content="2024-01-07T03:32:17.662Z">
+<meta property="article:modified_time" content="2024-01-07T05:52:40.789Z">
 <meta property="article:author" content="Joker.Mao">
 <meta property="article:tag" content="CMOS SENSOR">
 <meta property="article:tag" content="OVT">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://jokereyeadas.github.io/img/20_Ovt0.56CIS/qpd.png">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/20_OvtCIS/qpd.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -289,27 +289,27 @@
 <p>小像素图像传感器经常受到较低的全阱容量（FWC）的影响。因此，需要强大的隔离电位屏障来缓解这一问题。在本文中，我们提出了一种0.56µm像素、200MP堆叠CMOS图像传感器，该传感器使用新的CIS专用28nm工艺开发。缩小工艺节点释放了芯片空间，为其他设备和功能提供了空间，如可切换转换增益（SCG）和用于低噪声和高速读出的电路。</p>
 <p>这项工作中开发的0.56um像素在不牺牲暗性能的情况下实现了高FWC。与0.61µm的前代相比，在没有图像滞后或晕染的情况下获得了更高的FWC，而暗电流和白色像素（WP）保持可比性。该设备能够采用具有可切换转换增益的像素binning模式，提供高动态范围和FWC以产生更高的图像质量。共享浮动扩散（FD）用于16C binning模式以降低读取噪声。</p>
 <h1 id="2-像素架构与技术"><a href="#2-像素架构与技术" class="headerlink" title="2. 像素架构与技术"></a>2. 像素架构与技术</h1><h2 id="A-Pixel堆叠式工艺"><a href="#A-Pixel堆叠式工艺" class="headerlink" title="A. Pixel堆叠式工艺"></a>A. Pixel堆叠式工艺</h2><p>本文讨论的0.56µm像素开发采用了一种新的、独联体专用的28nm像素工艺节点，而不是上一代设备中使用的45nm工艺节点。逻辑芯片遵循我们以前的小像素堆栈传感器中使用的40nm处理节点。与0.61µm像素设计相比，0.56µm-Pitch设备受益于由CIS专用28nm处理节点启用的增强设计灵活性。由于28nm节点保留了芯片空间，该设备实现了额外的行选择晶体管，以实现快速读取。额外的布局策略用于改善噪音性能和更高的FWC。下图显示了这项工作中使用的0.61µm（Figure 1a)和0.56µm(Figure 1b)之间的像素晶体管布局比较。</p>
-<p><img src="/Img/20_Ovt0.56CIS/pixel_compare.png" srcset="/img/loading.gif" lazyload alt="Pixel对比"></p>
+<p><img src="/Img/20_OvtCIS/pixel_compare.png" srcset="/img/loading.gif" lazyload alt="Pixel对比"></p>
 <p>每个晶体管分别由浅沟隔离（STI）隔离，而每个像素分别由改进的背深沟隔离（BDTI）、最大限度地减少泄漏和光学串扰隔离。通过采用CIS专用28nm处理节点，每组像素实现并联SFS以增加SF宽度，该SFS与2排精选晶体管设计一起工作，以最大限度地提高大型200MP设备的读取。如果没有这样的策略，这样一个大型设备可能会阅读缓慢；实现了垂直传输门（VTG）结构，将光电二极管更深地转移到硅区域，28nm像素处理为晶体管在0.56µm间距像素的有限空间中的设计和放置提供了更大的灵活性。这还允许在像素内放置额外的晶体管，以支持高动态应用的可切换转换增益。</p>
 <h2 id="B-Pixel架构"><a href="#B-Pixel架构" class="headerlink" title="B. Pixel架构"></a>B. Pixel架构</h2><p>像素阵列大小为200兆像素（16384（H）x 12288（V）），光学格式为1&#x2F;1.395寸，像素间距为0.56µm。采用2x4共享像素架构，如下图中的电路示意图所示。</p>
-<p><img src="/Img/20_Ovt0.56CIS/pixel_arch.png" srcset="/img/loading.gif" lazyload alt="Pixel架构"></p>
+<p><img src="/Img/20_OvtCIS/pixel_arch.png" srcset="/img/loading.gif" lazyload alt="Pixel架构"></p>
 <p>实现了一种新的2行选择晶体管设计，其中每个2x4共享像素由单独的控制信号RS0和RS1独立控制。在全尺寸或4单元模式中，RS0对左共享像素和右共享像素都是有效的，并且它们在FD处的信号通过两条独立的位线被单独地同时读出。在16C模式中，RS1对于左共享像素和右共享像素都是活动的，两个共享像素的RS1都连接到同一位线。交替行的RS1连接到单独的位线（下图中标记为“A”和“B”单元），保持两条位线的相同负载。</p>
-<p><img src="/Img/20_Ovt0.56CIS/readout.png" srcset="/img/loading.gif" lazyload alt="Readout"></p>
+<p><img src="/Img/20_OvtCIS/readout.png" srcset="/img/loading.gif" lazyload alt="Readout"></p>
 <p>这种交替的位线控制方案通过两条位线和两个列ADC读出两个16C binning的信号。这使得0.56µm器件的16C binning模式能够在不增加位线数量的情况下实现更快的读出速度。下表展示了0.61µm和0.56µm器件架构的比较:</p>
-<p><img src="/Img/20_Ovt0.56CIS/compare_table.png" srcset="/img/loading.gif" lazyload alt="性能对比"></p>
+<p><img src="/Img/20_OvtCIS/compare_table.png" srcset="/img/loading.gif" lazyload alt="性能对比"></p>
 <h2 id="C-QPD和滤色器模式"><a href="#C-QPD和滤色器模式" class="headerlink" title="C. QPD和滤色器模式"></a>C. QPD和滤色器模式</h2><p>由于较小的片上透镜（OCL）填充因子，小间距像素遭受显著的QE退化。QPD，或具有2x2 OCL的Quad Bayer编码，是一种在2x2像素阵列中使用一个OCL和相同滤色器的设计，可产生高分辨率和高动态范围的图像传感器。QPD是改进小像素图像传感器量化宽松的一项重要技术，并在本工作中实现，如下图所示：</p>
-<p><img src="/Img/20_Ovt0.56CIS/qpd.png" srcset="/img/loading.gif" lazyload alt="QPD"></p>
+<p><img src="/Img/20_OvtCIS/qpd.png" srcset="/img/loading.gif" lazyload alt="QPD"></p>
 <h1 id="3-实验结果"><a href="#3-实验结果" class="headerlink" title="3. 实验结果"></a>3. 实验结果</h1><p>下图显示了相对于像素间距的FWC趋势：</p>
-<p><img src="/Img/20_Ovt0.56CIS/fwc_trend.png" srcset="/img/loading.gif" lazyload alt="FWC趋势"></p>
+<p><img src="/Img/20_OvtCIS/fwc_trend.png" srcset="/img/loading.gif" lazyload alt="FWC趋势"></p>
 <p>虚线表示通过基于1.0µm像素的简单像素面积缩放实现的FWC。空圆圈显示了我们上一代0.7µm和0.61µm技术的数据。0.7µm、0.61µm和0.56um器件显示的实际FWC远高于简单缩放预测的值。这种FWC增强是通过深光电二极管技术实现的，其中光电二极管电势位于更深的硅区域。通过采用该技术，0.56µm器件实现了5.5ke-FWC，没有滞后或开花。尽管我们增加了n型&#x2F;p-型离子注入剂量，产生了更高的电场，但我们改进的BDTI技术减轻了表面缺陷的影响，实现了与上一代相当的暗电流和WP。</p>
 <p>下表显示了间距为0.61µm和0.56µm的器件之间的性能比较：</p>
-<p><img src="/Img/20_Ovt0.56CIS/cap_compare.png" srcset="/img/loading.gif" lazyload alt="性能对比"></p>
+<p><img src="/Img/20_OvtCIS/cap_compare.png" srcset="/img/loading.gif" lazyload alt="性能对比"></p>
 <p>0.56微米间距的像素在所有方面都比0.61微米间距的器件表现出更好的性能，包括非常低的噪声水平和相位检测自动聚焦（PDAF）性能。</p>
 <p>下图显示了光学QE性能对比结果：</p>
-<p><img src="/Img/20_Ovt0.56CIS/qe.png" srcset="/img/loading.gif" lazyload alt="QE"></p>
+<p><img src="/Img/20_OvtCIS/qe.png" srcset="/img/loading.gif" lazyload alt="QE"></p>
 <p>显示0.56µm间距像素的QE和串扰比0.61μm间距的参考像素有所改善，同时图像质量保持一致。</p>
 <p>最后文末给出了在4单元模式下使用0.56um像素拍摄的彩色图像示例，如下所示：</p>
-<p><img src="/Img/20_Ovt0.56CIS/demo.png" srcset="/img/loading.gif" lazyload alt="Demo图像"></p>
+<p><img src="/Img/20_OvtCIS/demo.png" srcset="/img/loading.gif" lazyload alt="Demo图像"></p>
 <h1 id="4-结束语"><a href="#4-结束语" class="headerlink" title="4. 结束语"></a>4. 结束语</h1><p>在这项工作中，我们开发了一种新的28&#x2F;40nm 2亿像素堆叠图像传感器，像素间距为0.56µm。该器件实现了5.5ke的FWC，没有图像滞后或光晕，暗性能与上一代0.61µm间距的器件相当。在可见光范围内，我们展示了比0.61µm更好的QPD QE性能。采用双列选择布局来提高读出速度，而不添加电路（位线），从而与上一代设备相比，帧速率有所提高。启用了可切换转换增益，使0.56µm器件的16C2 FWC比之前的0.61µm器件高出2倍。</p>
 <p>好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以follow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
 <hr>
