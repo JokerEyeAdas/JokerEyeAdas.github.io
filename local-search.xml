@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>IMX490|SONY车载CIS-IMX490技术论文分析</title>
+    <link href="/2024/02/11/22.%E7%89%B9%E6%96%AF%E6%8B%89HW4.0%E4%B9%8BIMX490/"/>
+    <url>/2024/02/11/22.%E7%89%B9%E6%96%AF%E6%8B%89HW4.0%E4%B9%8BIMX490/</url>
+    
+    <content type="html"><![CDATA[<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>近日，特斯拉全系列都使用上了HW4.0硬件，HW4.0相较于HW3.0主要在于SoC算力、CIS传感器分辨率、Pixel性能上有所提升。今天我们将基于索尼发布的技术论文，讲解Tesla所使用的SONY车规级IMX490图像传感器的芯片架构以及技术细节。</p><h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>动态范围（DR）正成为CMOS图像传感器（CIS）的关键性能参数，尤其是在监控和汽车领域。几种众所周知的多次曝光方法被广泛用于扩展动态范围（DR）。然而，这些方法会导致诸如运动伪影和发光二极管（LED）随着合成图像而闪烁之类的问题。因此，单次曝光方法对高DR图像的质量至关重要。扩展单次曝光DR的最明显的方法是使用像素内电容器。像素内电容器最著名的技术之一是横向溢出积分电容器（LOFIC），其特点是像素内电容的独特信号读出方法。此外，有论文中报道了使用有机光电导膜和像素内电容器的CIS。灵敏度比空间采样是扩展单次曝光DR的另一种常用方法。其次，有的学者还提出了一种将空间采样与灵敏度比和像素内电容器相结合的方法来扩展其单次曝光DR，这种亚像素架构可以实现超过120dB的单曝光DR。但另一个挑战出现了：在高温下，复合材料边界处的信噪比（SNR）退化变得显著。在这项工作中，我们提出了一个540万像素堆叠背照CIS的原型，使用具有高温耐受性的亚像素架构。</p><h1 id="2-芯片-像素架构"><a href="#2-芯片-像素架构" class="headerlink" title="2.芯片&amp;像素架构"></a>2.芯片&amp;像素架构</h1><h2 id="2-1-芯片框架"><a href="#2-1-芯片框架" class="headerlink" title="2.1 芯片框架"></a>2.1 芯片框架</h2><p>下图显示了像素和比较器的简化框图和示意图：</p><p><img src="/img/22_SonyIMX490/SensorBlock.png" alt="芯片框架"></p><p>像素采用大光电二极管（SP1）、小光电二极管（SP2）、像素内浮动电容器（FC）和七个晶体管。SP2的灵敏度为SP1的1&#x2F;14.5，SP2的线性全阱容量（FWC）为165800e-，这归功于FC，从而有效地处理了达到2400ke的电荷。考虑到在0.6 e-rms的高转换增益模式下的SP1随机噪声，简单DR计算为132dB。这七个晶体管如下：SP1（TGL）的传输门、SP2（TGS）的传输栅极、浮动扩散门（FDG）、浮动电容器门（FCG）、复位晶体管（RST）、选择晶体管（SEL）和源极跟随放大器（AMP）。浮动扩散（FD）由FDG和FCG分离为FD1、FD2和FD3，它们用作连接这些FD的开关。FC的两个电极分别连接到FD3和其电源电压为FCVDD的对电极。</p><p>该原型由像素芯片和逻辑芯片组成。通过使用用于FEOL的90nm工艺和用于BEOL的65nm工艺来制造像素芯片。读出电路（负载MOS晶体管、列ADC、DAC）、驱动器电路（行驱动器、行解码器）、图像信号处理器和其他电路（PLL、MIPI I&#x2F;F、CPU等）都使用40nm工艺安装到逻辑芯片。比较器的特点是具有2输入系统（两个输入容量、两个差分晶体管和两个自动调零开关）。</p><h2 id="2-2-像素架构"><a href="#2-2-像素架构" class="headerlink" title="2.2 像素架构"></a>2.2 像素架构</h2><p>下图显示了简化的像素横截面图：</p><p><img src="/img/22_SonyIMX490/pixel_arch.png" alt="像素结构"></p><p>FC和一些像素晶体管嵌入在SP1之上。由于这种结构，SP1和FC的FWC都可以得到改善。TGL需要实现垂直晶体管以将光电子从SP1转移到FD1。</p><h2 id="2-3-像素时序图"><a href="#2-3-像素时序图" class="headerlink" title="2.3 像素时序图"></a>2.3 像素时序图</h2><p>简化的时序图如下图所示：</p><p><img src="/img/22_SonyIMX490/Timming.png" alt="时序图"></p><p>在SP1中累积的电荷通过切换FDG在两种模式中被转换为信号电压，即高转换增益模式（SP1H）和低转换增益模式（SP1L）。通过减小SP1H的电容量，其转换增益高达197μV&#x2F;e-，因此SP1H中的随机噪声可以达到0.6e-rms。SP2中累积的电荷被读出为SP2H。FC中累积的充电与SP2的充电合并并被读出为SPFL。以这种方式，通过一次曝光读出四个信号。为每个像素选择具有最高SNR的信号，并合成一个图像。</p><p>下图显示了与时序图对应的简化电位图。</p><p><img src="/img/22_SonyIMX490/RDTimming.png" alt="简化电位图"></p><p>在曝光时段的开始，SP1的光电子通过接通&#x2F;断开TGL而复位（a），SP2和FC的光电子也通过接通&#x2F;关断TGS和FCG而复位（b）。这里，FDG和RST始终导通。在曝光期间，FDG与RST连续导通；因此，FD1和FD2总是被复位；来自SP2的光电子被累积在FD3和FC（c）中。在曝光周期结束时，当RST被关断时，首先对SP1L（R2）的复位电平进行采样（d）。接下来，当FDG关断时，对SP1H（R1）的复位电平进行采样。（e）然后，通过接通&#x2F;关断TGL一次，将SP1中累积的光电子转移到FD1，并对SP1H（S1）的信号电平进行采样（f）。此时，超过FD1容量的光电子被留在SP1中。在通过接通FDG将FD1连接到FD2并且通过再次接通&#x2F;关断TGL将SP1中剩余的光电子完全转移之后，对SP1L（S2）的信号电平进行采样（g）；因此，可以通过对每个复位和信号电平执行相关双采样（CDS）来读出SP1H和SP1L。此外，由于如上所述的比较器的2输入系统，可以对两个读出执行自动归零功能，并且可以通过开关AZP0和AZP1来消除比较器的偏移。随后，在FD1和FD2通过开关RST来复位之后，对SP2（R3）的复位电平进行采样；FD3通过接通FCG而连接到FD1和FD2。（h）随后，通过接通&#x2F;关断TGS而将SP2中累积的光电子完全转移到FD3，并且对SP2（S3）的信号电平进行采样（i）；因此可以通过对R3和S3执行CDS来读出SP2H。这里，R3和S3还包括在FC中累积的光电子。然后，通过执行德尔塔重置采样（DRS）来读出SP2L，其中首先（j）采样FC（S4）的信号电平，然后采样FC（R4）的重置电平。S4在电压域方面与S3处于相同的电平。R4通过接通&#x2F;断开RST而被采样，并且FD1、FD2和FD3的光电子被复位（k）。DRS的缺点是不能去除kTC噪声；但是可以通过充分增大FC的电容来抑制。此外，由于由FD3中产生的暗电流引起的固定模式噪声（FPN），SP2L的噪声具有大的温度依赖性。累积时段中的FCVDD被设置为低于SP2H和SP2L的读出时段中的FC VDD，以减小SP2L中的FPN。</p><h1 id="3-芯片性能"><a href="#3-芯片性能" class="headerlink" title="3. 芯片性能"></a>3. 芯片性能</h1><ul><li><strong>户外实拍</strong></li></ul><p>下图显示了受试者在RT、Tj&#x3D;100°C和不存在SP2H的情况下的中间色调的合成图像。</p><p><img src="/img/22_SonyIMX490/outdoor_img.png" alt="户外实拍"></p><p>由于SP2H的存在，即使在Tj&#x3D;100°C时，也能保持25dB的最小合成信噪比，这清楚地证实了该架构的有效性。</p><ul><li><strong>芯片特性</strong></li></ul><p>下图表示了芯片原型的参数特性以及芯片的显微照片：</p><p><img src="/img/22_SonyIMX490/micro_chip.png" alt="芯片微观"></p><ul><li><strong>参数对比</strong></li></ul><p>在对比表中可以看出，这项工作实现了从低光照到高光照条件下的最佳性能。</p><p><img src="/img/22_SonyIMX490/compare.png" alt="参数对比"></p><p>我们使用具有高温耐受性的亚像素结构制造了540万像素CIS。FC和一些像素晶体管嵌入在SP1之上。此外，SP2H在SP1L和SP2L之间实现。由于这种架构，在Tj&#x3D;100°C时，可以实现132dB的单次曝光DR，同时保持25dB的最小合成SNR。</p><p><img src="/img/22_SonyIMX490/snr.png" alt="SNR"></p><ul><li><strong>噪声参数</strong></li></ul><p>下图表示了SP2H以及SP2L在不同温度下的读出噪声参数：</p><p><img src="/img/22_SonyIMX490/noise.png" alt="噪声参数"></p><h1 id="4-结束语"><a href="#4-结束语" class="headerlink" title="4. 结束语"></a>4. 结束语</h1><p>好了今天就到这里，本文为大家介绍了Sony IMX490传感器的技术细节，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以follow我的<a href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p><hr><p><strong>加入星球:</strong></p><p><img src="/./img/6_HDR_ISP/xingqiu.jpg" alt="知识星球"></p><p><strong>如果您对ADAS感兴趣，欢迎关注我的公众号、知乎、Github、CSDN等，同时发表文章中使用源码以及文章会在我的GitHub进行开源，如果您有感兴趣话题也可以后台私信。</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>CMOS SENSOR</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>CMOS SENSOR</tag>
+      
+      <tag>SONY</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>iToF|用于低功耗和自优化带片上ISP的1.2Mp的iToF传感器</title>
     <link href="/2024/01/24/21.%E4%B8%89%E6%98%9F%E5%B8%A6%E6%9C%89%E7%89%87%E4%B8%8AISP%E7%9A%84iToF%E4%BC%A0%E6%84%9F%E5%99%A8/"/>
     <url>/2024/01/24/21.%E4%B8%89%E6%98%9F%E5%B8%A6%E6%9C%89%E7%89%87%E4%B8%8AISP%E7%9A%84iToF%E4%BC%A0%E6%84%9F%E5%99%A8/</url>

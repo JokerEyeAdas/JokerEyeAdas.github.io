@@ -16,27 +16,27 @@
   <meta name="author" content="Joker.Mao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="引言我们提出了一种i-ToF来改善功耗和运动伪影。在实现应用程序时需要深度信息的AR&#x2F;VR和机器人设备在使用i-ToF时由于有限的功率和移动运动特性而受到限制。特别地，出现了根据高分辨率的实现的AP操作量的增加以及由于多帧操作而导致的延迟时间的限制。所提出的传感器具有嵌入式深度处理器，用于处理传感器内部的深度计算，并通过使用28nm工艺实现低功耗实现。此外，通过以250FPS的读出速度操">
+    <meta name="description" content="引言近日，特斯拉全系列都使用上了HW4.0硬件，HW4.0相较于HW3.0主要在于SoC算力、CIS传感器分辨率、Pixel性能上有所提升。今天我们将基于索尼发布的技术论文，讲解Tesla所使用的SONY车规级IMX490图像传感器的芯片架构以及技术细节。 1. Introduction动态范围（DR）正成为CMOS图像传感器（CIS）的关键性能参数，尤其是在监控和汽车领域。几种众所周知的多次曝光">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iToF|用于低功耗和自优化带片上ISP的1.2Mp的iToF传感器">
-<meta property="og:url" content="https://jokereyeadas.github.io/2024/01/24/21.%E4%B8%89%E6%98%9F%E5%B8%A6%E6%9C%89%E7%89%87%E4%B8%8AISP%E7%9A%84iToF%E4%BC%A0%E6%84%9F%E5%99%A8/index.html">
+<meta property="og:title" content="IMX490|SONY车载CIS-IMX490技术论文分析">
+<meta property="og:url" content="https://jokereyeadas.github.io/2024/02/11/22.%E7%89%B9%E6%96%AF%E6%8B%89HW4.0%E4%B9%8BIMX490/index.html">
 <meta property="og:site_name" content="ADAS之眼">
-<meta property="og:description" content="引言我们提出了一种i-ToF来改善功耗和运动伪影。在实现应用程序时需要深度信息的AR&#x2F;VR和机器人设备在使用i-ToF时由于有限的功率和移动运动特性而受到限制。特别地，出现了根据高分辨率的实现的AP操作量的增加以及由于多帧操作而导致的延迟时间的限制。所提出的传感器具有嵌入式深度处理器，用于处理传感器内部的深度计算，并通过使用28nm工艺实现低功耗实现。此外，通过以250FPS的读出速度操">
+<meta property="og:description" content="引言近日，特斯拉全系列都使用上了HW4.0硬件，HW4.0相较于HW3.0主要在于SoC算力、CIS传感器分辨率、Pixel性能上有所提升。今天我们将基于索尼发布的技术论文，讲解Tesla所使用的SONY车规级IMX490图像传感器的芯片架构以及技术细节。 1. Introduction动态范围（DR）正成为CMOS图像传感器（CIS）的关键性能参数，尤其是在监控和汽车领域。几种众所周知的多次曝光">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://jokereyeadas.github.io/img/21_SamungiToF/pixel_arch.png">
-<meta property="article:published_time" content="2024-01-23T16:21:16.000Z">
-<meta property="article:modified_time" content="2024-01-24T14:01:17.304Z">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/22_SonyIMX490/pixel_arch.png">
+<meta property="article:published_time" content="2024-02-10T16:21:16.000Z">
+<meta property="article:modified_time" content="2024-02-11T10:02:41.393Z">
 <meta property="article:author" content="Joker.Mao">
-<meta property="article:tag" content="iToF">
-<meta property="article:tag" content="Samung">
+<meta property="article:tag" content="CMOS SENSOR">
+<meta property="article:tag" content="SONY">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://jokereyeadas.github.io/img/21_SamungiToF/pixel_arch.png">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/22_SonyIMX490/pixel_arch.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>iToF|用于低功耗和自优化带片上ISP的1.2Mp的iToF传感器 - ADAS之眼</title>
+  <title>IMX490|SONY车载CIS-IMX490技术论文分析 - ADAS之眼</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -206,7 +206,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="iToF|用于低功耗和自优化带片上ISP的1.2Mp的iToF传感器"></span>
+            <span id="subtitle" data-typed-text="IMX490|SONY车载CIS-IMX490技术论文分析"></span>
           
         </div>
 
@@ -217,8 +217,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-01-24 00:21" pubdate>
-          2024年1月24日 凌晨
+        <time datetime="2024-02-11 00:21" pubdate>
+          2024年2月11日 凌晨
         </time>
       </span>
     
@@ -229,7 +229,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.2k 字
+          3k 字
         
       </span>
     
@@ -240,7 +240,7 @@
         
         
         
-          27 分钟
+          25 分钟
         
       </span>
     
@@ -277,35 +277,50 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">iToF|用于低功耗和自优化带片上ISP的1.2Mp的iToF传感器</h1>
+            <h1 id="seo-header">IMX490|SONY车载CIS-IMX490技术论文分析</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>我们提出了一种i-ToF来改善功耗和运动伪影。在实现应用程序时需要深度信息的AR&#x2F;VR和机器人设备在使用i-ToF时由于有限的功率和移动运动特性而受到限制。特别地，出现了根据高分辨率的实现的AP操作量的增加以及由于多帧操作而导致的延迟时间的限制。所提出的传感器具有嵌入式深度处理器，用于处理传感器内部的深度计算，并通过使用28nm工艺实现低功耗实现。此外，通过以250FPS的读出速度操作，减少了运动伪影。结果显示，传感器本身可以实现输出30FPS的深度输出，并且功耗降低了90%。</p>
-<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>近年来，3D信息被用作机器视觉的基本信息，如AR&#x2F;VR中的3D地图生成和手势控制以及具有RGB图像的机器人。由于其基于电池的操作，这些设备需要低功率操作，并且由于发生连续运动，因此需要减少运动和恒定的FPS。此外，主要考虑使用间接ToF（i-ToF）的高分辨率深度信息，因为由于使用表面信息的应用程序的特性，需要高分辨率的深度信息。在先前的研究中，提出了通过解调对比度（DC）的提高、调制频率的提高和抽头失配校准来提高深度性能和距离。然而，由于所有深度处理都是在应用处理器（AP）中基于软件的，因此降低总体系统功率是有限制的。此外，根据AP的性能，FPS和深度质量是不同的。</p>
-<p>此外，由于多个传感器同时用于跟踪和检测，因此传输到AP的数据量和计算负担进一步增加。作为另一个问题，由于外部光条件在曝光时间期间累积，因此与室内相比，室外环境中的操作距离减小，并且噪声增加。为了解决这个问题，提出了一种通过外部控制转换模拟装仓和数字装仓的方法，分别实现信号增加和FWC增加效果。然而，存在这样的问题，即增加了用于确定外部光状况的传感器，或者需要通过AP中的附加计算来改变操作模式。在本文中，提出了以下三个改进方案，即在传感器中内置嵌入式深度处理器单元（eDPU）：</p>
-<ul>
-<li>1）降低系统功率；</li>
-<li>2）最小化运动伪影</li>
-<li>3）减少外部条件的影响</li>
+                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>近日，特斯拉全系列都使用上了HW4.0硬件，HW4.0相较于HW3.0主要在于SoC算力、CIS传感器分辨率、Pixel性能上有所提升。今天我们将基于索尼发布的技术论文，讲解Tesla所使用的SONY车规级IMX490图像传感器的芯片架构以及技术细节。</p>
+<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>动态范围（DR）正成为CMOS图像传感器（CIS）的关键性能参数，尤其是在监控和汽车领域。几种众所周知的多次曝光方法被广泛用于扩展动态范围（DR）。然而，这些方法会导致诸如运动伪影和发光二极管（LED）随着合成图像而闪烁之类的问题。因此，单次曝光方法对高DR图像的质量至关重要。扩展单次曝光DR的最明显的方法是使用像素内电容器。像素内电容器最著名的技术之一是横向溢出积分电容器（LOFIC），其特点是像素内电容的独特信号读出方法。此外，有论文中报道了使用有机光电导膜和像素内电容器的CIS。灵敏度比空间采样是扩展单次曝光DR的另一种常用方法。其次，有的学者还提出了一种将空间采样与灵敏度比和像素内电容器相结合的方法来扩展其单次曝光DR，这种亚像素架构可以实现超过120dB的单曝光DR。但另一个挑战出现了：在高温下，复合材料边界处的信噪比（SNR）退化变得显著。在这项工作中，我们提出了一个540万像素堆叠背照CIS的原型，使用具有高温耐受性的亚像素架构。</p>
+<h1 id="2-芯片-像素架构"><a href="#2-芯片-像素架构" class="headerlink" title="2.芯片&amp;像素架构"></a>2.芯片&amp;像素架构</h1><h2 id="2-1-芯片框架"><a href="#2-1-芯片框架" class="headerlink" title="2.1 芯片框架"></a>2.1 芯片框架</h2><p>下图显示了像素和比较器的简化框图和示意图：</p>
+<p><img src="/img/22_SonyIMX490/SensorBlock.png" srcset="/img/loading.gif" lazyload alt="芯片框架"></p>
+<p>像素采用大光电二极管（SP1）、小光电二极管（SP2）、像素内浮动电容器（FC）和七个晶体管。SP2的灵敏度为SP1的1&#x2F;14.5，SP2的线性全阱容量（FWC）为165800e-，这归功于FC，从而有效地处理了达到2400ke的电荷。考虑到在0.6 e-rms的高转换增益模式下的SP1随机噪声，简单DR计算为132dB。这七个晶体管如下：SP1（TGL）的传输门、SP2（TGS）的传输栅极、浮动扩散门（FDG）、浮动电容器门（FCG）、复位晶体管（RST）、选择晶体管（SEL）和源极跟随放大器（AMP）。浮动扩散（FD）由FDG和FCG分离为FD1、FD2和FD3，它们用作连接这些FD的开关。FC的两个电极分别连接到FD3和其电源电压为FCVDD的对电极。</p>
+<p>该原型由像素芯片和逻辑芯片组成。通过使用用于FEOL的90nm工艺和用于BEOL的65nm工艺来制造像素芯片。读出电路（负载MOS晶体管、列ADC、DAC）、驱动器电路（行驱动器、行解码器）、图像信号处理器和其他电路（PLL、MIPI I&#x2F;F、CPU等）都使用40nm工艺安装到逻辑芯片。比较器的特点是具有2输入系统（两个输入容量、两个差分晶体管和两个自动调零开关）。</p>
+<h2 id="2-2-像素架构"><a href="#2-2-像素架构" class="headerlink" title="2.2 像素架构"></a>2.2 像素架构</h2><p>下图显示了简化的像素横截面图：</p>
+<p><img src="/img/22_SonyIMX490/pixel_arch.png" srcset="/img/loading.gif" lazyload alt="像素结构"></p>
+<p>FC和一些像素晶体管嵌入在SP1之上。由于这种结构，SP1和FC的FWC都可以得到改善。TGL需要实现垂直晶体管以将光电子从SP1转移到FD1。</p>
+<h2 id="2-3-像素时序图"><a href="#2-3-像素时序图" class="headerlink" title="2.3 像素时序图"></a>2.3 像素时序图</h2><p>简化的时序图如下图所示：</p>
+<p><img src="/img/22_SonyIMX490/Timming.png" srcset="/img/loading.gif" lazyload alt="时序图"></p>
+<p>在SP1中累积的电荷通过切换FDG在两种模式中被转换为信号电压，即高转换增益模式（SP1H）和低转换增益模式（SP1L）。通过减小SP1H的电容量，其转换增益高达197μV&#x2F;e-，因此SP1H中的随机噪声可以达到0.6e-rms。SP2中累积的电荷被读出为SP2H。FC中累积的充电与SP2的充电合并并被读出为SPFL。以这种方式，通过一次曝光读出四个信号。为每个像素选择具有最高SNR的信号，并合成一个图像。</p>
+<p>下图显示了与时序图对应的简化电位图。</p>
+<p><img src="/img/22_SonyIMX490/RDTimming.png" srcset="/img/loading.gif" lazyload alt="简化电位图"></p>
+<p>在曝光时段的开始，SP1的光电子通过接通&#x2F;断开TGL而复位（a），SP2和FC的光电子也通过接通&#x2F;关断TGS和FCG而复位（b）。这里，FDG和RST始终导通。在曝光期间，FDG与RST连续导通；因此，FD1和FD2总是被复位；来自SP2的光电子被累积在FD3和FC（c）中。在曝光周期结束时，当RST被关断时，首先对SP1L（R2）的复位电平进行采样（d）。接下来，当FDG关断时，对SP1H（R1）的复位电平进行采样。（e）然后，通过接通&#x2F;关断TGL一次，将SP1中累积的光电子转移到FD1，并对SP1H（S1）的信号电平进行采样（f）。此时，超过FD1容量的光电子被留在SP1中。在通过接通FDG将FD1连接到FD2并且通过再次接通&#x2F;关断TGL将SP1中剩余的光电子完全转移之后，对SP1L（S2）的信号电平进行采样（g）；因此，可以通过对每个复位和信号电平执行相关双采样（CDS）来读出SP1H和SP1L。此外，由于如上所述的比较器的2输入系统，可以对两个读出执行自动归零功能，并且可以通过开关AZP0和AZP1来消除比较器的偏移。随后，在FD1和FD2通过开关RST来复位之后，对SP2（R3）的复位电平进行采样；FD3通过接通FCG而连接到FD1和FD2。（h）随后，通过接通&#x2F;关断TGS而将SP2中累积的光电子完全转移到FD3，并且对SP2（S3）的信号电平进行采样（i）；因此可以通过对R3和S3执行CDS来读出SP2H。这里，R3和S3还包括在FC中累积的光电子。然后，通过执行德尔塔重置采样（DRS）来读出SP2L，其中首先（j）采样FC（S4）的信号电平，然后采样FC（R4）的重置电平。S4在电压域方面与S3处于相同的电平。R4通过接通&#x2F;断开RST而被采样，并且FD1、FD2和FD3的光电子被复位（k）。DRS的缺点是不能去除kTC噪声；但是可以通过充分增大FC的电容来抑制。此外，由于由FD3中产生的暗电流引起的固定模式噪声（FPN），SP2L的噪声具有大的温度依赖性。累积时段中的FCVDD被设置为低于SP2H和SP2L的读出时段中的FC VDD，以减小SP2L中的FPN。</p>
+<h1 id="3-芯片性能"><a href="#3-芯片性能" class="headerlink" title="3. 芯片性能"></a>3. 芯片性能</h1><ul>
+<li><strong>户外实拍</strong></li>
 </ul>
-<h1 id="2-基本操作"><a href="#2-基本操作" class="headerlink" title="2.基本操作"></a>2.基本操作</h1><p>i-ToF是通过反射回物体的调制发射机信号的相位延迟来计算距离。为此，需要每个周期分为四个的相位信息，并且通过将其分为一个像素内的每个抽头来感测相位信息。此功能将减少噪声并提高精度。然而，由于制造过程中的失配，每个抽头都具有增益和偏移误差。为了补偿这一点，通常使用连续的2帧信息，因为在附加帧中应用抽头混洗。此外，由于调制的周期性，最大操作距离受到作为折叠误差的频率（fm）的限制。为了解决这个问题，通过对两个或多个fm进行交叉运算，通过最大公约数（GCD）运算来确定实际距离。结果，当计算基于i-ToF的处理时，使用2到4个基于多帧的计算。结果，延迟增加，所需的计算量增加。</p>
-<h1 id="3-芯片架构"><a href="#3-芯片架构" class="headerlink" title="3.芯片架构"></a>3.芯片架构</h1><p>下图显示了所提出的具有深度处理器的传感器的框图：</p>
-<p><img src="/img/21_SamungiToF/pixel_arch.png" srcset="/img/loading.gif" lazyload alt="Alt text"></p>
-<p>单位像素由2x2个子像素组成，每个子像素由4抽头（A、B、C、D）组成。在光栅极驱动器信号的控制下，在曝光积分时间（EIT）部分期间存储相位信息。在EIT之后，使用相关双采样（CDS）和计数器对模拟信号进行数字化。这些数据通过预处理块进行相位重新排序，并存储在由多达4页的原始数据组成的帧存储器中，用于混洗和多频率。该信号通过内置在传感器中的深度处理单元被转换成深度信息。eDPU执行相位延迟计算、非理想和透镜校准、空间滤波和时间滤波，以计算深度和增强。通常，硬连线逻辑的缺点是只能进行预定义的操作。然而，所提出的eDPU用硬连线逻辑实现简单的数学运算（例如，相位延迟感测），并且需要根据应用程序更改功能的部分（如滤波）是可编程配置的。环境光检测器（ALD）使用从eDPU计算的强度和幅度来计算环境光环境，并通过传感器本身确定装仓模式。此信息传递到预处理块以进行日期重新排序。如图1底部所示，在模拟装仓的情况下，由于2x2个子像素的求和信号被一次读取以增加信号。在数字装仓的情况下，从所有像素捕获1280x960个信号以增加全阱容量（FWC），并通过预处理块中的平均值转换为640x480。</p>
-<p>芯片时序图如下图所示，所提出的eDPU支持各种系统场景，并通过基于混洗、多频率和基于深度帧的ISP计算优化原始帧速率来最小化运动伪影。</p>
-<p><img src="/img/21_SamungiToF/timing.png" srcset="/img/loading.gif" lazyload alt="时序图"></p>
-<p>另外上图中（a）显示了在单频调制（s-fm）下的混洗操作。它使用两个帧来计算深度，并且具有最小化运动的强度。然而，由于操作距离仅由调制频率决定，因此适用于短距离操作。对于内存大小优化，非混洗数据（n帧）直接存储在帧内存中，混洗帧数据（n+1帧）使用行内存计算混洗，然后压缩数据存储在帧存储器中。接下来，通过相位延迟和滤波操作来输出深度信息。上图（b）显示了双频调制（d-fm）的工作情况。尽管运动滞后时间由于基于四帧信息而增加，但它在通过增加距离和高频调制来确保高性能深度方面具有优势。对与调制第一频率（f1）相对应的数据（n，n+1帧）进行混洗，然后将计算出的相位延迟存储在存储器中，并且在读出第二频率（f2）的（n+2，n+3帧）数据之后，执行混洗、校准、滤波和展开操作。该序列可以根据应用分别支持运动减少和距离增加。</p>
-<h1 id="4-实现与结果"><a href="#4-实现与结果" class="headerlink" title="4. 实现与结果"></a>4. 实现与结果</h1><p>由于EDPU和帧存储器的实现，拟议的传感器采用2堆栈结构，顶部芯片采用65nm背面照明（BSI）的像素阵列，底部芯片采用28nm逻辑工艺制造，用于芯片尺寸优化。为了最小化运动，原始数据以250 fps运行，图3显示了以100 rpm旋转的实验结果，以检查运动工件的效果。运动滞后时间定义为从第一个原始帧开始到最后一个帧。在双频操作期间，出现25.39毫秒的滞后时间。下图（a）显示了60fps原始帧条件下双频（f1&#x3D;100MHz，f2&#x3D;30MHz）操作的实验结果。由于50.38ms滞后时间，移动区域的深度信息被扭曲，可以确认某些区域由于低SNR退化而被屏蔽。图（b）显示了在FM&#x3D;50MHz时应用洗牌的情况，延迟时间为8.73ms。这表明错误区域减少了。此外，如图（c）所示，当排除洗牌时，可以确保运动自由性能，但由于点击不匹配，噪声特性会恶化两次。</p>
-<p><img src="/img/21_SamungiToF/compare.png" srcset="/img/loading.gif" lazyload alt="对比"></p>
-<p>下图显示了所提出的传感器的深度和eDPU性能。</p>
-<p><img src="/img/21_SamungiToF/performance.png" srcset="/img/loading.gif" lazyload alt="性能"></p>
-<p>为了进行评估，透镜使用F&#x2F;1.3，78°FoV，发射器使用940nm 3.4W峰值功率的垂直腔面发射激光器（VCSEL）。最大EIT被设置为0.4ms，并且通过在主控制器中控制曝光时间来防止饱和。为了与SW-ISP进行性能比较，实验使用AP处理器（HDK8350，64位浮点）通过实现640x480分辨率的相同功能。比较结果表明，在工作范围（0.4-5m）内，精度小于0.6%。深度噪声小于0.57%，但与SW-ISP相比降低了0.2%。原因是在用于优化帧存储器容量的压缩处理期间量化噪声增加。延迟时间比较为13.59ms，输出数据量也减少到6.25%~12.5%。处理功耗仅为0.12W，比SW-ISP减少了90%，如图下图所示：</p>
-<p><img src="/img/21_SamungiToF/power.png" srcset="/img/loading.gif" lazyload alt="功耗"></p>
-<p>最后，传感器+深度操作功率从1.4W降低到0.29W。上图显示了根据环境条件的深度性能。</p>
-<h1 id="5-结论"><a href="#5-结论" class="headerlink" title="5. 结论"></a>5. 结论</h1><p>本文拟议的i-TOF系统支持小型化设备的低功耗设计，如带有嵌入式ISP的AR&#x2F;VR。此外，与SW相比，性能和高速FPS相同。通过这种方式，在实施应用程序和系统时，可以更容易、更高效地使用深度数据。</p>
-<h1 id="6-结束语"><a href="#6-结束语" class="headerlink" title="6. 结束语"></a>6. 结束语</h1><p>好了今天就到这里，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以follow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
+<p>下图显示了受试者在RT、Tj&#x3D;100°C和不存在SP2H的情况下的中间色调的合成图像。</p>
+<p><img src="/img/22_SonyIMX490/outdoor_img.png" srcset="/img/loading.gif" lazyload alt="户外实拍"></p>
+<p>由于SP2H的存在，即使在Tj&#x3D;100°C时，也能保持25dB的最小合成信噪比，这清楚地证实了该架构的有效性。</p>
+<ul>
+<li><strong>芯片特性</strong></li>
+</ul>
+<p>下图表示了芯片原型的参数特性以及芯片的显微照片：</p>
+<p><img src="/img/22_SonyIMX490/micro_chip.png" srcset="/img/loading.gif" lazyload alt="芯片微观"></p>
+<ul>
+<li><strong>参数对比</strong></li>
+</ul>
+<p>在对比表中可以看出，这项工作实现了从低光照到高光照条件下的最佳性能。</p>
+<p><img src="/img/22_SonyIMX490/compare.png" srcset="/img/loading.gif" lazyload alt="参数对比"></p>
+<p>我们使用具有高温耐受性的亚像素结构制造了540万像素CIS。FC和一些像素晶体管嵌入在SP1之上。此外，SP2H在SP1L和SP2L之间实现。由于这种架构，在Tj&#x3D;100°C时，可以实现132dB的单次曝光DR，同时保持25dB的最小合成SNR。</p>
+<p><img src="/img/22_SonyIMX490/snr.png" srcset="/img/loading.gif" lazyload alt="SNR"></p>
+<ul>
+<li><strong>噪声参数</strong></li>
+</ul>
+<p>下图表示了SP2H以及SP2L在不同温度下的读出噪声参数：</p>
+<p><img src="/img/22_SonyIMX490/noise.png" srcset="/img/loading.gif" lazyload alt="噪声参数"></p>
+<h1 id="4-结束语"><a href="#4-结束语" class="headerlink" title="4. 结束语"></a>4. 结束语</h1><p>好了今天就到这里，本文为大家介绍了Sony IMX490传感器的技术细节，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以follow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
 <hr>
 <p><strong>加入星球:</strong></p>
 <p><img src="/./img/6_HDR_ISP/xingqiu.jpg" srcset="/img/loading.gif" lazyload alt="知识星球"></p>
@@ -328,7 +343,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/iToF/" class="category-chain-item">iToF</a>
+  <a href="/categories/CMOS-SENSOR/" class="category-chain-item">CMOS SENSOR</a>
   
   
 
@@ -343,9 +358,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/iToF/" class="print-no-link">#iToF</a>
+        <a href="/tags/CMOS-SENSOR/" class="print-no-link">#CMOS SENSOR</a>
       
-        <a href="/tags/Samung/" class="print-no-link">#Samung</a>
+        <a href="/tags/SONY/" class="print-no-link">#SONY</a>
       
     </div>
   
@@ -357,8 +372,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>iToF|用于低功耗和自优化带片上ISP的1.2Mp的iToF传感器</div>
-      <div>https://jokereyeadas.github.io/2024/01/24/21.三星带有片上ISP的iToF传感器/</div>
+      <div>IMX490|SONY车载CIS-IMX490技术论文分析</div>
+      <div>https://jokereyeadas.github.io/2024/02/11/22.特斯拉HW4.0之IMX490/</div>
     </div>
     <div class="license-meta">
       
@@ -370,7 +385,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年1月24日</div>
+          <div>2024年2月11日</div>
         </div>
       
       
@@ -402,18 +417,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/11/22.%E7%89%B9%E6%96%AF%E6%8B%89HW4.0%E4%B9%8BIMX490/" title="IMX490|SONY车载CIS-IMX490技术论文分析">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">IMX490|SONY车载CIS-IMX490技术论文分析</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/01/07/20.Ovt%E9%AB%98%E5%88%86%E8%BE%A8%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8A%80%E6%9C%AF%E8%AE%BA%E6%96%87/" title="CIS|豪威0.56μm用于高分辨率应用的CIS传感器">
-                        <span class="hidden-mobile">CIS|豪威0.56μm用于高分辨率应用的CIS传感器</span>
+                      <a href="/2024/01/24/21.%E4%B8%89%E6%98%9F%E5%B8%A6%E6%9C%89%E7%89%87%E4%B8%8AISP%E7%9A%84iToF%E4%BC%A0%E6%84%9F%E5%99%A8/" title="iToF|用于低功耗和自优化带片上ISP的1.2Mp的iToF传感器">
+                        <span class="hidden-mobile">iToF|用于低功耗和自优化带片上ISP的1.2Mp的iToF传感器</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
