@@ -16,27 +16,27 @@
   <meta name="author" content="Joker.Mao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="引言之前文章讲述了三星的车载基于DRAM技术的高动态图像传感器，本文讲解其2.1μm的车载图像传感器技术论文。 本文采用全深度深沟槽隔离和先进的电流读出电路技术，研制了一种汽车用2.1μm单曝光CMOS图像传感器。为了实现高动态范围，我们采用了亚像素结构，其特点是大光电二极管的高转换增益，以及连接到像素内存储电容器的小光电二极管的横向溢出。通过实现0.83e-的低随机噪声和210ke-的高溢出容量">
+    <meta name="description" content="引言本文演示了pixel size为0.64μm的108Mega像素的CMOS图像传感器，其使用先进的nonacell结构技术来最大限度地提高微光性能。本文采用了一种新的9电荷和（9S）方法，并将用于确定信噪比（SNR）的操作方法和参数与传统的3电荷和3电压平均（3S3A）进行了比较。为了验证我们提出的方法，我们检查对比了图像特性，定量分析了由于产生的信号和转换增益效应而引起的器件性能的增强。与3">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CIS|三星2.1μm单次曝光120dB车载CMOS图像传感器">
-<meta property="og:url" content="https://jokereyeadas.github.io/2024/03/17/24.samung%E8%BD%A6%E8%BD%BDsubpixel%E6%8A%80%E6%9C%AF/index.html">
+<meta property="og:title" content="CIS|一种0.64μm用于读取噪声和低照度信噪比增强的共享3x3图像传感器">
+<meta property="og:url" content="https://jokereyeadas.github.io/2024/04/06/25.%E4%B8%89%E6%98%9F9x9%E8%AF%BB%E5%87%BA%E6%8F%90%E9%AB%98SNR%E6%8A%80%E6%9C%AF/index.html">
 <meta property="og:site_name" content="ADAS之眼">
-<meta property="og:description" content="引言之前文章讲述了三星的车载基于DRAM技术的高动态图像传感器，本文讲解其2.1μm的车载图像传感器技术论文。 本文采用全深度深沟槽隔离和先进的电流读出电路技术，研制了一种汽车用2.1μm单曝光CMOS图像传感器。为了实现高动态范围，我们采用了亚像素结构，其特点是大光电二极管的高转换增益，以及连接到像素内存储电容器的小光电二极管的横向溢出。通过实现0.83e-的低随机噪声和210ke-的高溢出容量">
+<meta property="og:description" content="引言本文演示了pixel size为0.64μm的108Mega像素的CMOS图像传感器，其使用先进的nonacell结构技术来最大限度地提高微光性能。本文采用了一种新的9电荷和（9S）方法，并将用于确定信噪比（SNR）的操作方法和参数与传统的3电荷和3电压平均（3S3A）进行了比较。为了验证我们提出的方法，我们检查对比了图像特性，定量分析了由于产生的信号和转换增益效应而引起的器件性能的增强。与3">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://jokereyeadas.github.io/img/25_SammungHDR/caompare.png">
-<meta property="article:published_time" content="2024-03-16T16:21:16.000Z">
-<meta property="article:modified_time" content="2024-03-17T03:41:16.932Z">
+<meta property="og:image" content="https://jokereyeadas.github.io/img/25_SammungSnr/histogram.png">
+<meta property="article:published_time" content="2024-04-06T04:21:16.000Z">
+<meta property="article:modified_time" content="2024-04-06T11:28:53.417Z">
 <meta property="article:author" content="Joker.Mao">
 <meta property="article:tag" content="CIS SENSOR">
 <meta property="article:tag" content="SAMUNG">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://jokereyeadas.github.io/img/25_SammungHDR/caompare.png">
+<meta name="twitter:image" content="https://jokereyeadas.github.io/img/25_SammungSnr/histogram.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>CIS|三星2.1μm单次曝光120dB车载CMOS图像传感器 - ADAS之眼</title>
+  <title>CIS|一种0.64μm用于读取噪声和低照度信噪比增强的共享3x3图像传感器 - ADAS之眼</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -206,7 +206,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="CIS|三星2.1μm单次曝光120dB车载CMOS图像传感器"></span>
+            <span id="subtitle" data-typed-text="CIS|一种0.64μm用于读取噪声和低照度信噪比增强的共享3x3图像传感器"></span>
           
         </div>
 
@@ -217,8 +217,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-03-17 00:21" pubdate>
-          2024年3月17日 凌晨
+        <time datetime="2024-04-06 12:21" pubdate>
+          2024年4月6日 中午
         </time>
       </span>
     
@@ -229,7 +229,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.2k 字
+          2.4k 字
         
       </span>
     
@@ -240,7 +240,7 @@
         
         
         
-          36 分钟
+          20 分钟
         
       </span>
     
@@ -277,40 +277,31 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">CIS|三星2.1μm单次曝光120dB车载CMOS图像传感器</h1>
+            <h1 id="seo-header">CIS|一种0.64μm用于读取噪声和低照度信噪比增强的共享3x3图像传感器</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>之前文章讲述了三星的车载基于DRAM技术的高动态图像传感器，本文讲解其2.1μm的车载图像传感器技术论文。</p>
-<p>本文采用全深度深沟槽隔离和先进的电流读出电路技术，研制了一种汽车用2.1μm单曝光CMOS图像传感器。为了实现高动态范围，我们采用了亚像素结构，其特点是大光电二极管的高转换增益，以及连接到像素内存储电容器的小光电二极管的横向溢出。通过实现0.83e-的低随机噪声和210ke-的高溢出容量，扩展的动态范围在85°C下可以达到120dB。通过增加高达10000电子的小型光电二极管的全阱容量并抑制105°C下的浮动扩散泄漏，在过渡点实现了超过25 dB的信噪比。</p>
-<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>高动态范围（HDR）是汽车图像传感器的主要要求，不仅要捕捉单个场景中的亮区和暗区，还要捕捉运输环境的发光二极管（LED）照明信号。扩展动态范围（DR）的一种方法是使用多次曝光方法。然而，顺序图像捕获会导致运动伪影，并且短的积分时间会导致LED闪烁。因此，与HDR一起使用积分时间较长的单次曝光是必要的。横向溢出集成能力（LOFIC）技术可以通过将多余的光电子存储在大的像素内电容器中来覆盖长曝光时间。大容量MOS和金属绝缘体金属电容器被广泛使用，已知像素内电容的单位电容约为10 fF&#x2F;µm。</p>
-<p>具有LOFIC的单个光电二极管（PD）实现了110dB的单次曝光DR，而与亚像素结构相结合的LOFIC可以在单次曝光中将DR扩展到120dB。4单个大PD（LPD）和单个小PD（SPD）之间具有高灵敏度比的空间采样能够扩展DR。随着像素尺寸逐渐缩小以获得更高的分辨率，这种亚像素架构不仅面临由于像素内电容器的像素面积受限而不再扩展DR的临界极限，而且在两个PD之间的信号转换期间显著恶化SNR。高密度像素内电容器方法可以克服以前的限制。然而，这种缩放使信噪比下降，这是由于PD的全阱容量（FWC）很小。</p>
-<p>尽管有这些限制，我们还是通过应用全深度深沟槽隔离（F-DTI）技术开发了一种2.1μm CMOS图像传感器，该传感器采用了亚像素结构。通过在像素中使用存储电容器，可在85°C下实现120 dB的单次曝光DR。通过增加SPD的FWC并减少浮动扩散（FD）泄漏电流，在105°C的结温度（Tj）下，过渡点的最小信噪比（SNR）提高到25 dB。我们认为，在汽车图像传感器技术中，将F-DTI过程集成到像素阵列中可以加快像素间距的减小，并具有竞争性的HDR性能。</p>
-<h1 id="2-Pixel设计与架构"><a href="#2-Pixel设计与架构" class="headerlink" title="2.Pixel设计与架构"></a>2.Pixel设计与架构</h1><h2 id="A-2-1-μm-F-DTI-pixel"><a href="#A-2-1-μm-F-DTI-pixel" class="headerlink" title="A. 2.1 μm F-DTI pixel"></a>A. 2.1 μm F-DTI pixel</h2><p>通常，具有LPD的高灵敏度和SPD的低灵敏度的子像素结构被制造为覆盖从黑暗到明亮环境的宽范围的光级。随着像素尺寸的缩小，传统的背侧深沟槽隔离（B-DTI）工艺在应用于子像素结构时由于在PD之间形成势垒的限制而受到限制。因此，没有开花的PD的较大FWC是不可行的；难以用B-DTI像素结构按比例缩小。然而，在这项工作中，F-DTI工艺被用于开发物理隔离的亚像素结构，如图所示。第下图（a）段。F-DTI的优点是防止光和电串扰，并最大限度地提高PD的FWC而不会出现光晕。</p>
-<p><img src="/./img/25_SammungHDR/caompare.png" srcset="/img/loading.gif" lazyload alt="pixel截面"></p>
-<p>F-DTI像素的完全耗尽区域可以通过高能n型注入扩展到硅的深能级，并且通过器件模拟展示了SPD的较大FWC，如图所示。上图（b）段。在硅表面的前侧，通过额外的p阱注入将晶体管和FD分离，进一步扩大了掩埋PD的FWC。上图（c）为Pixel的的截面图的扫描电子显微镜（SEM）图像。利用垂直传输门（VTG）和掩埋PD，实现了高达10000e-的SPD的FWC，以提高信噪比。用存储电容器覆盖的F-DTI像素允许我们通过横向溢出操作扩展DR。溢出电容器的电容超过每像素34fF，允许在一次曝光中累积超过210ke-。</p>
-<h2 id="B-像素电路和操作"><a href="#B-像素电路和操作" class="headerlink" title="B. 像素电路和操作"></a>B. 像素电路和操作</h2><p>下图（a）显示了2.1μm F-DTI像素的像素示意图：</p>
-<p><img src="/./img/25_SammungHDR/rd_timming.png" srcset="/img/loading.gif" lazyload alt="读出时序与pixel电路"></p>
-<p>该像素由两个PD、三个FD、八个晶体管和一个存储电容器组成。使用DRG晶体管，LPD支持双转换增益（CG）读出，并且可以通过SW晶体管切换由于电容器引起的SPD的低CG。当所有晶体管都导通时，每个FD节点都连接到源极跟随器（SF）放大器的栅极，然后电路可以在LOFIC信号的读出模式下操作。添加DSW晶体管以减少LOFIC信号的复位操作期间存储电容器的放电时间。我们实现了四个读出方案：LPD和SPD的相关双采样（CDS）和不完全CDS。简化的时序图如上图（b）所示。在操作期间，用LPD-HCG（具有高CG读出的LPD）、LPD-LCG（具有低CG读出的LP）、SPD-CDS（具有CDS读出的SPD）和SPD-LOF（具有LOFIC读出的SPD）执行顺序读出。CDS被应用于LPD-HCG和SPD-CDS，而不完全CDS被应用到LPD-LCG和SPD-LOF。</p>
-<p>最初，LPD通过快门操作复位，并且在11ms的积分时间期间在LPD中产生光电子。在积分时间之后，RG和DRG关断，并且复位电平被采样到FD1。之后，当LTG导通时，电子被转移到FD1，并且信号电平被采样，从而完成LPD-HCG的完整CDS操作。通过开启DRG，可以在FD2的附加电容中存储更多的光电子。具有不完全CDS读出的LPDLCG在LPD-HCG之后通过采样信号电平开始。为了将CDS应用于LPD中的HCG和LCG信号，需要额外的采样电容器和比较器电路来存储LCG重置电压。4在没有空间成本的情况下，我们采用单个读出电路来实现HCG的完全CDS和LCG的不完全CDS。电源抑制比（PSRR）等不完全CDS的副作用将通过PSRR补偿电路技术来减轻。因为在不完全CDS操作期间在信号读出之后执行复位读出，所以电源噪声在复位和信号读出之间没有相关性。因此，不完全CDS读出具有比完全CDS更低的PSRR。为了提高电源抗扰度，实现了内部电压调节器，并使用了PSRR补偿电路，如上图所示（c）段。PSRR性能的改善如图所示（d）段。</p>
-<p>在LPD读出之后，通过接通SW和DRG，FD3、FD2和FD1依次连接在一起，并且FD1的电压电平变为SPDCDS的复位电平。在STG导通之后，来自SPD的光电子被转移并采样到FD1，从而完成SPD-CDS的完整CDS。连续地，在高照度下产生的溢出光电子的信号电平首先被读出，因为它们已经累积在像素内存储电容器中。在DRG截止并且SW和RG导通之后，像素内电容器被放电到复位电平。通过再次接通DRG，在FD1处对复位电平进行采样。因此，该操作变成SPD-LOF的不完全CDS。</p>
-<p>由于大量电子可以存储在像素内电容器中，因此DSW晶体管通过缩短电容器的放电路径来实现快速放电。如下图图（a）所示，仿真结果表明，通过添加DSW来实现1µs的重置稳定时间，以支持更高的帧速率。</p>
-<p><img src="/./img/25_SammungHDR/fig3.png" srcset="/img/loading.gif" lazyload alt="reset仿真"></p>
-<p>如上图（b）所示，通过测量结果验证了模拟结果。已测量重置沉降；SPD-LOF的平均输出代码设置为2000 LSB，如果重置采样不完整，输出数据将小于2000 LSB。结果证实，我们使用DSW实现了小于1μs的沉降时间。</p>
-<h1 id="3-实验结果以及讨论"><a href="#3-实验结果以及讨论" class="headerlink" title="3. 实验结果以及讨论"></a>3. 实验结果以及讨论</h1><h2 id="A-HDR高温性能表现"><a href="#A-HDR高温性能表现" class="headerlink" title="A. HDR高温性能表现"></a>A. HDR高温性能表现</h2><p>基于定义为0-dB的曝光水平（SNR1）和饱和曝光水平之间的比率的DR，暗随机噪声（RN）和暗信号不均匀性（DSNU）预计将是高温下DR和SNR的主要退化源。为了减少RN，优化了SF的宽度和长度，并通过减少LPD的FD电容实现了185μV&#x2F;e-的高CG。结果，测量到0.83e-的输入参考RN。在Tj85℃下，借助于四读出方案的像素内存储电容器，获得了120dB的单次曝光DR。</p>
-<p>在下图（a）中，将2.1μm F-DTI像素的估计SNR曲线与3.0μm B-DTI像素在Tj 105℃下的估算SNR曲线进行了比较。3.0μm B-DTI像素的例子采用三读出方案；LPD-HCG、LPD-LCG和SPD-LOF。在3.0μm B-DTI像素向SPD-LOF过渡期间，发现了较大的SNR下降。SPDLOF的DSNU仅在三次读出时就显著降低了SNR水平；这可以通过在2.1μm F-DTI像素中添加SPD-CDS模式来改善。我们将SPD的FWC最大化至10000 e-，以在从LPD到SPD的转换过程中进一步提高SNR。然而，在高温下，SPD-LOF中的DSNU仍然使SNR恶化。</p>
-<p><img src="/./img/25_SammungHDR/snr_hdr.png" srcset="/img/loading.gif" lazyload alt="SNR &amp; HDR"></p>
-<p>由于固定模式噪声的主要来源是FD3中的暗电流生成。我们发现，由于FD泄漏较大，3.0μm B-DTI像素的DSNU大于2.1μm F-DTI像素初始版本的DSNU。DSNU的减少有助于初始2.1μm F-DTI像素的表面固化过程。随着温度的升高，SPD-LOF的DSNU表现出指数行为，如上图所示（b）段。通过应用额外的缺陷固化工艺，仅对于F-DTI工艺，2.1μm F-DTI像素的DSNU表现出额外的降低。利用F-DTI的优点，SPD FWC的增加和DSNU的降低能够提高LOFIC操作期间的SNR。我们最终在高温下实现了超过25dB的最小信噪比。</p>
-<h2 id="B-Sensor特性"><a href="#B-Sensor特性" class="headerlink" title="B. Sensor特性"></a>B. Sensor特性</h2><p>本文制作了2.1μm F-DTI像素，下表总结了传感器基本参数：</p>
-<p><img src="/./img/25_SammungHDR/chart.png" srcset="/img/loading.gif" lazyload alt="芯片参数"></p>
-<p>SPD的FWC达到10000e-以提高信噪比，并采用高密度存储电容器在高温下实现120dB的单次曝光DR。</p>
-<p>凭借极具竞争力的HDR特性，我们的2.1μm F-DTI像素支持各种滤色器阵列；RCCB、RCCG、RGGB和RYYCy，以及RCCB的相对QE如下图所示：</p>
-<p><img src="/./img/25_SammungHDR/qe.png" srcset="/img/loading.gif" lazyload alt="QE"></p>
-<p>最后，下表中总结了与以往工作相比具有代表性的HDR传感器：</p>
-<p><img src="/./img/25_SammungHDR/hdr_compare.png" srcset="/img/loading.gif" lazyload alt="HDR对比"></p>
-<h1 id="4-结束语"><a href="#4-结束语" class="headerlink" title="4.结束语"></a>4.结束语</h1><p>我们开发了一款2.1μm F-DTI像素，可缓解汽车应用中的LED闪烁。通过采用像素内存储电容器覆盖的子像素架构来实现120dB的单次曝光DR。该电容器可以极大地扩展DSW晶体管支持的像素的电荷积累能力。利用F-DTI处理和四读出方案的优点，通过提高SPD的FWC和降低SPD-LOF的DSNU，使最小信噪比保持在25dB以上。</p>
-<p>好了今天就到这里，本文为大家介绍了三星车载2.1μmHDR传感器的技术细节，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以follow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
+                <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>本文演示了pixel size为0.64μm的108Mega像素的CMOS图像传感器，其使用先进的nonacell结构技术来最大限度地提高微光性能。本文采用了一种新的9电荷和（9S）方法，并将用于确定信噪比（SNR）的操作方法和参数与传统的3电荷和3电压平均（3S3A）进行了比较。为了验证我们提出的方法，我们检查对比了图像特性，定量分析了由于产生的信号和转换增益效应而引起的器件性能的增强。与3S3A相比，9S的读取噪声降低了45%，并且在弱光操作条件下证实了SNR值的提高。</p>
+<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><p>近年来，CMOS图像传感器（CIS）作为一种移动应用受到了极大的关注，因为它被认为是选择移动设备的重要特征之一。出于这个原因，CIS性能的改进是持续需要的，并且正在进行各种努力来提高质量。对高分辨率的需求正在增加，例如，由于透镜模块的光学格式的限制，像素尺寸应该缩小。亚微米像素于2018年首次量产。最近，0.64μm像素是量产中最小的像素。然而，随着像素尺寸的缩小，诸如全阱容量（FWC）、灵敏度和信噪比（SNR）之类的特性不可避免地降低。作为解决这个问题的一种方法，已经提出并广泛使用了诸如2x2、3x3等的像素求和方法。</p>
+<p>3x3nona binning手册发布是和0.8μm像素一起的，它可以分别切换108Mp和12Mp的全分辨率和binning分辨率。通过合并9个光电二极管，特别是在低照度条件下，它提高了灵敏度。然而，由于高读取噪声，先前的3x3非像素在低照明条件下遭受相对较差的图像质量。在这项工作中，分析了在非单元结构中根据3x3binning方法的噪声特性，并提出了新的9电荷和方法来提高微光信噪比，并在0.64μm像素中进行了演示。</p>
+<h1 id="2-像素架构"><a href="#2-像素架构" class="headerlink" title="2. 像素架构"></a>2. 像素架构</h1><p>在之前的工作中，将三个1x3共享像素单元合并以生成具有相同颜色的3x3像素。在非binning模式中，我们使用了3电荷和3电压平均模式（由3S3A表示），这表明共享的3个PD中的信号电子被添加到浮动扩散（FD）中，并且三个垂直输出在电压域被平均。另一方面，在这项工作中，采用了用于非装仓的9个电荷和（由9S表示），并且3S3A之间的9S的主要差异是FD节点共同共享的9个PD的数量，像素的物理结构如下图（a）和（b）所示：</p>
+<p><img src="/./img/25_SammungSnr/pixel_arch.png" srcset="/img/loading.gif" lazyload alt="Pixel Arch"></p>
+<p>由于9个像素共享相同的FD，所以在binning模式下影响高照明条件的SNR的FWC由FD动态范围而不是PD的FWC来确定。因此，重要的是增加FD电容，使其能够吸收尽可能多的电子。为了使FD电容更大，同时使用相邻FD节点的电容的技术由复位（RG）和双转换增益（DCG）晶体管控制。在大量使用FD电容的模式中，FD节点连接到相邻的9共享FD节点，并且总共18个像素与单个节点连接。使用这种方法，FD电容与9共享FD电容相比增加了4倍以上，电路示意图如上图的（c）和（d）段。</p>
+<p>在下表中简单地比较了9S和传统3S3A模式的特性：</p>
+<p><img src="/./img/25_SammungSnr/character.png" srcset="/img/loading.gif" lazyload alt="特性对比"></p>
+<p>由于平均值的结果，即使物理FD电容相同，转换增益也降低到1&#x2F;3。结果，3S3A的输入参考噪声（具体地说是电子单位）是9S的输入参考噪音的3倍。为了比较9S和3S3A之间的SNR，通过以lsb为单位对信号和噪声进行划分来分析信号和噪声。9S的光子散粒噪声由于其信号而相对较大，并且3S3A的暗噪声由于3S3A平均噪声而小于9S模式。在低照度条件下（N&gt;&gt;S），信号电平接管了总噪声，因此，9S的SNR优于3S3A。</p>
+<p>下图显示了9S和传统3S3A之间的SNR作为照度的函数的差异：</p>
+<p><img src="/./img/25_SammungSnr/lux_snr.png" srcset="/img/loading.gif" lazyload alt="照度-SNR"></p>
+<p>请注意，对于照度＜10lux的情况，9S的SNR高于3S3A的SNR，这正如我们所讨论的。</p>
+<h1 id="3-结果与讨论"><a href="#3-结果与讨论" class="headerlink" title="3. 结果与讨论"></a>3. 结果与讨论</h1><p>9共享像素结构在像素中放置晶体管（例如源极跟随器（SF）、RG、DCG、SEL晶体管）方面具有优势。随着共享像素数量的增加，存在用于施加多指SF的晶体管的额外空间。通过使用多指SF，SF的沟道面积增加，并且宽度增加与并联使用的宽度一样多，以最大化跨导率。因此，0.64μm像素的随机电报噪声与0.8μm像素相似，即使像素间距降低到0.64μm。此外，还证实了读取噪声从3.4e-降低到1.9e-，直方图对比如下图所示。</p>
+<p><img src="/./img/25_SammungSnr/histogram.png" srcset="/img/loading.gif" lazyload alt="直方图"></p>
+<p>注意，电子单元中的读取噪声由于降低平均值影响的转换增益的影响而增加，对于lsb和电子单元，它可以分别用N&#x2F;√3和√3N表示，其中N表示全模式噪声。</p>
+<p>将9S模式的测量特性与传统3S3A的测量特性进行比较如下表所示:</p>
+<p><img src="/./img/25_SammungSnr/table2.png" srcset="/img/loading.gif" lazyload alt="测量特性"></p>
+<p>我们可以清楚地注意到9S模式优于传统3S3A模式。SNR特性，特别是在低照度（1lux）下，由于读取噪声而得到改善。FWC、暗电流和白点是CIS性能的关键因素，与之前发表的研究保持在相同水平。</p>
+<h1 id="4-结束语"><a href="#4-结束语" class="headerlink" title="4.结束语"></a>4.结束语</h1><p>我们证明了0.64μm的9S CMOS图像传感器的读取噪声和SNR特性，将9S的0.64μm和3S3A的0.8μm以单位像素进行比较。我们引入了一种新的binning方案来提高低照度下的信噪比，并在转换增益、噪声和信噪比方面对9S和传统的3S3A进行了比较。所提出的9电荷和binning方法可以显著改善读取噪声，并且已经完成了在低照明条件下可以提供相当于大像素的图像质量和在高照明条件下提供高分辨率的3x3非单元结构。</p>
+<p>好了今天就到这里，本文为大家介绍了三星0.64μm pixel传感器binning的技术细节，希望今天可以给您带来对于传感器的更深的认知，喜欢的同学可以进行朋友圈分享以及点击文章在看。另外，对论文感兴趣的同学可以follow我的<a target="_blank" rel="noopener" href="https://github.com/JokerEyeAdas/AdasTechPapers">Github论文仓库</a>，也可以加入知识星球以及交流群，获取一手行业资料~</p>
 <hr>
 <p><strong>加入星球:</strong></p>
 <p><img src="/./img/6_HDR_ISP/xingqiu.jpg" srcset="/img/loading.gif" lazyload alt="知识星球"></p>
@@ -362,8 +353,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>CIS|三星2.1μm单次曝光120dB车载CMOS图像传感器</div>
-      <div>https://jokereyeadas.github.io/2024/03/17/24.samung车载subpixel技术/</div>
+      <div>CIS|一种0.64μm用于读取噪声和低照度信噪比增强的共享3x3图像传感器</div>
+      <div>https://jokereyeadas.github.io/2024/04/06/25.三星9x9读出提高SNR技术/</div>
     </div>
     <div class="license-meta">
       
@@ -375,7 +366,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年3月17日</div>
+          <div>2024年4月6日</div>
         </div>
       
       
@@ -407,18 +398,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/04/06/25.%E4%B8%89%E6%98%9F9x9%E8%AF%BB%E5%87%BA%E6%8F%90%E9%AB%98SNR%E6%8A%80%E6%9C%AF/" title="CIS|一种0.64μm用于读取噪声和低照度信噪比增强的共享3x3图像传感器">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CIS|一种0.64μm用于读取噪声和低照度信噪比增强的共享3x3图像传感器</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/03/01/23.SonySPAD/" title="SPAD|SONY背面式的10µm SPAD像素阵列">
-                        <span class="hidden-mobile">SPAD|SONY背面式的10µm SPAD像素阵列</span>
+                      <a href="/2024/03/17/24.samung%E8%BD%A6%E8%BD%BDsubpixel%E6%8A%80%E6%9C%AF/" title="CIS|三星2.1μm单次曝光120dB车载CMOS图像传感器">
+                        <span class="hidden-mobile">CIS|三星2.1μm单次曝光120dB车载CMOS图像传感器</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
